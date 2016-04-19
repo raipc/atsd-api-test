@@ -5,24 +5,23 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * @author Dmitry Korchagin.
  */
-public class TCPClient {
+public class TCPSender {
     private String url;
     private Integer port;
     private StringBuilder command;
 
-    TCPClient(String url, Integer port) {
+    public TCPSender(String url, Integer port) {
         this.url = url;
         this.port = port;
-        command = new StringBuilder();
+        command = new StringBuilder("debug ");
     }
 
     public void setCommand(String command) {
-        this.command = new StringBuilder(command);
+        this.command = new StringBuilder("debug ").append(command);
     }
 
     public void appendCommand(String commandPart) {

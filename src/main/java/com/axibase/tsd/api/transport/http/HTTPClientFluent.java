@@ -17,18 +17,18 @@ import java.util.Map;
 /**
  * @author Dmitry Korchagin.
  */
-public class HttpClientFluent implements Driver {
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientFluent.class);
+public class HTTPClientFluent implements HTTPClient {
+    private static final Logger logger = LoggerFactory.getLogger(HTTPClientFluent.class);
     private Executor executor;
     private String url;
 
-    public HttpClientFluent(String protocol, String host, int port, String login, String password) {
+    public HTTPClientFluent(String protocol, String host, int port, String login, String password) {
         executor = Executor.newInstance()
                 .auth(new HttpHost(host, port), login, password);
         url = protocol + "://" + host + ":" + port;
     }
 
-    public AtsdResponse get(String atsdMethod) throws IOException {
+    public AtsdHttpResponse get(String atsdMethod) throws IOException {
         String uri = url + atsdMethod;
 
         Request request = Request.Get(uri);
@@ -40,7 +40,7 @@ public class HttpClientFluent implements Driver {
         return parseResponse(response);
     }
 
-    public AtsdResponse post(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse post(String atsdMethod, String body) throws IOException {
         String uri = url + atsdMethod;
 
         Request request = Request.Post(uri);
@@ -50,7 +50,7 @@ public class HttpClientFluent implements Driver {
         return parseResponse(executor.execute(request));
     }
 
-    public AtsdResponse put(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse put(String atsdMethod, String body) throws IOException {
         String uri = url + atsdMethod;
 
         Request request = Request.Put(uri);
@@ -60,7 +60,7 @@ public class HttpClientFluent implements Driver {
         return parseResponse(executor.execute(request));
     }
 
-    public AtsdResponse patch(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse patch(String atsdMethod, String body) throws IOException {
         String uri = url + atsdMethod;
         Request request = Request.Patch(uri);
         setHeaders(request, null);
@@ -71,7 +71,7 @@ public class HttpClientFluent implements Driver {
         return parseResponse(executor.execute(request));
     }
 
-    public AtsdResponse delete(String atsdMethod) throws IOException {
+    public AtsdHttpResponse delete(String atsdMethod) throws IOException {
         String uri = url + atsdMethod;
 
         Request request = Request.Post(uri);
@@ -91,8 +91,8 @@ public class HttpClientFluent implements Driver {
         }
     }
 
-    private AtsdResponse parseResponse(Response response) throws IOException {
-        AtsdResponse atsdResponse;
+    private AtsdHttpResponse parseResponse(Response response) throws IOException {
+        AtsdHttpResponse atsdHttpResponse;
         HttpResponse httpResponse = response.returnResponse();
         int responseCode = httpResponse.getStatusLine().getStatusCode();
 
@@ -103,10 +103,10 @@ public class HttpClientFluent implements Driver {
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-            atsdResponse = new AtsdResponse(responseCode, null, sb.toString());
+            atsdHttpResponse = new AtsdHttpResponse(responseCode, null, sb.toString());
         } else {
-            atsdResponse = new AtsdResponse(200, null, response.returnContent().asString());
+            atsdHttpResponse = new AtsdHttpResponse(200, null, response.returnContent().asString());
         }
-        return atsdResponse;
+        return atsdHttpResponse;
     }
 }

@@ -11,8 +11,9 @@
     <properties>
         <slf4j.version>1.7.5</slf4j.version>
         <fluent-hc.version>4.5.2</fluent-hc.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.4</junit.version>
         <jackson.version>2.7.3</jackson.version>
+        <javax.json.version>1.0.4</javax.json.version>
     </properties>
 
     <dependencies>
@@ -20,11 +21,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.13</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -52,25 +48,12 @@
             <version>${junit.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.7.0</version>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>${javax.json.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.jaxrs</groupId>
-            <artifactId>jackson-jaxrs-base</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+
+
     </dependencies>
 
 

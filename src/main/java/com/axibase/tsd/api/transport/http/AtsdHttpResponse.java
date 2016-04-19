@@ -5,12 +5,12 @@ import java.util.Map;
 /**
  * @author Dmitry Korchagin.
  */
-public class AtsdResponse {
+public class AtsdHttpResponse {
     private int code;
     private Map<String, String> headers;
     private String body;
 
-    AtsdResponse(int code, Map<String, String> headers, String body) {
+    AtsdHttpResponse(int code, Map<String, String> headers, String body) {
         this.code = code;
         this.headers = headers;
         this.body = body;

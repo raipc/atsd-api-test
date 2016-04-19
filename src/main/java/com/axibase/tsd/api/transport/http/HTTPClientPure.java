@@ -4,7 +4,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.StringEntity;
@@ -21,13 +20,13 @@ import java.util.Map;
 /**
  * @author Dmitry Korchagin.
  */
-public class HttpClientPure implements Driver {
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientFluent.class);
+public class HTTPClientPure implements HTTPClient {
+    private static final Logger logger = LoggerFactory.getLogger(HTTPClientFluent.class);
     private HttpClientContext context;
-    private HttpClient httpClient;
+    private org.apache.http.client.HttpClient httpClient;
     private String url;
 
-    public HttpClientPure(String protocol, String host, int port, String login, String password) {
+    public HTTPClientPure(String protocol, String host, int port, String login, String password) {
         httpClient = HttpClientBuilder.create().build();
         CredentialsProvider credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(
@@ -38,50 +37,50 @@ public class HttpClientPure implements Driver {
         url = protocol + "://" + host + ":" + port;
     }
 
-    public AtsdResponse get(String atsdMethod) throws IOException {
+    public AtsdHttpResponse get(String atsdMethod) throws IOException {
         String uri = url + atsdMethod;
 
         HttpGet request = new HttpGet(uri);
+        logger.info("> {}", uri);
         return parseResponse(httpClient.execute(request, context));
     }
 
-    public AtsdResponse post(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse post(String atsdMethod, String body) throws IOException {
         String uri = url + atsdMethod;
 
         HttpPost request = new HttpPost(uri);
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
-
+        logger.info("> {}, {}", uri, body);
         return parseResponse(httpClient.execute(request, context));
     }
 
-    public AtsdResponse put(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse put(String atsdMethod, String body) throws IOException {
         String uri = url + atsdMethod;
 
         HttpPut request = new HttpPut(uri);
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
-
+        logger.info("> {}, {}", uri, body);
         return parseResponse(httpClient.execute(request, context));
     }
 
-    public AtsdResponse patch(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse patch(String atsdMethod, String body) throws IOException {
         String uri = url + atsdMethod;
         HttpPatch request = new HttpPatch(uri);
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
 
-        logger.debug("query url: {}", uri);
-        logger.debug("query body: {}", body);
+        logger.info("> {}, {}", uri, body);
         return parseResponse(httpClient.execute(request, context));
     }
 
-    public AtsdResponse delete(String atsdMethod) throws IOException {
+    public AtsdHttpResponse delete(String atsdMethod) throws IOException {
         String uri = url + atsdMethod;
 
         HttpDelete request = new HttpDelete(uri);
         setHeaders(request, null);
-
+        logger.info("> {}", uri);
         return parseResponse(httpClient.execute(request, context));
     }
 
@@ -96,8 +95,8 @@ public class HttpClientPure implements Driver {
         }
     }
 
-    private AtsdResponse parseResponse(HttpResponse httpResponse) throws IOException {
-        AtsdResponse atsdResponse;
+    private AtsdHttpResponse parseResponse(HttpResponse httpResponse) throws IOException {
+        AtsdHttpResponse atsdHttpResponse;
         int responseCode = httpResponse.getStatusLine().getStatusCode();
         BufferedReader br = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
         String line;
@@ -105,7 +104,8 @@ public class HttpClientPure implements Driver {
         while ((line = br.readLine()) != null) {
             sb.append(line);
         }
-        atsdResponse = new AtsdResponse(responseCode, null, sb.toString());
-        return atsdResponse;
+        atsdHttpResponse = new AtsdHttpResponse(responseCode, null, sb.toString());
+        logger.info("< {}", atsdHttpResponse.toString());
+        return atsdHttpResponse;
     }
 }

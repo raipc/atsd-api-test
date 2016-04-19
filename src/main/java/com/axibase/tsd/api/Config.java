@@ -19,7 +19,8 @@ public class Config {
     private String password;
     private String protocol;
     private String serverName;
-    private int serverPort;
+    private int httpPort;
+    private int tcpPort;
     private String dataPath;
     private String metadataPath;
 
@@ -47,8 +48,12 @@ public class Config {
         return serverName;
     }
 
-    public int getServerPort() {
-        return serverPort;
+    public int getHttpPort() {
+        return httpPort;
+    }
+
+    public int getTcpPort() {
+        return tcpPort;
     }
 
     public String getDataPath() {
@@ -88,7 +93,8 @@ public class Config {
         password = load("password", clientProperties, null);
         protocol = load("protocol", clientProperties, null);
         serverName = load("serverName", clientProperties, null);
-        serverPort = Integer.parseInt(load("serverPort", clientProperties, null));
+        httpPort = Integer.parseInt(load("httpPort", clientProperties, null));
+        tcpPort = Integer.parseInt(load("tcpPort", clientProperties, null));
         dataPath = load("dataPath", clientProperties, null);
         metadataPath = load("metadataPath", clientProperties, null);
     }
@@ -116,7 +122,8 @@ public class Config {
                 ", password='" + password + '\'' +
                 ", protocol='" + protocol + '\'' +
                 ", serverName='" + serverName + '\'' +
-                ", serverPort='" + serverPort + '\'' +
+                ", httpPort=" + httpPort +
+                ", tcpPort=" + tcpPort +
                 ", dataPath='" + dataPath + '\'' +
                 ", metadataPath='" + metadataPath + '\'' +
                 '}';

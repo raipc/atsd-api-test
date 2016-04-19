@@ -1,29 +1,27 @@
 package com.axibase.tsd.api.method.property;
 
-import com.axibase.tsd.api.transport.http.AtsdResponse;
+
+import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.method.Method;
-import com.axibase.tsd.api.model.Model;
-import com.axibase.tsd.api.model.propery.Property;
-import com.axibase.tsd.api.model.propery.PropertyDelete;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
+import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
-
+import javax.json.*;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.StringReader;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Dmitry Korchagin.
  */
+
 public class BatchDelete extends Method {
-    private static final String ATSD_METHOD="/properties";
+    private static final String ATSD_METHOD = "/properties";
     private static final Logger logger = LoggerFactory.getLogger(BatchDelete.class);
 
     @BeforeClass
@@ -32,47 +30,90 @@ public class BatchDelete extends Method {
     }
 
 
-
-
-
     @Test
     public void batchPropertyDelete_CorrectPropertyDelete_PropertyDisappear() throws IOException {
-        String type = buildVariablePrefix() + "type";
-        String entity = buildVariablePrefix() + "entity";
-        Map<String, String> key = new HashMap<String, String>();
-        key.put("key1", "keyval1");
-        Map<String, String> tags = new HashMap<String, String>();
-        tags.put("tag1", "tagval1");
-        final Property property = new Property(type, entity, key, tags, null);
-        PropertyDelete propertyDelete = new PropertyDelete(type, entity, key, 0L);
+        final String type = Util.buildVariablePrefix() + "type";
+        final String entity = Util.buildVariablePrefix() + "entity";
+        final Long timestamp = System.currentTimeMillis();
 
-        RequestStructure requestStructure = new RequestStructure(Arrays.asList((Model)propertyDelete));
+        JsonArray insertPropertyRequest;
+        JsonArray expectedResponse;
+        JsonObject request;
+        JsonArray deletePropertyRequest;
 
-        AtsdResponse response = requestSender.patch(ATSD_METHOD, serialize(Arrays.asList(requestStructure)));
-        logger.debug("AtsdReponse: {}", response);
-        assertEquals(200, response.getCode());
-        assertEquals("", response.getBody());
+        {
+            insertPropertyRequest = Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                                    .add("type", type)
+                                    .add("entity", entity)
+                                    .add("key", Json.createObjectBuilder()
+                                                    .add("key1", "keyval1")
+                                    ).add("tags", Json.createObjectBuilder()
+                                            .add("tag1", "tagval1"))
+                                    .add("timestamp", timestamp)
+                    )
+                    .build();
+
+            request = Json.createObjectBuilder()
+                    .add("queries", Json.createArrayBuilder()
+                            .add(Json.createObjectBuilder()
+                                            .add("type", type)
+                                            .add("entity", entity)
+                                            .add("key", Json.createObjectBuilder()
+                                                            .add("key1", "keyval1")
+                                            )
+                            ))
+                    .build();
+
+            expectedResponse = Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                                    .add("type", type)
+                                    .add("entity", entity)
+                                    .add("key", Json.createObjectBuilder()
+                                                    .add("key1", "keyval1")
+                                    ).add("tags", Json.createObjectBuilder()
+                                            .add("tag1", "tagval1"))
+                                    .add("timestamp", timestamp)
+                    )
+                    .build();
+
+            deletePropertyRequest = Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                                    .add("action", "delete")
+                                    .add("properties", Json.createArrayBuilder()
+                                                    .add(Json.createObjectBuilder()
+                                                                    .add("type", type)
+                                                                    .add("entity", entity)
+                                                                    .add("key", Json.createObjectBuilder()
+                                                                                    .add("key1", "keyval1")
+                                                                    )
+                                                    )
+                                    )
+                    )
+                    .build();
+        }
 
 
+        {
+            AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, ATSD_METHOD, insertPropertyRequest.toString());
+            assertEquals(200, response.getCode());
+        }
 
+        {
+            AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, ATSD_METHOD, request.toString());
+            assertEquals(200, response.getCode());
+            assertEquals(expectedResponse, Json.createReader(new StringReader(response.getBody())).readObject());
+        }
+
+        {
+            AtsdHttpResponse response = httpSender.send(HTTPMethod.PATH, ATSD_METHOD, deletePropertyRequest.toString());
+            assertEquals(200, response.getCode());
+
+            response = httpSender.send(HTTPMethod.POST, ATSD_METHOD, request.toString());
+            assertEquals(200, response.getCode());
+            assertEquals(Json.createArrayBuilder().build(), Json.createReader(new StringReader(response.getBody())).readObject());
+        }
 
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    class RequestStructure {
-        private final String action="delete";
-        private List<Model> properties;
-
-        public RequestStructure(List<Model> properties) {
-            this.properties = properties;
-        }
-
-        public String getAction() {
-            return action;
-        }
-
-        public List<Model> getProperties() {
-            return properties;
-        }
-    }
 }
