@@ -108,7 +108,7 @@ public class HTTPClientPure implements HTTPClient {
         if(responseCode == 200) {
             logger.info("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
         } else {
-            logger.info("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
+            logger.warn("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
 
         }
         return atsdHttpResponse;

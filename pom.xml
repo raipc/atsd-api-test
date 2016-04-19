@@ -17,6 +17,7 @@
     </properties>
 
     <dependencies>
+        <!--logs-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -27,11 +28,7 @@
             <artifactId>logback-classic</artifactId>
             <version>1.0.13</version>
         </dependency>
-        <dependency>
-            <groupId>org.fusesource.jansi</groupId>
-            <artifactId>jansi</artifactId>
-            <version>1.11</version>
-        </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -52,17 +49,20 @@
             <artifactId>fluent-hc</artifactId>
             <version>${fluent-hc.version}</version>
         </dependency>
+
+        <!--tests-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>${javax.json.version}</version>
-        </dependency>
 
+        <!--json-->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
 
     </dependencies>
 
