@@ -1,11 +1,16 @@
 package com.axibase.tsd.api.transport.http;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 
 /**
  * @author Dmitry Korchagin.
  */
 public class HTTPSender {
+    private static final Logger logger = LoggerFactory.getLogger(HTTPSender.class);
+
     private HTTPClient driver;
     private String dataPath;
     private String metaDataPath;
@@ -17,23 +22,24 @@ public class HTTPSender {
     }
 
     public AtsdHttpResponse send(HTTPMethod method, String uri, String body) throws IOException {
+        logger.debug("> METHOD: {}", method);
         AtsdHttpResponse atsdHttpResponse;
         switch (method) {
             case GET:
                 atsdHttpResponse = get(uri);
                 break;
             case POST:
-                atsdHttpResponse =  post(uri, body);
+                atsdHttpResponse = post(uri, body);
                 break;
             case PUT:
-                atsdHttpResponse =  put(uri, body);
-            break;
+                atsdHttpResponse = put(uri, body);
+                break;
             case PATH:
-                atsdHttpResponse =  patch(uri, body);
+                atsdHttpResponse = patch(uri, body);
                 break;
             case DELETE:
-                atsdHttpResponse =  delete(uri);
-            break;
+                atsdHttpResponse = delete(uri);
+                break;
             default:
                 atsdHttpResponse = null;
         }
@@ -46,10 +52,12 @@ public class HTTPSender {
     }
 
     private AtsdHttpResponse post(String atsdMethod, String body) throws IOException {
+
         return driver.post(dataPath + atsdMethod, body);
     }
 
     private AtsdHttpResponse put(String atsdMethod, String body) throws IOException {
+
         return driver.put(dataPath + atsdMethod, body);
     }
 

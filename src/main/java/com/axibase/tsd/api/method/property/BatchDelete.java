@@ -95,14 +95,14 @@ public class BatchDelete extends Method {
 
 
         {
-            AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, ATSD_METHOD, insertPropertyRequest.toString());
+            AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, ATSD_METHOD + "/insert", insertPropertyRequest.toString());
             assertEquals(200, response.getCode());
         }
 
         {
             AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, ATSD_METHOD, request.toString());
             assertEquals(200, response.getCode());
-            assertEquals(expectedResponse, Json.createReader(new StringReader(response.getBody())).readObject());
+            assertEquals(expectedResponse, Json.createReader(new StringReader(response.getBody())).readArray());
         }
 
         {
@@ -111,7 +111,7 @@ public class BatchDelete extends Method {
 
             response = httpSender.send(HTTPMethod.POST, ATSD_METHOD, request.toString());
             assertEquals(200, response.getCode());
-            assertEquals(Json.createArrayBuilder().build(), Json.createReader(new StringReader(response.getBody())).readObject());
+            assertEquals(Json.createArrayBuilder().build(), Json.createReader(new StringReader(response.getBody())).readArray());
         }
 
     }

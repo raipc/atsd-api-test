@@ -15,13 +15,14 @@
 
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%-5level %d{HH:mm:ss.SSS} [%thread] %logger{0}:%n%msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="debug">
-        <!--<root level="info">-->
+    <!--<root level="debug">-->
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

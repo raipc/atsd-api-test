@@ -4,11 +4,14 @@ import com.axibase.tsd.api.Config;
 import com.axibase.tsd.api.transport.http.HTTPClientPure;
 import com.axibase.tsd.api.transport.http.HTTPSender;
 import com.axibase.tsd.api.transport.tcp.TCPSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Dmitry Korchagin.
  */
 public abstract class Method {
+    private static final Logger logger = LoggerFactory.getLogger(Method.class);
     protected static HTTPSender httpSender;
     protected static TCPSender tcpSender;
 

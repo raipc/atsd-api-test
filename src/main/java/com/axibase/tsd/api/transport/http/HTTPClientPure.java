@@ -21,7 +21,7 @@ import java.util.Map;
  * @author Dmitry Korchagin.
  */
 public class HTTPClientPure implements HTTPClient {
-    private static final Logger logger = LoggerFactory.getLogger(HTTPClientFluent.class);
+    private static final Logger logger = LoggerFactory.getLogger(HTTPClientPure.class);
     private HttpClientContext context;
     private org.apache.http.client.HttpClient httpClient;
     private String url;
@@ -51,7 +51,7 @@ public class HTTPClientPure implements HTTPClient {
         HttpPost request = new HttpPost(uri);
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
-        logger.info("> {}, {}", uri, body);
+        logger.info("> {}\n> {}", uri, body);
         return parseResponse(httpClient.execute(request, context));
     }
 
@@ -61,7 +61,7 @@ public class HTTPClientPure implements HTTPClient {
         HttpPut request = new HttpPut(uri);
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
-        logger.info("> {}, {}", uri, body);
+        logger.info("> {}\n> {}", uri, body);
         return parseResponse(httpClient.execute(request, context));
     }
 
@@ -71,7 +71,7 @@ public class HTTPClientPure implements HTTPClient {
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
 
-        logger.info("> {}, {}", uri, body);
+        logger.info("> {}\n> {}", uri, body);
         return parseResponse(httpClient.execute(request, context));
     }
 
@@ -105,7 +105,12 @@ public class HTTPClientPure implements HTTPClient {
             sb.append(line);
         }
         atsdHttpResponse = new AtsdHttpResponse(responseCode, null, sb.toString());
-        logger.info("< {}", atsdHttpResponse.toString());
+        if(responseCode == 200) {
+            logger.info("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
+        } else {
+            logger.info("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
+
+        }
         return atsdHttpResponse;
     }
 }

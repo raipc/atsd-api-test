@@ -1,13 +1,13 @@
 package com.axibase.tsd.api.model.propery;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+//import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Map;
 
 /**
  * @author Dmitry Korchagin.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PropertyDelete extends PropertyKey {
     private Long createBeforeTime;
     private String createBeforeDate;

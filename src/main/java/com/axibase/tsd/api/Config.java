@@ -97,6 +97,7 @@ public class Config {
         tcpPort = Integer.parseInt(load("tcpPort", clientProperties, null));
         dataPath = load("dataPath", clientProperties, null);
         metadataPath = load("metadataPath", clientProperties, null);
+        logger.debug(this.toString());
     }
 
     private static String load(String name, Properties clientProperties, String defaultValue) {
