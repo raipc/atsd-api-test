@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author Dmitry Korchagin.
@@ -37,58 +38,82 @@ public class BatchDeleteTest extends Method {
         final String type = Util.buildVariablePrefix() + "type";
         final String entity = Util.buildVariablePrefix() + "entity";
         final Long timestamp = System.currentTimeMillis();
-        final JSONParser jsonParser = new JSONParser();
 
-        JSONObject key = new JSONObject();
-        key.put("key1", "keyval1");
-        JSONObject tags = new JSONObject();
-        tags.put("tag1", "tagval1");
-        JSONObject propertyKey = new JSONObject();
-        propertyKey.put("type", type);
-        propertyKey.put("entity", entity);
-        propertyKey.put("key", key);
+        final JSONObject propertyKey = new JSONObject() {{
+            put("type", type);
+            put("entity", entity);
+            put("key", new JSONObject() {{
+                put("key1", "keyval1");
+                put("key2", "keyval2");
+            }});
+        }};
 
-        JSONObject property = (JSONObject) propertyKey.clone();
-        property.put("tags", tags);
-        property.put("timestamp", timestamp);
+        final JSONObject property = new JSONObject() {{
+            put("type", type);
+            put("entity", entity);
+            put("key", new JSONObject() {{
+                put("key1", "keyval1");
+                put("key2", "keyval2");
+            }});
+            put("tags", new JSONObject() {{
+                put("tag1", "tagval1");
+                put("tag2", "tagval2");
+            }});
+            put("timestamp", timestamp);
+        }};
 
-        JSONArray insertPropertyRequest = new JSONArray();
-        insertPropertyRequest.add(property);
-
-        JSONObject getPropertyRequest = new JSONObject();
-
-        try {
-            getPropertyRequest.put("queries", jsonParser.parse("[" + propertyKey + "]"));
-        } catch (org.json.simple.parser.ParseException e) {
-            logger.error("Fail to prepare test data");
-            e.printStackTrace();
-            fail();
-        }
-        JSONArray deletePropertyRequest = new JSONArray();
-        try {
-            deletePropertyRequest = (JSONArray) jsonParser.parse("[{\"action\":\"delete\", \"properties\": [" + propertyKey + "]}]");
-        } catch (org.json.simple.parser.ParseException e) {
-            logger.error("Fail to prepare deletePropertyRequest.");
-            e.printStackTrace();
-            fail();
-        }
 
         {
+            JSONArray insertPropertyRequest = new JSONArray() {{
+                add(property);
+            }};
             AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, ATSD_METHOD + "/insert", insertPropertyRequest.toString());
             assertEquals(200, response.getCode());
         }
 
+
+
+        JSONObject getPropertyRequest = new JSONObject() {{
+            put("queries", new JSONArray() {{
+                add(new JSONObject() {{
+                    put("type", type);
+                    put("entity", entity);
+                    put("key", new JSONObject() {{
+                        put("key1", "keyval1");
+                        put("key2", "keyval2");
+                    }});
+                }});
+            }});
+        }};
+
         {
+
             AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, ATSD_METHOD, getPropertyRequest.toJSONString());
             assertEquals(200, response.getCode());
             try {
-                assertEquals(new JSONParser().parse("[" + property + "]"), new JSONParser().parse(response.getBody()));
+                assertEquals(new JSONArray(){{add(property);}}, new JSONParser().parse(response.getBody()));
             } catch (org.json.simple.parser.ParseException e) {
                 fail();
             }
         }
 
         {
+            JSONArray deletePropertyRequest = new JSONArray() {{
+                add(new JSONObject() {{
+                    put("action", "delete");
+                    put("properties", new JSONArray() {{
+                        add(new JSONObject(){{
+                            put("type", type);
+                            put("entity", entity);
+                            put("key", new JSONObject() {{
+                                put("key1", "keyval1");
+                                put("key2", "keyval2");
+                            }});
+                        }});
+                    }});
+                }});
+            }};
+
             AtsdHttpResponse response = httpSender.send(HTTPMethod.PATH, ATSD_METHOD, deletePropertyRequest.toString());
             assertEquals(200, response.getCode());
 
