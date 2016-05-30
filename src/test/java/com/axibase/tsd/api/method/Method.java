@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
  * @author Dmitry Korchagin.
  */
 public abstract class Method {
+
     private static final Logger logger = LoggerFactory.getLogger(Method.class);
     protected static HTTPSender httpSender;
     protected static TCPSender tcpSender;

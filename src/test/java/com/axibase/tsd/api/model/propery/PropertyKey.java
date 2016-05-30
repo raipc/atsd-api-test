@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author Dmitry Korchagin.
  */
-abstract public class PropertyKey extends Model {
+public class PropertyKey extends Model {
     private String type;
     private String entity;
     private Map<String, String> key;
@@ -49,7 +49,7 @@ abstract public class PropertyKey extends Model {
 
     @Override
     public String toString() {
-        return "PropertyKey{" +
+        return "{" +
                 "type='" + type + '\'' +
                 ", entity='" + entity + '\'' +
                 ", key=" + key +

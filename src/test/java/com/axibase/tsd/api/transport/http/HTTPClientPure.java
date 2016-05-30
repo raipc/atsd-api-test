@@ -41,8 +41,10 @@ public class HTTPClientPure implements HTTPClient {
         String uri = url + atsdMethod;
 
         HttpGet request = new HttpGet(uri);
-        logger.info("> {}", uri);
-        return parseResponse(httpClient.execute(request, context));
+        logger.debug("> {}", uri);
+        AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
+        request.releaseConnection();
+        return atsdHttpResponse;
     }
 
     public AtsdHttpResponse post(String atsdMethod, String body) throws IOException {
@@ -51,8 +53,10 @@ public class HTTPClientPure implements HTTPClient {
         HttpPost request = new HttpPost(uri);
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
-        logger.info("> {}\n> {}", uri, body);
-        return parseResponse(httpClient.execute(request, context));
+        logger.debug("> {}\n> {}", uri, body);
+        AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
+        request.releaseConnection();
+        return atsdHttpResponse;
     }
 
     public AtsdHttpResponse put(String atsdMethod, String body) throws IOException {
@@ -61,8 +65,10 @@ public class HTTPClientPure implements HTTPClient {
         HttpPut request = new HttpPut(uri);
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
-        logger.info("> {}\n> {}", uri, body);
-        return parseResponse(httpClient.execute(request, context));
+        logger.debug("> {}\n> {}", uri, body);
+        AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
+        request.releaseConnection();
+        return atsdHttpResponse;
     }
 
     public AtsdHttpResponse patch(String atsdMethod, String body) throws IOException {
@@ -71,8 +77,10 @@ public class HTTPClientPure implements HTTPClient {
         setHeaders(request, null);
         request.setEntity(new StringEntity(body));
 
-        logger.info("> {}\n> {}", uri, body);
-        return parseResponse(httpClient.execute(request, context));
+        logger.debug("> {}\n> {}", uri, body);
+        AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
+        request.releaseConnection();
+        return atsdHttpResponse;
     }
 
     public AtsdHttpResponse delete(String atsdMethod) throws IOException {
@@ -80,8 +88,10 @@ public class HTTPClientPure implements HTTPClient {
 
         HttpDelete request = new HttpDelete(uri);
         setHeaders(request, null);
-        logger.info("> {}", uri);
-        return parseResponse(httpClient.execute(request, context));
+        logger.debug("> {}", uri);
+        AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
+        request.releaseConnection();
+        return atsdHttpResponse;
     }
 
     private void setHeaders(HttpRequestBase request, Map<String, String> headers) {
@@ -106,7 +116,7 @@ public class HTTPClientPure implements HTTPClient {
         }
         atsdHttpResponse = new AtsdHttpResponse(responseCode, null, sb.toString());
         if(responseCode == 200) {
-            logger.info("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
+            logger.debug("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
         } else {
             logger.warn("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
 
