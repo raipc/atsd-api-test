@@ -1,7 +1,9 @@
 package com.axibase.tsd.api.method.property.delete;
 
 
+import com.axibase.tsd.api.builder.PropertyBuilder;
 import com.axibase.tsd.api.method.property.PropertyMethod;
+import com.axibase.tsd.api.model.propery.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.json.simple.JSONArray;
@@ -33,6 +35,28 @@ public class NegativeTest extends PropertyMethod {
         prepareRequestSender();
     }
 
+
+    @Test
+    public void propertyDelete_ByPropertyKey_EndDateEQDate_PropertyRemain() throws IOException {
+        final Property property = new PropertyBuilder().buildRandom();
+        if (!insertProperty(property) || !propertyExist(property)) {
+            fail("Fail to insert property");
+        }
+        logger.info("Property inserted");
+        JSONArray request = new JSONArray() {{
+            add(new JSONObject() {{
+                put("entity", property.getEntity());
+                put("type", property.getType());
+                put("key", property.getKey());
+                put("endDate", property.getDate());
+            }});
+        }};
+
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+        assertEquals(200, response.getCode());
+
+        assertTrue("Property should be remain", propertyExist(property));
+    }
 
     @Test
     public void checkDataset() throws IOException {

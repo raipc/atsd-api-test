@@ -8,14 +8,33 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Dmitry Korchagin.
  */
 public class Util {
+
+    public static Date getCurrentDate() {
+        return new Date();
+    }
+
+    public static Date getPastDate() {
+        return new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24); //one day before
+
+    }
+
+    public static Date getFutureDate() {
+        return new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24); //one day after
+    }
+
+    public static String format(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssXXX");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.format(date);
+    }
+
     public static String buildVariablePrefix() {
         String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
         StringBuilder prefix = new StringBuilder();
@@ -41,7 +60,6 @@ public class Util {
             datasetBuilder.append(aux);
         }
         return datasetBuilder.toString();
-
     }
 
     public static class ABNF {

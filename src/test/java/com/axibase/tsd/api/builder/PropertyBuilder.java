@@ -31,9 +31,7 @@ public class PropertyBuilder implements Builder<Property> {
         property.setType(Util.ABNF.generateNAME(TYPE_LENGTH).toLowerCase());
         property.setTags(generateTag(TAG_COUNT));
         property.setKey(generateKey(KEY_COUNT));
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssXXX");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        property.setDate(dateFormat.format(new Date()));
+        property.setDate(Util.format(Util.getCurrentDate()));
         return property;
     }
 

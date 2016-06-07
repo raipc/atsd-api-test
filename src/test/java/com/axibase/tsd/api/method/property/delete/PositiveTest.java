@@ -1,6 +1,7 @@
 package com.axibase.tsd.api.method.property.delete;
 
 
+import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.builder.PropertyBuilder;
 import com.axibase.tsd.api.method.property.PropertyMethod;
 import com.axibase.tsd.api.model.propery.Property;
@@ -18,6 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import static org.junit.Assert.*;
 
@@ -36,38 +40,57 @@ public class PositiveTest extends PropertyMethod {
         prepareRequestSender();
     }
 
+
     @Test
-    public void checkDataset() throws IOException {
+    public void propertyDelete_FutureDate_DeleteWithoutDateFilterByTypeAndEntity_ExactFALSE_PropertyDisappear() throws IOException {
+        final Property  property = new PropertyBuilder().buildRandom();
+        property.setDate(Util.format(Util.getFutureDate()));
+        logger.debug("Property generated : {}", property.toString());
 
-        JSONArray dataset = getDataset(DATASET_DIRECTORY + "/" + DATASET_NAME);
-        assertNotNull(dataset);
-
-        int size = dataset.size();
-        logger.info("Starting to iterate Dataset ...");
-        for (int i = 0; i < size; i++) {
-            logger.info("Query set number: {}", i);
-            JSONArray querySet = (JSONArray) dataset.get(i);
-            logger.debug("query set: {}", querySet.toJSONString());
-
-            JSONArray insert = (JSONArray) querySet.get(0);
-            JSONArray query = (JSONArray) querySet.get(1);
-            JSONArray deleteQuery = (JSONArray) querySet.get(2);
-
-            logger.debug("insert: {}", insert);
-            logger.debug("query: {}", query);
-            logger.debug("deleteQuery: {}", deleteQuery);
-
-            assertTrue(insertProperty(insert));
-            assertTrue(propertyExist(query, insert));
-
-
-            AtsdHttpResponse atsdResponse = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, deleteQuery.toJSONString());
-            assertEquals("HTTP Response code mismatch", 200, atsdResponse.getCode());
-
-            assertFalse("Property still exist", propertyExist(query, insert));
-
+        if (!insertProperty(property) || !propertyExist(property)) {
+            fail("Fail to insert property");
         }
+        logger.info("Property inserted");
 
+
+        JSONArray request = new JSONArray() {{
+            add(new JSONObject() {{
+                put("type", property.getType());
+                put("entity", property.getEntity());
+                put("exactMatch", false);
+            }});
+        }};
+
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+        assertEquals(200, response.getCode());
+
+        assertFalse("Property should be deleted", propertyExist(property));
+    }
+
+    @Test
+    public void propertyDelete_FutureDate_DeleteExactWithoutDateFilter_PropertyDisappear() throws IOException {
+        final Property  property = new PropertyBuilder().buildRandom();
+        property.setDate(Util.format(Util.getFutureDate()));
+        logger.debug("Property generated : {}", property.toString());
+
+        if (!insertProperty(property) || !propertyExist(property)) {
+            fail("Fail to insert property");
+        }
+        logger.info("Property inserted");
+
+
+        JSONArray request = new JSONArray() {{
+            add(new JSONObject() {{
+                put("type", property.getType());
+                put("entity", property.getEntity());
+                put("key", property.getKey());
+            }});
+        }};
+
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+        assertEquals(200, response.getCode());
+
+        assertFalse("Property should be deleted", propertyExist(property));
     }
 
     @Test
@@ -104,7 +127,7 @@ public class PositiveTest extends PropertyMethod {
         AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
         assertEquals(200, response.getCode());
 
-        assertFalse("First property should be deleter", propertyExist(property));
+        assertFalse("First property should be deleted", propertyExist(property));
         assertTrue("Second property should remain", propertyExist(secondProperty));
     }
 
@@ -181,6 +204,27 @@ public class PositiveTest extends PropertyMethod {
     }
 
     @Test
+    public void propertyDelete_ByTypeAndEntity_exactTRUE_PropertyDisappear() throws IOException {
+        final Property property = new PropertyBuilder().buildRandom();
+        if (!insertProperty(property) || !propertyExist(property)) {
+            fail("Fail to insert property");
+        }
+        logger.info("Property inserted");
+        JSONArray request = new JSONArray() {{
+            add(new JSONObject() {{
+                put("entity", property.getEntity());
+                put("type", property.getType());
+                put("exactMatch", true);
+            }});
+        }};
+
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+        assertEquals(200, response.getCode());
+
+        assertTrue("Property should be remain", propertyExist(property));
+    }
+
+    @Test
     public void propertyDelete_ByPropertyKey_PropertyDisappear() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
         if (!insertProperty(property) || !propertyExist(property)) {
@@ -199,6 +243,42 @@ public class PositiveTest extends PropertyMethod {
         assertEquals(200, response.getCode());
 
         assertFalse("Property should be deleted", propertyExist(property));
+    }
+
+
+
+    @Test
+    public void checkDataset() throws IOException {
+
+        JSONArray dataset = getDataset(DATASET_DIRECTORY + "/" + DATASET_NAME);
+        assertNotNull(dataset);
+
+        int size = dataset.size();
+        logger.info("Starting to iterate Dataset ...");
+        for (int i = 0; i < size; i++) {
+            logger.info("Query set number: {}", i);
+            JSONArray querySet = (JSONArray) dataset.get(i);
+            logger.debug("query set: {}", querySet.toJSONString());
+
+            JSONArray insert = (JSONArray) querySet.get(0);
+            JSONArray query = (JSONArray) querySet.get(1);
+            JSONArray deleteQuery = (JSONArray) querySet.get(2);
+
+            logger.debug("insert: {}", insert);
+            logger.debug("query: {}", query);
+            logger.debug("deleteQuery: {}", deleteQuery);
+
+            assertTrue(insertProperty(insert));
+            assertTrue(propertyExist(query, insert));
+
+
+            AtsdHttpResponse atsdResponse = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, deleteQuery.toJSONString());
+            assertEquals("HTTP Response code mismatch", 200, atsdResponse.getCode());
+
+            assertFalse("Property still exist", propertyExist(query, insert));
+
+        }
+
     }
 
 
