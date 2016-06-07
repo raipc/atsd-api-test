@@ -65,7 +65,7 @@ public class Config {
     }
 
     public static Config getInstance() {
-        if(null == instance) {
+        if (null == instance) {
             instance = new Config();
         }
         return instance;
@@ -82,10 +82,10 @@ public class Config {
         try {
             stream = new FileInputStream(configPath);
             clientProperties.load(stream);
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Fail to load client properties");
             e.printStackTrace();
-        }finally {
+        } finally {
             IOUtils.closeQuietly(stream);
         }
 

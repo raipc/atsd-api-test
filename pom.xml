@@ -11,6 +11,7 @@
 
     <properties>
         <slf4j.version>1.7.5</slf4j.version>
+        <java.version>1.7</java.version>
         <fluent-hc.version>4.5.2</fluent-hc.version>
         <junit.version>4.8</junit.version>
         <jackson.version>2.7.3</jackson.version>
@@ -21,17 +22,8 @@
     </properties>
 
 
-
     <dependencies>
-        <!-- http://mvnrepository.com/artifact/com.github.nradov/abnffuzzer -->
-        <!--<dependency>-->
-            <!--<groupId>com.github.nradov</groupId>-->
-            <!--<artifactId>abnffuzzer</artifactId>-->
-            <!--<version>0.1.12</version>-->
-        <!--</dependency>-->
 
-
-        <!--logs-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -111,8 +103,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
