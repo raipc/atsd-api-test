@@ -46,7 +46,7 @@ public class PropertyBuilder implements Builder<Property> {
     private Map<String, String> generateKey(int keyCount) {
         Map<String, String> keys = new HashMap<>();
         for (int i = 0; i < keyCount; i++) {
-            keys.put(Util.ABNF.generateNAME(KEY_NAME_LENGTH).toLowerCase(), Util.ABNF.generateTEXTVALUE(KEY_VALUE_LENGTH).toLowerCase());
+            keys.put(Util.ABNF.generateNAME(KEY_NAME_LENGTH).toLowerCase(), Util.ABNF.generateTEXTVALUE(KEY_VALUE_LENGTH));
         }
         return keys;
     }
