@@ -37,6 +37,65 @@ public class NegativeTest extends PropertyMethod {
 
 
     @Test
+    public void propertyDelete_DeleteByTypeAndEntity_exactTRUE_PropertiesRemain() throws IOException {
+        final Property property = new PropertyBuilder().buildRandom();
+        logger.debug("First property generated : {}", property.toString());
+
+        if (!insertProperty(property) || !propertyExist(property)) {
+            fail("Fail to insert property");
+        }
+        logger.info("First property inserted");
+        Property secondProperty = new PropertyBuilder().buildRandom();
+        secondProperty.setType(property.getType());
+        secondProperty.setEntity(property.getEntity());
+
+        logger.debug("Generated property: {}", secondProperty.toString());
+        if (!insertProperty(secondProperty)) {
+            fail("Fail to insert secondProperty");
+        }
+        if (!propertyExist(secondProperty)) {
+            fail("Fail to check secondProperty insert");
+        }
+        logger.info("Second property inserted");
+
+        JSONArray request = new JSONArray() {{
+            add(new JSONObject() {{
+                put("type", property.getType());
+                put("entity", property.getEntity());
+                put("exactMatch", true);
+            }});
+        }};
+
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+        assertEquals(200, response.getCode());
+
+        assertTrue("First property should remain", propertyExist(property));
+        assertTrue("Second property should remain", propertyExist(secondProperty));
+    }
+
+
+    @Test
+    public void propertyDelete_ByTypeAndEntity_exactTRUE_PropertyRemain() throws IOException {
+        final Property property = new PropertyBuilder().buildRandom();
+        if (!insertProperty(property) || !propertyExist(property)) {
+            fail("Fail to insert property");
+        }
+        logger.info("Property inserted");
+        JSONArray request = new JSONArray() {{
+            add(new JSONObject() {{
+                put("entity", property.getEntity());
+                put("type", property.getType());
+                put("exactMatch", true);
+            }});
+        }};
+
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+        assertEquals(200, response.getCode());
+
+        assertTrue("Property should be remain", propertyExist(property));
+    }
+
+    @Test
     public void propertyDelete_ByPropertyKey_EndDateEQDate_PropertyRemain() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
         if (!insertProperty(property) || !propertyExist(property)) {
