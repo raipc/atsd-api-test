@@ -117,4 +117,17 @@ abstract public class PropertyMethod extends Method {
         }
         return false;
     }
+
+    protected JSONArray buildJsonArray(final Property property) {
+        JSONArray request = new JSONArray() {{
+            add(new JSONObject() {{
+                put("entity", property.getEntity());
+                put("type", property.getType());
+                put("key", property.getKey());
+                put("tags", property.getTags());
+                put("date", property.getDate());
+            }});
+        }};
+        return request;
+    }
 }
