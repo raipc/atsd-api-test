@@ -35,7 +35,125 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntity_StartPast_IntervalGiveFuture_propertyFinded() throws IOException {
+    public void test_TypeEntityStartEnd_LastDEFAULT_bothFounded() throws IOException {
+        final Property propertyFirst = new PropertyBuilder().buildRandom();
+        propertyFirst.setType(registry.registerType("query-last-type8"));
+        propertyFirst.setEntity(registry.registerEntity("query-last-entity8"));
+        propertyFirst.setDate(Util.format(Util.getPastDate()));
+        if (!insertProperty(propertyFirst) || !propertyExist(propertyFirst)) {
+            fail("Fail to insert propertyFirst");
+        }
+        logger.info("propertyFirst inserted");
+
+        final Property propertyLast = new PropertyBuilder().buildRandom();
+        propertyLast.setType(propertyFirst.getType());
+        propertyLast.setEntity(propertyFirst.getEntity());
+        propertyLast.setDate(Util.format(Util.getCurrentDate()));
+        if (!insertProperty(propertyLast) || !propertyExist(propertyLast)) {
+            fail("Fail to insert propertyLast");
+        }
+        logger.info("propertyLast inserted");
+
+        JSONArray request;
+
+        {
+            request = new JSONArray() {{
+                add(new JSONObject() {{
+                    put("entity", propertyFirst.getEntity());
+                    put("type", propertyFirst.getType());
+                    put("startDate", propertyFirst.getDate());
+                    put("interval", new JSONObject() {{
+                        put("count", 2);
+                        put("unit", "DAY");
+                    }});
+                }});
+            }};
+            assertTrue("Last property should be founded", propertiesExist(request, buildJsonArray(propertyFirst, propertyLast)));
+        }
+    }
+
+    @Test
+    public void test_TypeEntityStartEnd_LastFALSE_bothFounded() throws IOException {
+        final Property propertyFirst = new PropertyBuilder().buildRandom();
+        propertyFirst.setType(registry.registerType("query-last-type7"));
+        propertyFirst.setEntity(registry.registerEntity("query-last-entity7"));
+        propertyFirst.setDate(Util.format(Util.getPastDate()));
+        if (!insertProperty(propertyFirst) || !propertyExist(propertyFirst)) {
+            fail("Fail to insert propertyFirst");
+        }
+        logger.info("propertyFirst inserted");
+
+        final Property propertyLast = new PropertyBuilder().buildRandom();
+        propertyLast.setType(propertyFirst.getType());
+        propertyLast.setEntity(propertyFirst.getEntity());
+        propertyLast.setDate(Util.format(Util.getCurrentDate()));
+        if (!insertProperty(propertyLast) || !propertyExist(propertyLast)) {
+            fail("Fail to insert propertyLast");
+        }
+        logger.info("propertyLast inserted");
+
+        JSONArray request;
+
+        {
+            request = new JSONArray() {{
+                add(new JSONObject() {{
+                    put("entity", propertyFirst.getEntity());
+                    put("type", propertyFirst.getType());
+                    put("startDate", propertyFirst.getDate());
+                    put("interval", new JSONObject() {{
+                        put("count", 2);
+                        put("unit", "DAY");
+                    }});
+                    put("last", false);
+                }});
+            }};
+            assertTrue("Last property should be founded", propertiesExist(request, buildJsonArray(propertyFirst, propertyLast)));
+        }
+    }
+
+    @Test
+    public void test_TypeEntityStartEnd_LastTRUE_propertyLastFounded() throws IOException {
+        final Property propertyFirst = new PropertyBuilder().buildRandom();
+        propertyFirst.setType(registry.registerType("query-last-type6"));
+        propertyFirst.setEntity(registry.registerEntity("query-last-entity6"));
+        propertyFirst.setDate(Util.format(Util.getPastDate()));
+        if (!insertProperty(propertyFirst) || !propertyExist(propertyFirst)) {
+            fail("Fail to insert propertyFirst");
+        }
+        logger.info("propertyFirst inserted");
+
+        final Property propertyLast = new PropertyBuilder().buildRandom();
+        propertyLast.setType(propertyFirst.getType());
+        propertyLast.setEntity(propertyFirst.getEntity());
+        propertyLast.setDate(Util.format(Util.getCurrentDate()));
+        if (!insertProperty(propertyLast) || !propertyExist(propertyLast)) {
+            fail("Fail to insert propertyLast");
+        }
+        logger.info("propertyLast inserted");
+
+        JSONArray request;
+
+        {
+            request = new JSONArray() {{
+                add(new JSONObject() {{
+                    put("entity", propertyFirst.getEntity());
+                    put("type", propertyFirst.getType());
+                    put("startDate", propertyFirst.getDate());
+                    put("interval", new JSONObject() {{
+                        put("count", 2);
+                        put("unit", "DAY");
+                    }});
+                    put("last", true);
+                }});
+            }};
+            assertFalse("First property should not be founded", propertiesExist(request, buildJsonArray(propertyFirst)));
+
+            assertTrue("Last property should be founded", propertiesExist(request, buildJsonArray(propertyLast)));
+        }
+    }
+
+    @Test
+    public void test_TypeEntity_StartPast_IntervalGiveFuture_propertyFounded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
         property.setType(registry.registerType("query-type5"));
         property.setEntity(registry.registerEntity("query-entity5"));
@@ -91,7 +209,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
 
     @Test
-    public void test_TypeEntity_StartPast_EndFuture_propertyFinded() throws IOException {
+    public void test_TypeEntity_StartPast_EndFuture_propertyFounded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
         property.setType(registry.registerType("query-type3"));
         property.setEntity(registry.registerEntity("query-entity3"));
@@ -116,7 +234,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
 
     @Test
-    public void test_TypeEntityStartEnd_propertyFinded() throws IOException {
+    public void test_TypeEntityStartEnd_propertyFounded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
         property.setType(registry.registerType("query-type2"));
         property.setEntity(registry.registerEntity("query-entity2"));
@@ -139,7 +257,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntityStartEnd_ExactFalse_propertyFinded() throws IOException {
+    public void test_TypeEntityStartEnd_ExactFalse_propertyFounded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
         property.setType(registry.registerType("query-type1"));
         property.setEntity(registry.registerEntity("query-entity1"));
@@ -163,7 +281,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_Example_TypeEntityStartEnd_Partkey_propertyFinded() throws IOException {
+    public void test_Example_TypeEntityStartEnd_Partkey_propertyFounded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
         property.setType(registry.registerType("disk"));
         property.setEntity(registry.registerEntity("nurswgvml007"));
