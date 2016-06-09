@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -23,6 +22,7 @@ public class PropertyBuilder implements Builder<Property> {
     private final int TAG_COUNT = 2;
     private final int TAG_NAME_LENGTH = 4;
     private final int TAG_VALUE_LENGTH = 4;
+
 
 
     public Property buildRandom() {
@@ -43,6 +43,7 @@ public class PropertyBuilder implements Builder<Property> {
         return tags;
     }
 
+
     private Map<String, String> generateKey(int keyCount) {
         Map<String, String> keys = new HashMap<>();
         for (int i = 0; i < keyCount; i++) {
@@ -50,6 +51,8 @@ public class PropertyBuilder implements Builder<Property> {
         }
         return keys;
     }
+
+
 
 
 }

@@ -26,7 +26,6 @@ abstract public class PropertyMethod extends Method {
     protected static final String METHOD_PROPERTY_INSERT = "/properties/insert";
     protected static final String METHOD_PROPERTY_QUERY = "/properties/query";
     protected static final String METHOD_PROPERTY_DELETE = "/properties/delete";
-    protected static final String DATASET_DIRECTORY = "/dataset/property";
 
     protected Boolean insertProperty(final Property property) throws IOException {
         JSONArray request = new JSONArray() {{
@@ -96,7 +95,7 @@ abstract public class PropertyMethod extends Method {
         return responseBody.contains(propertyObject);
     }
 
-    protected Boolean propertyExist(final JSONArray request, final JSONArray properties) throws IOException {
+    protected Boolean propertiesExist(final JSONArray request, final JSONArray properties) throws IOException {
 
 
         AtsdHttpResponse atsdResponse = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_QUERY, request.toJSONString());
@@ -110,24 +109,20 @@ abstract public class PropertyMethod extends Method {
             return false;
         }
         logger.debug("check: {}\nresponse: {}", properties, responseBody);
-        for (int i = 0; i < properties.size(); i++) {
-            if (responseBody.contains(properties.get(i))) {
-                return true;
-            }
-        }
-        return false;
+        return responseBody.containsAll(properties);
     }
 
-    protected JSONArray buildJsonArray(final Property property) {
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
+    protected JSONArray buildJsonArray(final Property... properties) {
+        JSONArray jsonArray = new JSONArray();
+        for(final Property property: properties) {
+            jsonArray.add(new JSONObject() {{
                 put("entity", property.getEntity());
                 put("type", property.getType());
                 put("key", property.getKey());
                 put("tags", property.getTags());
                 put("date", property.getDate());
             }});
-        }};
-        return request;
+        }
+        return jsonArray;
     }
 }

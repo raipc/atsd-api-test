@@ -1,6 +1,7 @@
 package com.axibase.tsd.api.method;
 
 import com.axibase.tsd.api.Config;
+import com.axibase.tsd.api.Registry;
 import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.transport.http.HTTPClientPure;
 import com.axibase.tsd.api.transport.http.HTTPSender;
@@ -22,6 +23,7 @@ public abstract class Method {
 
     protected static HTTPSender httpSender;
     protected static TCPSender tcpSender;
+    protected static Registry registry;
 
     protected static void prepareRequestSender() {
         Config config = Config.getInstance();
@@ -30,8 +32,9 @@ public abstract class Method {
         tcpSender = new TCPSender(config.getServerName(), config.getTcpPort());
     }
 
-    abstract public void checkDataset() throws IOException;
-
+    protected static void setUpRegistry() {
+        registry = Registry.getInstance();
+    }
 
     protected JSONArray getDataset(final String datasetPath) throws IOException {
         logger.debug("Starting to parse Dataset.\nDataset file: {}", datasetPath);
