@@ -37,6 +37,8 @@ public class PropertyQueryTest extends PropertyMethod {
     @Test
     public void test_TypeEntity_StartPast_IntervalGiveFuture_propertyFinded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
+        property.setType(registry.registerType("query-type5"));
+        property.setEntity(registry.registerEntity("query-entity5"));
         if (!insertProperty(property) || !propertyExist(property)) {
             fail("Fail to insert property");
         }
@@ -63,6 +65,8 @@ public class PropertyQueryTest extends PropertyMethod {
     @Test
     public void test_TypeEntity_StartEQDate_Interval1MS_propertyFinded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
+        property.setType(registry.registerType("query-type4"));
+        property.setEntity(registry.registerEntity("query-entity4"));
         if (!insertProperty(property) || !propertyExist(property)) {
             fail("Fail to insert property");
         }
@@ -89,6 +93,8 @@ public class PropertyQueryTest extends PropertyMethod {
     @Test
     public void test_TypeEntity_StartPast_EndFuture_propertyFinded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
+        property.setType(registry.registerType("query-type3"));
+        property.setEntity(registry.registerEntity("query-entity3"));
         if (!insertProperty(property) || !propertyExist(property)) {
             fail("Fail to insert property");
         }
@@ -112,6 +118,8 @@ public class PropertyQueryTest extends PropertyMethod {
     @Test
     public void test_TypeEntityStartEnd_propertyFinded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
+        property.setType(registry.registerType("query-type2"));
+        property.setEntity(registry.registerEntity("query-entity2"));
         if (!insertProperty(property) || !propertyExist(property)) {
             fail("Fail to insert property");
         }
@@ -133,6 +141,8 @@ public class PropertyQueryTest extends PropertyMethod {
     @Test
     public void test_TypeEntityStartEnd_ExactFalse_propertyFinded() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
+        property.setType(registry.registerType("query-type1"));
+        property.setEntity(registry.registerEntity("query-entity1"));
         if (!insertProperty(property) || !propertyExist(property)) {
             fail("Fail to insert property");
         }

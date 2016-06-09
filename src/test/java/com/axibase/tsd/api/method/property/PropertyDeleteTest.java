@@ -34,8 +34,8 @@ public class PropertyDeleteTest extends PropertyMethod {
     @Test
     public void test_FutureDate_DeleteWithoutDateFilterByTypeAndEntity_ExactFALSE_PropertyDisappear() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("e8"));
-        property.setType(registry.registerType("t8"));
+        property.setEntity(registry.registerEntity("delete-entity8"));
+        property.setType(registry.registerType("delete-type8"));
         property.setDate(Util.format(Util.getFutureDate()));
         logger.debug("Property generated : {}", property.toString());
 
@@ -62,8 +62,8 @@ public class PropertyDeleteTest extends PropertyMethod {
     @Test
     public void test_FutureDate_DeleteExactWithoutDateFilter_PropertyDisappear() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("e7"));
-        property.setType(registry.registerType("t7"));
+        property.setEntity(registry.registerEntity("delete-entity7"));
+        property.setType(registry.registerType("delete-type7"));
         property.setDate(Util.format(Util.getFutureDate()));
         logger.debug("Property generated : {}", property.toString());
 
@@ -90,8 +90,8 @@ public class PropertyDeleteTest extends PropertyMethod {
     @Test
     public void test_CommonTypeAndEntity_ByPropertyKey_OnlyFirstPropertyDisappear() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("e6"));
-        property.setType(registry.registerType("t6"));
+        property.setEntity(registry.registerEntity("delete-entity6"));
+        property.setType(registry.registerType("delete-type6"));
         logger.debug("First property generated : {}", property.toString());
 
         if (!insertProperty(property) || !propertyExist(property)) {
@@ -131,8 +131,8 @@ public class PropertyDeleteTest extends PropertyMethod {
     @Test
     public void test_DeleteAllByType_exactFALSE_AllPropertyDisappear() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("e5"));
-        property.setType(registry.registerType("t5"));
+        property.setEntity(registry.registerEntity("delete-entity5"));
+        property.setType(registry.registerType("delete-type5"));
         logger.debug("First property generated : {}", property.toString());
 
         if (!insertProperty(property) || !propertyExist(property)) {
@@ -168,8 +168,8 @@ public class PropertyDeleteTest extends PropertyMethod {
     @Test
     public void test_ByPropertyKey_PropertyDisappear() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("e4"));
-        property.setType(registry.registerType("t4"));
+        property.setEntity(registry.registerEntity("delete-entity4"));
+        property.setType(registry.registerType("delete-type4"));
         if (!insertProperty(property) || !propertyExist(property)) {
             fail("Fail to insert property");
         }
@@ -191,8 +191,8 @@ public class PropertyDeleteTest extends PropertyMethod {
     @Test
     public void test_DeleteByTypeAndEntity_exactTRUE_PropertiesRemain() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("e3"));
-        property.setType(registry.registerType("t3"));
+        property.setEntity(registry.registerEntity("delete-entity3"));
+        property.setType(registry.registerType("delete-type3"));
         logger.debug("First property generated : {}", property.toString());
 
         if (!insertProperty(property) || !propertyExist(property)) {
@@ -231,8 +231,8 @@ public class PropertyDeleteTest extends PropertyMethod {
     @Test
     public void test_ByTypeAndEntity_exactTRUE_PropertyRemain() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("e2"));
-        property.setType(registry.registerType("t2"));
+        property.setEntity(registry.registerEntity("delete-entity2"));
+        property.setType(registry.registerType("delete-type2"));
         if (!insertProperty(property) || !propertyExist(property)) {
             fail("Fail to insert property");
         }
@@ -254,8 +254,8 @@ public class PropertyDeleteTest extends PropertyMethod {
     @Test
     public void test_ByPropertyKey_EndDateEQDate_PropertyRemain() throws IOException {
         final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("e1"));
-        property.setType(registry.registerType("t1"));
+        property.setEntity(registry.registerEntity("delete-entity1"));
+        property.setType(registry.registerType("delete-type1"));
         if (!insertProperty(property) || !propertyExist(property)) {
             fail("Fail to insert property");
         }
