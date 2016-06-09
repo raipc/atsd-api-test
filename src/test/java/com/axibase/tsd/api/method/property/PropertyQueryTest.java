@@ -3,7 +3,7 @@ package com.axibase.tsd.api.method.property;
 
 import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.builder.PropertyBuilder;
-import com.axibase.tsd.api.model.propery.Property;
+import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.json.simple.JSONArray;
@@ -15,7 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -31,284 +36,233 @@ public class PropertyQueryTest extends PropertyMethod {
     @BeforeClass
     public static void setUpBeforeClass() {
         prepareRequestSender();
-        setUpRegistry();
+    }
+
+
+    @Test
+    public void test_TypeEntitiesStartEnd_bothFounded_wrongNotFounded() throws IOException {
+        final Property property = new Property("query-type9", "query-entity9");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        final Property lastProperty = new Property(null, "query-entity9-2");
+        lastProperty.setType(property.getType());
+        insertPropertyCheck(lastProperty);
+
+        final Property wrongProperty = new Property(null, "query-wrongentity-9");
+        wrongProperty.setType(property.getType());
+        insertPropertyCheck(wrongProperty);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entities", new String[] {property.getEntity(), lastProperty.getEntity()});
+        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
+        queryObj.put("interval", new JSONObject() {{
+            put("count", 2);
+            put("unit", "DAY");
+        }});
+
+        assertTrue(queryProperties(queryObj, property, lastProperty));
+        assertFalse(queryProperties(queryObj, wrongProperty));
     }
 
     @Test
-    public void test_TypeEntityStartEnd_LastDEFAULT_bothFounded() throws IOException {
-        final Property propertyFirst = new PropertyBuilder().buildRandom();
-        propertyFirst.setType(registry.registerType("query-last-type8"));
-        propertyFirst.setEntity(registry.registerEntity("query-last-entity8"));
-        propertyFirst.setDate(Util.format(Util.getPastDate()));
-        if (!insertProperty(propertyFirst) || !propertyExist(propertyFirst)) {
-            fail("Fail to insert propertyFirst");
-        }
-        logger.info("propertyFirst inserted");
+    public void test_TypeEntityStartInterval_LastDEFAULT_bothFounded() throws IOException {
+        final Property property = new Property("query-type8", "query-entity8");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getPastDate());
+        insertPropertyCheck(property);
 
-        final Property propertyLast = new PropertyBuilder().buildRandom();
-        propertyLast.setType(propertyFirst.getType());
-        propertyLast.setEntity(propertyFirst.getEntity());
-        propertyLast.setDate(Util.format(Util.getCurrentDate()));
-        if (!insertProperty(propertyLast) || !propertyExist(propertyLast)) {
-            fail("Fail to insert propertyLast");
-        }
-        logger.info("propertyLast inserted");
+        final Property lastProperty = new Property();
+        lastProperty.setType(property.getType());
+        lastProperty.setEntity(property.getEntity());
+        lastProperty.addTag("t2", "tv2");
+        lastProperty.setDate(Util.getCurrentDate());
+        insertPropertyCheck(lastProperty);
 
-        JSONArray request;
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
+        queryObj.put("interval", new JSONObject() {{
+            put("count", 2);
+            put("unit", "DAY");
+        }});
 
-        {
-            request = new JSONArray() {{
-                add(new JSONObject() {{
-                    put("entity", propertyFirst.getEntity());
-                    put("type", propertyFirst.getType());
-                    put("startDate", propertyFirst.getDate());
-                    put("interval", new JSONObject() {{
-                        put("count", 2);
-                        put("unit", "DAY");
-                    }});
-                }});
-            }};
-            assertTrue("Last property should be founded", propertiesExist(request, buildJsonArray(propertyFirst, propertyLast)));
-        }
+        assertTrue(queryProperties(queryObj, property, lastProperty));
     }
 
     @Test
-    public void test_TypeEntityStartEnd_LastFALSE_bothFounded() throws IOException {
-        final Property propertyFirst = new PropertyBuilder().buildRandom();
-        propertyFirst.setType(registry.registerType("query-last-type7"));
-        propertyFirst.setEntity(registry.registerEntity("query-last-entity7"));
-        propertyFirst.setDate(Util.format(Util.getPastDate()));
-        if (!insertProperty(propertyFirst) || !propertyExist(propertyFirst)) {
-            fail("Fail to insert propertyFirst");
-        }
-        logger.info("propertyFirst inserted");
+    public void test_TypeEntityStartInterval_LastFALSE_bothFounded() throws IOException {
+        final Property property = new Property("query-type7", "query-entity7");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getPastDate());
+        insertPropertyCheck(property);
 
-        final Property propertyLast = new PropertyBuilder().buildRandom();
-        propertyLast.setType(propertyFirst.getType());
-        propertyLast.setEntity(propertyFirst.getEntity());
-        propertyLast.setDate(Util.format(Util.getCurrentDate()));
-        if (!insertProperty(propertyLast) || !propertyExist(propertyLast)) {
-            fail("Fail to insert propertyLast");
-        }
-        logger.info("propertyLast inserted");
+        final Property lastProperty = new Property();
+        lastProperty.setType(property.getType());
+        lastProperty.setEntity(property.getEntity());
+        lastProperty.setDate(Util.getCurrentDate());
+        insertPropertyCheck(lastProperty);
 
-        JSONArray request;
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
+        queryObj.put("interval", new JSONObject() {{
+            put("count", 2);
+            put("unit", "DAY");
+        }});
+        queryObj.put("last", false);
 
-        {
-            request = new JSONArray() {{
-                add(new JSONObject() {{
-                    put("entity", propertyFirst.getEntity());
-                    put("type", propertyFirst.getType());
-                    put("startDate", propertyFirst.getDate());
-                    put("interval", new JSONObject() {{
-                        put("count", 2);
-                        put("unit", "DAY");
-                    }});
-                    put("last", false);
-                }});
-            }};
-            assertTrue("Last property should be founded", propertiesExist(request, buildJsonArray(propertyFirst, propertyLast)));
-        }
+        assertTrue(queryProperties(queryObj, property, lastProperty));
     }
 
     @Test
-    public void test_TypeEntityStartEnd_LastTRUE_propertyLastFounded() throws IOException {
-        final Property propertyFirst = new PropertyBuilder().buildRandom();
-        propertyFirst.setType(registry.registerType("query-last-type6"));
-        propertyFirst.setEntity(registry.registerEntity("query-last-entity6"));
-        propertyFirst.setDate(Util.format(Util.getPastDate()));
-        if (!insertProperty(propertyFirst) || !propertyExist(propertyFirst)) {
-            fail("Fail to insert propertyFirst");
-        }
-        logger.info("propertyFirst inserted");
+    public void test_TypeEntityStartInterval_LastTRUE_propertyLastFounded() throws IOException {
+        final Property property = new Property("query-type6", "query-entity6");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getPastDate());
+        insertPropertyCheck(property);
 
-        final Property propertyLast = new PropertyBuilder().buildRandom();
-        propertyLast.setType(propertyFirst.getType());
-        propertyLast.setEntity(propertyFirst.getEntity());
-        propertyLast.setDate(Util.format(Util.getCurrentDate()));
-        if (!insertProperty(propertyLast) || !propertyExist(propertyLast)) {
-            fail("Fail to insert propertyLast");
-        }
-        logger.info("propertyLast inserted");
+        final Property lastProperty = new Property();
+        lastProperty.setType(property.getType());
+        lastProperty.setEntity(property.getEntity());
+        lastProperty.setDate(Util.getCurrentDate());
+        insertPropertyCheck(lastProperty);
 
-        JSONArray request;
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
+        queryObj.put("interval", new JSONObject() {{
+            put("count", 2);
+            put("unit", "DAY");
+        }});
+        queryObj.put("last", true);
 
-        {
-            request = new JSONArray() {{
-                add(new JSONObject() {{
-                    put("entity", propertyFirst.getEntity());
-                    put("type", propertyFirst.getType());
-                    put("startDate", propertyFirst.getDate());
-                    put("interval", new JSONObject() {{
-                        put("count", 2);
-                        put("unit", "DAY");
-                    }});
-                    put("last", true);
-                }});
-            }};
-            assertFalse("First property should not be founded", propertiesExist(request, buildJsonArray(propertyFirst)));
-
-            assertTrue("Last property should be founded", propertiesExist(request, buildJsonArray(propertyLast)));
-        }
+        assertTrue(queryProperties(queryObj, lastProperty));
+        assertFalse(queryProperties(queryObj, property));
     }
 
     @Test
     public void test_TypeEntity_StartPast_IntervalGiveFuture_propertyFounded() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setType(registry.registerType("query-type5"));
-        property.setEntity(registry.registerEntity("query-entity5"));
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
-        logger.info("Property inserted");
-        JSONArray request;
+        final Property property = new Property("query-type5", "query-entity5");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getCurrentDate());
+        insertPropertyCheck(property);
 
-        {
-            request = new JSONArray() {{
-                add(new JSONObject() {{
-                    put("entity", property.getEntity());
-                    put("type", property.getType());
-                    put("startDate", Util.format(Util.getPastDate()));
-                    put("interval", new JSONObject() {{
-                        put("count", 2);
-                        put("unit", "DAY");
-                    }});
-                }});
-            }};
-            assertTrue("Can not get property by specified request", propertiesExist(request, buildJsonArray(property)));
-        }
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
+        queryObj.put("interval", new JSONObject() {{
+            put("count", 2);
+            put("unit", "DAY");
+        }});
+
+        assertTrue(queryProperties(queryObj, property));
     }
 
 
     @Test
-    public void test_TypeEntity_StartEQDate_Interval1MS_propertyFinded() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setType(registry.registerType("query-type4"));
-        property.setEntity(registry.registerEntity("query-entity4"));
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
-        logger.info("Property inserted");
-        JSONArray request;
+    public void test_TypeEntity_StartEQDate_Interval1MS_propertyFounded() throws IOException {
+        final Property property = new Property("query-type4", "query-entity4");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getCurrentDate());
+        insertPropertyCheck(property);
 
-        {
-            request = new JSONArray() {{
-                add(new JSONObject() {{
-                    put("entity", property.getEntity());
-                    put("type", property.getType());
-                    put("startDate", property.getDate());
-                    put("interval", new JSONObject() {{
-                        put("count", 1);
-                        put("unit", "MILLISECOND");
-                    }});
-                }});
-            }};
-            assertTrue("Can not get property by specified request", propertiesExist(request, buildJsonArray(property)));
-        }
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", property.getDate());
+        queryObj.put("interval", new JSONObject() {{
+            put("count", 1);
+            put("unit", "MILLISECOND");
+        }});
+
+        assertTrue(queryProperties(queryObj, property));
     }
 
 
     @Test
     public void test_TypeEntity_StartPast_EndFuture_propertyFounded() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setType(registry.registerType("query-type3"));
-        property.setEntity(registry.registerEntity("query-entity3"));
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
-        logger.info("Property inserted");
-        JSONArray request;
+        final Property property = new Property("query-type3", "query-entity3");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getCurrentDate());
+        insertPropertyCheck(property);
 
-        {
-            request = new JSONArray() {{
-                add(new JSONObject() {{
-                    put("entity", property.getEntity());
-                    put("type", property.getType());
-                    put("startDate", Util.format(Util.getPastDate()));
-                    put("endDate", Util.format(Util.getFutureDate()));
-                }});
-            }};
-            assertTrue("Can not get property by specified request", propertiesExist(request, buildJsonArray(property)));
-        }
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
+        queryObj.put("endDate", Util.ISOFormat(Util.getFutureDate()));
+
+        assertTrue(queryProperties(queryObj, property));
     }
 
 
     @Test
-    public void test_TypeEntityStartEnd_propertyFounded() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setType(registry.registerType("query-type2"));
-        property.setEntity(registry.registerEntity("query-entity2"));
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
-        logger.info("Property inserted");
-        JSONArray request;
+    public void test_TypeEntityStartEnd_ExactDEFAULT_propertyFounded() throws IOException {
+        final Property property = new Property("query-type2", "query-entity2");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getCurrentDate());
+        insertPropertyCheck(property);
 
-        request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("entity", property.getEntity());
-                put("type", property.getType());
-                put("startDate", property.getDate());
-                put("endDate", Util.format(Util.getFutureDate()));
-            }});
-        }};
-        assertTrue("Can not get property by specified request", propertiesExist(request, buildJsonArray(property)));
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", property.getDate());
+        queryObj.put("endDate", Util.ISOFormat(Util.getFutureDate()));
 
+        assertTrue(queryProperties(queryObj, property));
     }
 
     @Test
-    public void test_TypeEntityStartEnd_ExactFalse_propertyFounded() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setType(registry.registerType("query-type1"));
-        property.setEntity(registry.registerEntity("query-entity1"));
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
-        logger.info("Property inserted");
-        JSONArray request;
+    public void test_TypeEntityStartEnd_ExactFALSE_propertyFounded() throws IOException {
+        final Property property = new Property("query-type1", "query-entity1");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getCurrentDate());
+        insertPropertyCheck(property);
 
-        request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("entity", property.getEntity());
-                put("type", property.getType());
-                put("exactMatch", false);
-                put("startDate", property.getDate());
-                put("endDate", Util.format(Util.getFutureDate()));
-            }});
-        }};
-        assertTrue("Can not get property by specified request", propertiesExist(request, buildJsonArray(property)));
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("exactMatch", false);
+        queryObj.put("startDate", property.getDate());
+        queryObj.put("endDate", Util.ISOFormat(Util.getFutureDate()));
 
+        assertTrue(queryProperties(queryObj, property));
     }
 
     @Test
-    public void test_Example_TypeEntityStartEnd_Partkey_propertyFounded() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setType(registry.registerType("disk"));
-        property.setEntity(registry.registerEntity("nurswgvml007"));
-        property.setKey(new HashMap<String, String>(){{
-                put(registry.registerKeyName("file_system"), registry.registerKeyValue("/"));
-                put(registry.registerKeyName("mount_point"), registry.registerKeyValue("/sda1"));
+    public void test_Example_TypeEntityStartEnd_Partkey_propertyFounded() throws IOException, ParseException {
+        final Property property = new Property("disk", "nurswgvml007");
+        property.addTag("fs_type", "ext4");
+        property.addKey("file_system", "/");
+        property.addKey("mount_point", "/sda1");
+        property.setDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse("2016-05-25T04:00:00.000Z"));
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", new HashMap<String, String>(){{
+            put("file_system", "/");
         }});
-        property.setTags(new HashMap<String, String>(){{
-            put(registry.registerTagName("fs_type"), registry.registerTagValue("ext4"));
-        }});
-        property.setDate("2016-05-25T04:00:00.000Z");
-        assertTrue(insertProperty(property));
-        assertTrue("Fail to insert property", propertyExist(property));
+        queryObj.put("startDate", "2016-05-25T04:00:00Z");
+        queryObj.put("endDate", "2016-05-25T05:00:00Z");
 
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", property.getType());
-                put("entity", property.getEntity());
-                put("key", new JSONObject(){{
-                    put("file_system", "/");
-                }});
-                put("startDate", "2016-05-25T04:00:00Z");
-                put("endDate", "2016-05-25T05:00:00Z");
-            }});
-        }};
-
-        assertTrue(propertiesExist(request, buildJsonArray(property)));
+        assertTrue(queryProperties(queryObj, property));
     }
 
     @Test

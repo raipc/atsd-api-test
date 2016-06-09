@@ -1,7 +1,6 @@
 package com.axibase.tsd.api.method;
 
 import com.axibase.tsd.api.Config;
-import com.axibase.tsd.api.Registry;
 import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.transport.http.HTTPClientPure;
 import com.axibase.tsd.api.transport.http.HTTPSender;
@@ -23,17 +22,12 @@ public abstract class Method {
 
     protected static HTTPSender httpSender;
     protected static TCPSender tcpSender;
-    protected static Registry registry;
 
     protected static void prepareRequestSender() {
         Config config = Config.getInstance();
         HTTPClientPure driver = new HTTPClientPure(config.getProtocol(), config.getServerName(), config.getHttpPort(), config.getLogin(), config.getPassword());
         httpSender = new HTTPSender(driver, config.getDataPath(), config.getMetadataPath());
         tcpSender = new TCPSender(config.getServerName(), config.getTcpPort());
-    }
-
-    protected static void setUpRegistry() {
-        registry = Registry.getInstance();
     }
 
     protected JSONArray getDataset(final String datasetPath) throws IOException {

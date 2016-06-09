@@ -1,26 +1,47 @@
-package com.axibase.tsd.api.model.propery;
+package com.axibase.tsd.api.model.property;
 
+import com.axibase.tsd.api.Util;
+import com.axibase.tsd.api.model.Model;
+import com.axibase.tsd.api.registry.PropertyRegistry;
+
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author Dmitry Korchagin.
  */
-public class Property {
+public class Property extends Model {
     private String type;
     private String entity;
     private Map<String, String> key;
     private Map<String, String> tags;
-    private String date;
+    private Date date;
 
     public Property() {
     }
 
-    public Property(String type, String entity, Map<String, String> key, Map<String, String> tags, String date) {
+    public Property(String type, String entity) {
+        if(type != null)
+            PropertyRegistry.getInstance().registerType(type);
+        if(entity != null)
+            PropertyRegistry.getInstance().registerEntity(entity);
         this.type = type;
         this.entity = entity;
-        this.key = key;
-        this.tags = tags;
-        this.date = date;
+    }
+
+    public void addTag(String tagName, String tagValue) {
+        if(tags == null) {
+            tags = new HashMap<>();
+        }
+        tags.put(tagName, tagValue);
+    }
+
+    public void addKey(String keyName, String keyValue) {
+        if(key == null) {
+            key = new HashMap<>();
+        }
+        key.put(keyName, keyValue);
     }
 
     public String getType() {
@@ -56,11 +77,18 @@ public class Property {
     }
 
     public String getDate() {
-        return date;
+        if(date == null) {
+            return null;
+        }
+        return Util.ISOFormat(date);
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
+    }
+
+    public void setDate(Long millis) {
+        this.date = new Date(millis);
     }
 
     @Override

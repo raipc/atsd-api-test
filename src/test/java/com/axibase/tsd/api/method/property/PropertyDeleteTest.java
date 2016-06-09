@@ -2,7 +2,7 @@ package com.axibase.tsd.api.method.property;
 
 import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.builder.PropertyBuilder;
-import com.axibase.tsd.api.model.propery.Property;
+import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.json.simple.JSONArray;
@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -27,138 +29,115 @@ public class PropertyDeleteTest extends PropertyMethod {
     @BeforeClass
     public static void setUpBeforeClass() {
         prepareRequestSender();
-        setUpRegistry();
     }
+
+    @Test
+    public void test_FutureDate_TypeEntity_ExactTRUE_PropertyRemain() throws IOException {
+        final Property property = new Property("delete-type9", "delete-entity9");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        property.setDate(Util.getFutureDate());
+        insertPropertyCheck(property);
+        logger.info("Property inserted");
+
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", property.getType());
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("exactMatch", true);
+
+        deleteProperty(deleteObj);
+
+        assertTrue("Property should be remain", propertyExist(property));
+    }
+
 
 
     @Test
     public void test_FutureDate_TypeEntity_ExactFALSE_PropertyDisappear() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("delete-entity8"));
-        property.setType(registry.registerType("delete-type8"));
-        property.setDate(Util.format(Util.getFutureDate()));
-        logger.debug("Property generated : {}", property.toString());
-
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
+        final Property property = new Property("delete-type8", "delete-entity8");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        property.setDate(Util.getFutureDate());
+        insertPropertyCheck(property);
         logger.info("Property inserted");
 
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", property.getType());
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("exactMatch", false);
 
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", property.getType());
-                put("entity", property.getEntity());
-                put("exactMatch", false);
-            }});
-        }};
-
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
-        assertEquals(200, response.getCode());
+        deleteProperty(deleteObj);
 
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
     @Test
     public void test_FutureDate_TypeEntityKey_PropertyDisappear() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("delete-entity7"));
-        property.setType(registry.registerType("delete-type7"));
-        property.setDate(Util.format(Util.getFutureDate()));
-        logger.debug("Property generated : {}", property.toString());
-
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
+        final Property property = new Property("delete-type7", "delete-entity7");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        property.setDate(Util.getFutureDate());
+        insertPropertyCheck(property);
         logger.info("Property inserted");
 
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", property.getType());
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("key", property.getKey());
 
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", property.getType());
-                put("entity", property.getEntity());
-                put("key", property.getKey());
-            }});
-        }};
-
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
-        assertEquals(200, response.getCode());
+        deleteProperty(deleteObj);
 
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
     @Test
     public void test_CommonTypeEntity_TypeEntityKey_FirstDisappear() throws IOException {
-        final Property propertyFirst = new PropertyBuilder().buildRandom();
-        propertyFirst.setEntity(registry.registerEntity("delete-entity6"));
-        propertyFirst.setType(registry.registerType("delete-type6"));
-        logger.debug("First property generated : {}", propertyFirst.toString());
+        final Property property = new Property("delete-type-6", "delete-entity6");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        insertPropertyCheck(property);
+        logger.info("Property inserted");
 
-        if (!insertProperty(propertyFirst) || !propertyExist(propertyFirst)) {
-            fail("Fail to insert property");
-        }
-        logger.info("First property inserted");
+        Property secondProperty = new Property(null, "delete-entity6-2");
+        secondProperty.setType(property.getType());
+        secondProperty.setTags(property.getTags());
+        secondProperty.addKey("k2", "v2");
+        insertPropertyCheck(secondProperty);
+        logger.info("secondProperty inserted");
 
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", property.getType());
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("key", property.getKey());
 
-        Property secondProperty = new PropertyBuilder().buildRandom();
-        secondProperty.setType(propertyFirst.getType());
+        deleteProperty(deleteObj);
 
-        logger.debug("Generated property: {}", secondProperty.toString());
-        if (!insertProperty(secondProperty)) {
-            fail("Fail to insert secondProperty");
-        }
-        if (!propertyExist(secondProperty)) {
-            fail("Fail to check secondProperty insert");
-        }
-        logger.info("Second property inserted");
-
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", propertyFirst.getType());
-                put("entity", propertyFirst.getEntity());
-                put("key", propertyFirst.getKey());
-            }});
-        }};
-
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
-        assertEquals(200, response.getCode());
-
-        assertFalse("First property should be deleted", propertyExist(propertyFirst));
+        assertFalse("First property should be deleted", propertyExist(property));
         assertTrue("Second property should remain", propertyExist(secondProperty));
     }
 
 
     @Test
     public void test_TypeEntity_ExactFALSE_PropertiesDisappear() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("delete-entity5"));
-        property.setType(registry.registerType("delete-type5"));
-        logger.debug("First property generated : {}", property.toString());
+        final Property property = new Property("delete-type-5", "delete-entity5");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        insertPropertyCheck(property);
+        logger.info("Property inserted");
 
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
-        logger.info("First property inserted");
+        Property secondProperty = new Property(property.getType(), property.getEntity());
+        secondProperty.setTags(property.getTags());
+        secondProperty.addKey("k2", "v2");
+        insertPropertyCheck(secondProperty);
+        logger.info("secondProperty inserted");
 
-        Property secondProperty = new PropertyBuilder().buildRandom();
-        secondProperty.setType(property.getType());
-        secondProperty.setEntity(property.getEntity());
-        logger.debug("Second property generated : {}", secondProperty.toString());
-        if (!insertProperty(secondProperty) || !propertyExist(secondProperty)) {
-            fail("Fail to insert secondProperty");
-        }
-        logger.info("Second property inserted");
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", property.getType());
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("exactMatch", false);
 
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", property.getType());
-                put("entity", property.getEntity());
-                put("exactMatch", false);
-            }});
-        }};
+        deleteProperty(deleteObj);
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
-        assertEquals(200, response.getCode());
         assertFalse("Frist property should be deleted", propertyExist(property));
         assertFalse("Second property should be deleted", propertyExist(secondProperty));
 
@@ -167,62 +146,42 @@ public class PropertyDeleteTest extends PropertyMethod {
 
     @Test
     public void test_TypeEntityKey_PropertyDisappear() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("delete-entity4"));
-        property.setType(registry.registerType("delete-type4"));
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
+        final Property property = new Property("delete-type4", "delete-entity4");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        insertPropertyCheck(property);
         logger.info("Property inserted");
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("entity", property.getEntity());
-                put("type", property.getType());
-                put("key", property.getKey());
-            }});
-        }};
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
-        assertEquals(200, response.getCode());
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", property.getType());
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("key", property.getKey());
+
+        deleteProperty(deleteObj);
 
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
     @Test
     public void test_TypeEntity_exactTRUE_PropertiesRemain() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("delete-entity3"));
-        property.setType(registry.registerType("delete-type3"));
-        logger.debug("First property generated : {}", property.toString());
+        final Property property = new Property("delete-type3", "delete-entity3");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        insertPropertyCheck(property);
+        logger.info("Property inserted");
 
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
-        logger.info("First property inserted");
-        Property secondProperty = new PropertyBuilder().buildRandom();
-        secondProperty.setType(property.getType());
-        secondProperty.setEntity(property.getEntity());
-
-        logger.debug("Generated property: {}", secondProperty.toString());
-        if (!insertProperty(secondProperty)) {
-            fail("Fail to insert secondProperty");
-        }
-        if (!propertyExist(secondProperty)) {
-            fail("Fail to check secondProperty insert");
-        }
+        Property secondProperty = new Property(property.getType(), property.getEntity());
+        secondProperty.addKey("k2", "v2");
+        secondProperty.setTags(property.getTags());
+        insertPropertyCheck(secondProperty);
         logger.info("Second property inserted");
 
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", property.getType());
-                put("entity", property.getEntity());
-                put("exactMatch", true);
-            }});
-        }};
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", property.getType());
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("exactMatch", true);
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
-        assertEquals(200, response.getCode());
-
+        deleteProperty(deleteObj);
         assertTrue("First property should remain", propertyExist(property));
         assertTrue("Second property should remain", propertyExist(secondProperty));
     }
@@ -230,47 +189,38 @@ public class PropertyDeleteTest extends PropertyMethod {
 
     @Test
     public void test_TypeEntity_exactTRUE_PropertyRemain() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("delete-entity2"));
-        property.setType(registry.registerType("delete-type2"));
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
+        final Property property = new Property("delete-type2", "delete-entity2");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        insertPropertyCheck(property);
         logger.info("Property inserted");
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("entity", property.getEntity());
-                put("type", property.getType());
-                put("exactMatch", true);
-            }});
-        }};
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
-        assertEquals(200, response.getCode());
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("type", property.getType());
+        deleteObj.put("exactMatch", true);
+
+        deleteProperty(deleteObj);
 
         assertTrue("Property should be remain", propertyExist(property));
     }
 
     @Test
     public void test_TypeEntityKey_EndDateEQDate_PropertyRemain() throws IOException {
-        final Property property = new PropertyBuilder().buildRandom();
-        property.setEntity(registry.registerEntity("delete-entity1"));
-        property.setType(registry.registerType("delete-type1"));
-        if (!insertProperty(property) || !propertyExist(property)) {
-            fail("Fail to insert property");
-        }
+        final Property property = new Property("delete-type1", "delete-entity1");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "v1");
+        property.setDate(System.currentTimeMillis());
+        insertPropertyCheck(property);
         logger.info("Property inserted");
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("entity", property.getEntity());
-                put("type", property.getType());
-                put("key", property.getKey());
-                put("endDate", property.getDate());
-            }});
-        }};
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
-        assertEquals(200, response.getCode());
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("entity", property.getEntity());
+        deleteObj.put("type", property.getType());
+        deleteObj.put("key", property.getKey());
+        deleteObj.put("endDate", property.getDate());
+
+        deleteProperty(deleteObj);
 
         assertTrue("Property should be remain", propertyExist(property));
     }
@@ -329,6 +279,14 @@ public class PropertyDeleteTest extends PropertyMethod {
         AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
         assertEquals(400, response.getCode());
         assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.getBody());
+    }
+
+    private void deleteProperty(final Map deleteObj) throws IOException {
+        JSONArray jsonArray = new JSONArray(){{
+            add(new JSONObject(deleteObj));
+        }};
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, jsonArray.toJSONString());
+        assertEquals("Fail to execute delete query", 200, response.getCode());
     }
 
 

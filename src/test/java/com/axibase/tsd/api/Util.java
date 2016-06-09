@@ -29,7 +29,7 @@ public class Util {
         return new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24); //one day after
     }
 
-    public static String format(Date date) {
+    public static String ISOFormat(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssXXX");
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(date);

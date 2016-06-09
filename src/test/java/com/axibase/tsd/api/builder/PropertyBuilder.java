@@ -1,7 +1,7 @@
 package com.axibase.tsd.api.builder;
 
 import com.axibase.tsd.api.Util;
-import com.axibase.tsd.api.model.propery.Property;
+import com.axibase.tsd.api.model.property.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ public class PropertyBuilder implements Builder<Property> {
         property.setType(Util.ABNF.generateNAME(TYPE_LENGTH).toLowerCase());
         property.setTags(generateTag(TAG_COUNT));
         property.setKey(generateKey(KEY_COUNT));
-        property.setDate(Util.format(Util.getCurrentDate()));
+        property.setDate(Util.getCurrentDate());
         return property;
     }
 
