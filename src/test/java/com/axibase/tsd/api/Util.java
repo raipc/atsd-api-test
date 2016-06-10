@@ -35,6 +35,14 @@ public class Util {
         return dateFormat.format(date);
     }
 
+    public static String getMinDate() {
+        return "1970-01-01T00:00:00Z";
+    }
+
+    public static String getMaxDate() {
+        return "9999-01-01T00:00:00Z";
+    }
+
     public static String buildVariablePrefix() {
         String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
         StringBuilder prefix = new StringBuilder();

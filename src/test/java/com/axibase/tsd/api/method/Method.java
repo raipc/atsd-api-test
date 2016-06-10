@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.text.SimpleDateFormat;
 
 /**
  * @author Dmitry Korchagin.
@@ -31,5 +32,6 @@ public abstract class Method {
         httpSender = new HTTPSender(driver, config.getDataPath(), config.getMetadataPath());
         tcpSender = new TCPSender(config.getServerName(), config.getTcpPort());
         jacksonMapper = new ObjectMapper();
+        jacksonMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssXXX"));
     }
 }

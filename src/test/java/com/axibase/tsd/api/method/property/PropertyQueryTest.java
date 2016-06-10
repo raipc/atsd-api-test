@@ -63,11 +63,8 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", property.getType());
         queryObj.put("entities", new ArrayList<String>(){{add(property.getEntity()); add(lastProperty.getEntity());}});
-        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
-        queryObj.put("interval", new JSONObject() {{
-            put("count", 2);
-            put("unit", "DAY");
-        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property); add(lastProperty);}});
 
@@ -75,7 +72,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntityStartInterval_LastDEFAULT_bothFounded() throws Exception {
+    public void test_TypeEntityStartEnd_LastDEFAULT_bothFounded() throws Exception {
         final Property property = new Property("query-type8", "query-entity8");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -92,8 +89,8 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
-        queryObj.put("startDate", "1970-01-01T00:00:00.000Z");
-        queryObj.put("endDate", "9999-01-01T00:00:00.000Z");
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property); add(lastProperty);}});
 
@@ -101,7 +98,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntityStartInterval_LastFALSE_bothFounded() throws Exception {
+    public void test_TypeEntityStartEnd_LastFALSE_bothFounded() throws Exception {
         final Property property = new Property("query-type7", "query-entity7");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -118,8 +115,8 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
-        queryObj.put("startDate", "1970-01-01T00:00:00.000Z");
-        queryObj.put("endDate", "9999-01-01T00:00:00.000Z");
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("last", false);
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property); add(lastProperty);}});
@@ -128,7 +125,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntityStartInterval_LastTRUE_propertyLastFounded() throws Exception {
+    public void test_TypeEntityStartEnd_LastTRUE_LastFounded() throws Exception {
         final Property property = new Property("query-type6", "query-entity6");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -145,11 +142,8 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
-        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
-        queryObj.put("interval", new JSONObject() {{
-            put("count", 2);
-            put("unit", "DAY");
-        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("last", true);
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(lastProperty);}});
@@ -170,21 +164,20 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
         queryObj.put("key", property.getKey());
-        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
+        queryObj.put("startDate", Util.getMinDate());
         queryObj.put("interval", new JSONObject() {{
-            put("count", 2);
-            put("unit", "DAY");
+            put("count", 999);
+            put("unit", "YEAR");
         }});
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property);}});
         logger.debug("Expected json: {}", expected);
-        logger.debug("Given json: {}", queryProperty(queryObj));
         JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
     }
 
 
     @Test
-    public void test_TypeEntity_StartEQDate_Interval1MS_propertyFounded() throws Exception {
+    public void test_TypeEntityEnd_StartEQDate_Interval1MS_propertyFounded() throws Exception {
         final Property property = new Property("query-type4", "query-entity4");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -195,10 +188,7 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
         queryObj.put("startDate", property.getDate());
-        queryObj.put("interval", new JSONObject() {{
-            put("count", 1);
-            put("unit", "MILLISECOND");
-        }});
+        queryObj.put("endDate", Util.getMaxDate());
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property);}});
 
