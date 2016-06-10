@@ -32,24 +32,4 @@ public abstract class Method {
         tcpSender = new TCPSender(config.getServerName(), config.getTcpPort());
         jacksonMapper = new ObjectMapper();
     }
-
-
-    protected JSONArray getDataset(final String datasetPath) throws IOException {
-        logger.debug("Starting to parse Dataset.\nDataset file: {}", datasetPath);
-
-        JSONArray dataset;
-        try {
-            dataset = (JSONArray) new JSONParser().parse(Util.getFileContent(datasetPath));
-            logger.info("Dataset parsed successfully, query set count: {}", dataset.size());
-        } catch (ParseException e) {
-            logger.error("Fail to parse Dataset");
-            return null;
-        }
-        return dataset;
-    }
-
-
-
-
-
 }

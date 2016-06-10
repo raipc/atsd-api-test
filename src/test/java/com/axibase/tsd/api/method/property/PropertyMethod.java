@@ -65,7 +65,7 @@ abstract public class PropertyMethod extends Method {
                 put("entity", property.getEntity());
                 put("type", property.getType());
                 put("key", property.getKey());
-                put("startDate", (property.getDate() == null?"1970-01-1T00:00:00.000Z":property.getDate()));
+                put("startDate", (property.getDate() == null?"1970-01-01T00:00:00.000Z":property.getDate()));
                 put("endDate", "9999-01-12T13:46:40.000Z");
             }});
         }};

@@ -125,7 +125,9 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
-        Property secondProperty = new Property(property.getType(), property.getEntity());
+        Property secondProperty = new Property();
+        secondProperty.setType(property.getType());
+        secondProperty.setEntity(property.getEntity());
         secondProperty.setTags(property.getTags());
         secondProperty.addKey("k2", "v2");
         insertPropertyCheck(secondProperty);
@@ -170,7 +172,9 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
-        Property secondProperty = new Property(property.getType(), property.getEntity());
+        Property secondProperty = new Property();
+        secondProperty.setType(property.getType());
+        secondProperty.setEntity(property.getEntity());
         secondProperty.addKey("k2", "v2");
         secondProperty.setTags(property.getTags());
         insertPropertyCheck(secondProperty);

@@ -21,12 +21,12 @@ public class Util {
     }
 
     public static Date getPastDate() {
-        return new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24); //one day before
+        return new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 2); //two day before
 
     }
 
     public static Date getFutureDate() {
-        return new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24); //one day after
+        return new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2); //two day after
     }
 
     public static String ISOFormat(Date date) {
