@@ -1,11 +1,12 @@
 package com.axibase.tsd.api;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Properties;
 
 /**
@@ -14,6 +15,7 @@ import java.util.Properties;
 public class Config {
     private static final Logger logger = LoggerFactory.getLogger(Config.class);
     private static final String DEFAULT_CONFIG_FILE = "src/test/resources/client.properties";
+    private static final String DEV_CONFIG_FILE = "src/test/resources/dev.client.properties";
     private static Config instance = null;
     private String login;
     private String password;
@@ -66,27 +68,25 @@ public class Config {
 
     public static Config getInstance() {
         if (null == instance) {
-            instance = new Config();
+            if(new File(DEV_CONFIG_FILE).exists()) {
+                logger.debug("Using dev.client.properties for config");
+                instance = new Config(DEV_CONFIG_FILE);
+            } else {
+                logger.debug("Using client.properties for config");
+                instance = new Config(DEFAULT_CONFIG_FILE);
+            }
         }
         return instance;
-    }
-
-    private Config() {
-        this(DEFAULT_CONFIG_FILE);
     }
 
     private Config(String configPath) {
         logger.debug("Load client properties from file: {}", configPath);
         Properties clientProperties = new Properties();
-        InputStream stream = null;
-        try {
-            stream = new FileInputStream(configPath);
+        try (InputStream stream = new FileInputStream(configPath)) {
             clientProperties.load(stream);
         } catch (Exception e) {
             logger.error("Fail to load client properties");
             e.printStackTrace();
-        } finally {
-            IOUtils.closeQuietly(stream);
         }
 
         login = load("login", clientProperties, null);

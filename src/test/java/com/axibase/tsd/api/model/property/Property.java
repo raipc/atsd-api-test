@@ -24,23 +24,23 @@ public class Property extends Model {
     }
 
     public Property(String type, String entity) {
-        if(type != null)
+        if (type != null)
             PropertyRegistry.getInstance().registerType(type);
-        if(entity != null)
+        if (entity != null)
             PropertyRegistry.getInstance().registerEntity(entity);
         this.type = type;
         this.entity = entity;
     }
 
     public void addTag(String tagName, String tagValue) {
-        if(tags == null) {
+        if (tags == null) {
             tags = new HashMap<>();
         }
         tags.put(tagName, tagValue);
     }
 
     public void addKey(String keyName, String keyValue) {
-        if(key == null) {
+        if (key == null) {
             key = new HashMap<>();
         }
         key.put(keyName, keyValue);
@@ -79,7 +79,7 @@ public class Property extends Model {
     }
 
     public String getDate() {
-        if(date == null) {
+        if (date == null) {
             return null;
         }
         return Util.ISOFormat(date);

@@ -1,7 +1,6 @@
 package com.axibase.tsd.api.method.property;
 
 import com.axibase.tsd.api.Util;
-import com.axibase.tsd.api.builder.PropertyBuilder;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
@@ -49,7 +48,6 @@ public class PropertyDeleteTest extends PropertyMethod {
 
         assertTrue("Property should be remain", propertyExist(property));
     }
-
 
 
     @Test
@@ -286,7 +284,7 @@ public class PropertyDeleteTest extends PropertyMethod {
     }
 
     private void deleteProperty(final Map deleteObj) throws IOException {
-        JSONArray jsonArray = new JSONArray(){{
+        JSONArray jsonArray = new JSONArray() {{
             add(new JSONObject(deleteObj));
         }};
         AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, jsonArray.toJSONString());

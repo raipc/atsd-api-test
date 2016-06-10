@@ -1,16 +1,12 @@
 package com.axibase.tsd.api.method.property;
 
-import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.method.Method;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
@@ -39,11 +35,11 @@ abstract public class PropertyMethod extends Method {
             add(new JSONObject() {{
                 put("entity", property.getEntity());
                 put("type", property.getType());
-                if(property.getKey() != null) {
+                if (property.getKey() != null) {
                     put("key", property.getKey());
                 }
                 put("tags", property.getTags());
-                if(property.getDate() != null) {
+                if (property.getDate() != null) {
                     put("date", property.getDate());
                 }
             }});
@@ -65,12 +61,14 @@ abstract public class PropertyMethod extends Method {
                 put("entity", property.getEntity());
                 put("type", property.getType());
                 put("key", property.getKey());
-                put("startDate", (property.getDate() == null?"1970-01-01T00:00:00.000Z":property.getDate()));
+                put("startDate", (property.getDate() == null ? "1970-01-01T00:00:00.000Z" : property.getDate()));
                 put("endDate", "9999-01-12T13:46:40.000Z");
             }});
         }};
 
-        String propertyJson =  jacksonMapper.writeValueAsString(new ArrayList<Property>(){{ add(property);}});
+        String propertyJson = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property);
+        }});
 
         AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_QUERY, request.toJSONString());
         assertEquals(200, response.getCode());
@@ -110,11 +108,11 @@ abstract public class PropertyMethod extends Method {
         return new JSONObject() {{
             put("entity", property.getEntity());
             put("type", property.getType());
-            if(property.getKey() != null) {
+            if (property.getKey() != null) {
                 put("key", property.getKey());
             }
             put("tags", property.getTags());
-            if(property.getDate() != null) {
+            if (property.getDate() != null) {
                 put("date", property.getDate());
             }
         }};
