@@ -6,10 +6,12 @@ import com.axibase.tsd.api.builder.PropertyBuilder;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,12 +37,12 @@ public class PropertyQueryTest extends PropertyMethod {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        prepareRequestSender();
+        prepare();
     }
 
 
     @Test
-    public void test_TypeEntitiesStartEnd_bothFounded_wrongNotFounded() throws IOException {
+    public void test_TypeEntitiesStartEnd_bothFounded_wrongNotFounded() throws IOException, JSONException {
         final Property property = new Property("query-type9", "query-entity9");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -63,8 +65,9 @@ public class PropertyQueryTest extends PropertyMethod {
             put("unit", "DAY");
         }});
 
-        assertTrue(queryProperties(queryObj, property, lastProperty));
-        assertFalse(queryProperties(queryObj, wrongProperty));
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property); add(lastProperty);}});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
     }
 
     @Test
@@ -91,7 +94,9 @@ public class PropertyQueryTest extends PropertyMethod {
             put("unit", "DAY");
         }});
 
-        assertTrue(queryProperties(queryObj, property, lastProperty));
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property); add(lastProperty);}});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
     }
 
     @Test
@@ -245,7 +250,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_Example_TypeEntityStartEnd_Partkey_propertyFounded() throws IOException, ParseException {
+    public void test_Example_TypeEntityStartEnd_Partkey_propertyFounded() throws IOException, ParseException, JSONException {
         final Property property = new Property("disk", "nurswgvml007");
         property.addTag("fs_type", "ext4");
         property.addKey("file_system", "/");
@@ -262,7 +267,7 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("startDate", "2016-05-25T04:00:00Z");
         queryObj.put("endDate", "2016-05-25T05:00:00Z");
 
-        assertTrue(queryProperties(queryObj, property));
+        JSONAssert.assertEquals(jacksonMapper.writeValueAsString(property), queryProperty(queryObj), false);
     }
 
     @Test

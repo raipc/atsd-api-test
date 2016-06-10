@@ -3,6 +3,7 @@ package com.axibase.tsd.api.model.property;
 import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.model.Model;
 import com.axibase.tsd.api.registry.PropertyRegistry;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
 /**
  * @author Dmitry Korchagin.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Property extends Model {
     private String type;
     private String entity;

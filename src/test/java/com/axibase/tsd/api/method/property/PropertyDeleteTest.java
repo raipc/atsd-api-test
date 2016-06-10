@@ -28,7 +28,7 @@ public class PropertyDeleteTest extends PropertyMethod {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        prepareRequestSender();
+        prepare();
     }
 
     @Test

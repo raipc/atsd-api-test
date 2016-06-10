@@ -5,6 +5,7 @@ import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.transport.http.HTTPClientPure;
 import com.axibase.tsd.api.transport.http.HTTPSender;
 import com.axibase.tsd.api.transport.tcp.TCPSender;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -22,13 +23,16 @@ public abstract class Method {
 
     protected static HTTPSender httpSender;
     protected static TCPSender tcpSender;
+    protected static ObjectMapper jacksonMapper;
 
-    protected static void prepareRequestSender() {
+    protected static void prepare() {
         Config config = Config.getInstance();
         HTTPClientPure driver = new HTTPClientPure(config.getProtocol(), config.getServerName(), config.getHttpPort(), config.getLogin(), config.getPassword());
         httpSender = new HTTPSender(driver, config.getDataPath(), config.getMetadataPath());
         tcpSender = new TCPSender(config.getServerName(), config.getTcpPort());
+        jacksonMapper = new ObjectMapper();
     }
+
 
     protected JSONArray getDataset(final String datasetPath) throws IOException {
         logger.debug("Starting to parse Dataset.\nDataset file: {}", datasetPath);

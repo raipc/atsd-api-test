@@ -5,15 +5,20 @@ import com.axibase.tsd.api.method.Method;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -60,31 +65,28 @@ abstract public class PropertyMethod extends Method {
                 put("entity", property.getEntity());
                 put("type", property.getType());
                 put("key", property.getKey());
-                put("startDate", (property.getDate() == null? Util.ISOFormat(Util.getPastDate()):property.getDate()));
-                put("interval", new JSONObject() {{
-                    put("count", 2);
-                    put("unit", "DAY");
-                }});
+                put("startDate", (property.getDate() == null?"1970-01-1T00:00:00.000Z":property.getDate()));
+                put("endDate", "9999-01-12T13:46:40.000Z");
             }});
         }};
 
-        JSONObject propertyObject = buildJsonObject(property);
+        String propertyJson =  jacksonMapper.writeValueAsString(new ArrayList<Property>(){{ add(property);}});
 
         AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_QUERY, request.toJSONString());
         assertEquals(200, response.getCode());
+        logger.debug("check: {}\nresponse: {}", propertyJson, response.getBody());
 
-        JSONArray responseBody;
         try {
-            responseBody = (JSONArray) new JSONParser().parse(response.getBody());
-        } catch (ParseException e) {
-            logger.error("Fail to parse response body: {}", response.getBody());
+            JSONAssert.assertEquals(propertyJson, response.getBody(), JSONCompareMode.LENIENT);
+        } catch (JSONException e) {
+            throw new IOException("Can not deserialize response");
+        } catch (AssertionError e) {
             return false;
         }
-        logger.debug("check: {}\nresponse: {}", propertyObject, responseBody);
-        return responseBody.contains(propertyObject);
+        return true;
     }
 
-    Boolean queryProperties(final Map request, final Property... properties) throws IOException {
+    String queryProperty(final Map request) throws IOException {
 
         JSONArray query = new JSONArray() {{
             add(new JSONObject(request));
@@ -93,15 +95,7 @@ abstract public class PropertyMethod extends Method {
         AtsdHttpResponse atsdResponse = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_QUERY, query.toJSONString());
         assertEquals(200, atsdResponse.getCode());
 
-        JSONArray responseBody;
-        try {
-            responseBody = (JSONArray) new JSONParser().parse(atsdResponse.getBody());
-        } catch (ParseException e) {
-            logger.error("Fail to parse response body: {}", atsdResponse.getBody());
-            return false;
-        }
-        logger.debug("check: {}\nresponse: {}", properties, responseBody);
-        return responseBody.containsAll(buildJsonArray(properties));
+        return atsdResponse.getBody();
     }
 
     private JSONArray buildJsonArray(final Property... properties) {
