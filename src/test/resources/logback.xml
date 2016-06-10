@@ -17,10 +17,16 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <withJansi>true</withJansi>
         <encoder>
+
+            <!-- no colors -->
+            <!--pattern>%-5level %d{HH:mm:ss.SSS} [%thread]
+                %class{16}.%M\(%L\):%n%msg%n%n
+            </pattern-->
+
+            <!-- colors -->
             <pattern>%highlight(%-5level) %gray(%d{HH:mm:ss.SSS}) [%thread]
                 %green(%class{16}.%M\(%L\)):%cyan(%n%msg%n%n)
             </pattern>
-            <!--<pattern>%n%-5level %d{HH:mm:ss.SSS} [%thread] %logger{0}.%M:%n%msg%n</pattern>-->
         </encoder>
     </appender>
 

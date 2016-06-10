@@ -92,8 +92,8 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
-        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
-        queryObj.put("endDate", Util.ISOFormat(Util.getFutureDate()));
+        queryObj.put("startDate", "1970-01-01T00:00:00.000Z");
+        queryObj.put("endDate", "9999-01-01T00:00:00.000Z");
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property); add(lastProperty);}});
 
@@ -118,11 +118,8 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
-        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
-        queryObj.put("interval", new JSONObject() {{
-            put("count", 2);
-            put("unit", "DAY");
-        }});
+        queryObj.put("startDate", "1970-01-01T00:00:00.000Z");
+        queryObj.put("endDate", "9999-01-01T00:00:00.000Z");
         queryObj.put("last", false);
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>(){{add(property); add(lastProperty);}});
