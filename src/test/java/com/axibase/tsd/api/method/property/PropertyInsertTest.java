@@ -32,6 +32,43 @@ public class PropertyInsertTest extends PropertyMethod {
 
 
     @Test
+    public void test_MultipleInsertDifferentKey_GetAll() throws IOException {
+        final Property firstProperty = new Property("insert-type4", "insert-entity4");
+        firstProperty.addTag("t1", "v1");
+        firstProperty.addKey("k1", "v1");
+        final Property secondProperty = new Property("insert-type5", "insert-entity5");
+        secondProperty.addTag("t1", "v1");
+        secondProperty.addKey("k1", "v1");
+        final Property thirdProperty = new Property("insert-type6", "insert-entity6");
+        thirdProperty.addTag("t1", "v1");
+        thirdProperty.addKey("k1", "v1");
+
+        Map<String, Object> insertFirstObj = new HashMap<>();
+        insertFirstObj.put("type",firstProperty.getType());
+        insertFirstObj.put("entity", firstProperty.getEntity());
+        insertFirstObj.put("key", firstProperty.getKey());
+        insertFirstObj.put("tags", firstProperty.getTags());
+
+        Map<String, Object> insertSecondObj = new HashMap<>();
+        insertSecondObj.put("type",secondProperty.getType());
+        insertSecondObj.put("entity", secondProperty.getEntity());
+        insertSecondObj.put("key", secondProperty.getKey());
+        insertSecondObj.put("tags", secondProperty.getTags());
+
+        Map<String, Object> insertThirdObj = new HashMap<>();
+        insertThirdObj.put("type",thirdProperty.getType());
+        insertThirdObj.put("entity", thirdProperty.getEntity());
+        insertThirdObj.put("key", thirdProperty.getKey());
+        insertThirdObj.put("tags", thirdProperty.getTags());
+
+        insertProperties(insertFirstObj, insertSecondObj, insertThirdObj);
+        assertTrue(propertyExist(firstProperty));
+        assertTrue(propertyExist(secondProperty));
+        assertTrue(propertyExist(thirdProperty));
+    }
+
+
+    @Test
     public void test_MultipleInsertSameTypeEntityKey_OnlyLastRemain() throws IOException {
         final long firstTime = System.currentTimeMillis() - 5000;
         final long secondTime = System.currentTimeMillis();
@@ -128,8 +165,6 @@ public class PropertyInsertTest extends PropertyMethod {
         assertFalse(propertyExist(property));
 
     }
-
-    //TODO add tests to check external fields insert
 
     private void insertProperties(final Map... insertObjects) throws IOException {
         JSONArray insertArray = new JSONArray();
