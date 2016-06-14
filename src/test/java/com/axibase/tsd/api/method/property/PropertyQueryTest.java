@@ -38,11 +38,11 @@ public class PropertyQueryTest extends PropertyMethod {
 
     @Test
     public void testExactFalseWildcartNoKey() throws Exception {
-        final Property property = new Property("query-type17", "query-entity17");
+        final Property property = new Property("query-type18", "query-entity18");
         property.addTag("t1", "tv1");
         insertPropertyCheck(property);
 
-        final Property secondProperty = new Property(null, "query-entity17-2");
+        final Property secondProperty = new Property(null, "query-entity18-2");
         secondProperty.setType(property.getType());
         secondProperty.addTag("t2", "tv2");
         secondProperty.addKey("k2", "kv2");
