@@ -147,5 +147,13 @@ abstract public class PropertyMethod extends Method {
         assertEquals("Fail to delete properties", 200, response.getCode());
     }
 
+    protected AtsdHttpResponse deleteProperty(final Map deleteObj) throws IOException {
+        JSONArray jsonArray = new JSONArray() {{
+            add(new JSONObject(deleteObj));
+        }};
+        return httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, jsonArray.toJSONString());
+
+    }
+
 
 }

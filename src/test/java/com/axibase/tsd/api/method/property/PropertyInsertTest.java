@@ -69,7 +69,7 @@ public class PropertyInsertTest extends PropertyMethod {
 
 
     @Test
-    public void test_MultipleInsertSameTypeEntityKey_OnlyLastRemain() throws IOException {
+    public void testMultipleInsertSameTypeEntityKey() throws IOException {
         final long firstTime = System.currentTimeMillis() - 5000;
         final long secondTime = System.currentTimeMillis();
 
@@ -106,7 +106,7 @@ public class PropertyInsertTest extends PropertyMethod {
     }
 
     @Test
-    public void test_InsertSameTypeEntityKey_OnlyLastRemain() throws IOException {
+    public void testSameTypeEntityKey() throws IOException {
         final Property property = new Property("insert-type1", "insert-entity1");
         final long firstTime = System.currentTimeMillis() - 5000;
         final long secondTime = System.currentTimeMillis();
@@ -144,7 +144,7 @@ public class PropertyInsertTest extends PropertyMethod {
     }
 
     @Test
-    public void test_InsertExtraKeyInRoot_Exception() throws IOException {
+    public void testExtraKeyInRoot() throws IOException {
         final Property property = new Property("insert-type3", "insert-entity3");
 
         final Map<String, Object> insertObj = new HashMap<>();

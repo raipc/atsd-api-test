@@ -38,7 +38,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
 
     @Test
-    public void test_TypeEntitiesStartEnd_bothFounded_wrongNotFounded() throws Exception {
+    public void testEntities() throws Exception {
         final Property property = new Property("query-type9", "query-entity9");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -74,11 +74,11 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntityStartEnd_LastDEFAULT_bothFounded() throws Exception {
+    public void testLastDefault() throws Exception {
         final Property property = new Property("query-type8", "query-entity8");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
-        property.setDate(Util.getPastDate());
+        property.setDate(Util.getPreviousDay());
         insertPropertyCheck(property);
 
         final Property lastProperty = new Property();
@@ -103,11 +103,11 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntityStartEnd_LastFALSE_bothFounded() throws Exception {
+    public void testLastFalse() throws Exception {
         final Property property = new Property("query-type7", "query-entity7");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
-        property.setDate(Util.getPastDate());
+        property.setDate(Util.getPreviousDay());
         insertPropertyCheck(property);
 
         final Property lastProperty = new Property();
@@ -135,11 +135,11 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntityStartEnd_LastTRUE_LastFounded() throws Exception {
+    public void testLastTrue() throws Exception {
         final Property property = new Property("query-type6", "query-entity6");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
-        property.setDate(Util.getPastDate());
+        property.setDate(Util.getPreviousDay());
         insertPropertyCheck(property);
 
         final Property lastProperty = new Property();
@@ -167,7 +167,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntity_StartPast_IntervalGiveFuture_propertyFounded() throws Exception {
+    public void testStartPastIntervalGiveFuture() throws Exception {
         final Property property = new Property("query-type5", "query-entity5");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -193,7 +193,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
 
     @Test
-    public void test_TypeEntityEnd_StartEQDate_Interval1MS_propertyFounded() throws Exception {
+    public void testStartEQDateInterval1MS() throws Exception {
         final Property property = new Property("query-type4", "query-entity4");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -215,7 +215,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
 
     @Test
-    public void test_TypeEntityKey_StartPast_EndFuture_propertyFounded() throws Exception {
+    public void testStartPastEndFuture() throws Exception {
         final Property property = new Property("query-type3", "query-entity3");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -226,8 +226,8 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
         queryObj.put("key", property.getKey());
-        queryObj.put("startDate", Util.ISOFormat(Util.getPastDate()));
-        queryObj.put("endDate", Util.ISOFormat(Util.getFutureDate()));
+        queryObj.put("startDate", Util.ISOFormat(Util.getPreviousDay()));
+        queryObj.put("endDate", Util.ISOFormat(Util.getNextDay()));
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
             add(property);
@@ -238,7 +238,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
 
     @Test
-    public void test_TypeEntityStartEnd_ExactDEFAULT_propertyFounded() throws Exception {
+    public void testTypeEntityStartEndExactDefault() throws Exception {
         final Property property = new Property("query-type2", "query-entity2");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -249,7 +249,7 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("type", property.getType());
         queryObj.put("entity", property.getEntity());
         queryObj.put("startDate", property.getDate());
-        queryObj.put("endDate", Util.ISOFormat(Util.getFutureDate()));
+        queryObj.put("endDate", Util.ISOFormat(Util.getNextDay()));
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
             add(property);
@@ -259,7 +259,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntityStartEnd_ExactFALSE_propertyFounded() throws Exception {
+    public void testTypeEntityStartEndExactFalse() throws Exception {
         final Property property = new Property("query-type1", "query-entity1");
         property.addTag("t1", "tv1");
         property.addKey("k1", "kv1");
@@ -271,7 +271,7 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("entity", property.getEntity());
         queryObj.put("exactMatch", false);
         queryObj.put("startDate", property.getDate());
-        queryObj.put("endDate", Util.ISOFormat(Util.getFutureDate()));
+        queryObj.put("endDate", Util.ISOFormat(Util.getNextDay()));
 
         String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
             add(property);
@@ -281,7 +281,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_Example_TypeEntityStartEnd_Partkey_propertyFounded() throws Exception {
+    public void testTypeEntityStartEnPartkey() throws Exception {
         final Property property = new Property("disk", "nurswgvml007");
         property.addTag("fs_type", "ext4");
         property.addKey("file_system", "/");
@@ -306,7 +306,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeEntity_Exception() throws IOException {
+    public void testTypeEntity() throws IOException {
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
                 put("type", "testtype");
@@ -320,7 +320,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_Type_Exception() throws IOException {
+    public void testType() throws IOException {
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
                 put("type", "testtype");
@@ -333,7 +333,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeStart_Exception() throws IOException {
+    public void testTypeStart() throws IOException {
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
                 put("type", "testtype");
@@ -347,7 +347,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeStartEnd_Exception() throws IOException {
+    public void testTypeStartEnd() throws IOException {
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
                 put("type", "testtype");

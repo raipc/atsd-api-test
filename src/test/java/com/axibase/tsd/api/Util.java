@@ -20,13 +20,13 @@ public class Util {
         return new Date();
     }
 
-    public static Date getPastDate() {
-        return new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 2); //two day before
+    public static Date getPreviousDay() {
+        return new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24); //two day before
 
     }
 
-    public static Date getFutureDate() {
-        return new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 2); //two day after
+    public static Date getNextDay() {
+        return new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24); //two day after
     }
 
     public static String ISOFormat(Date date) {
@@ -49,32 +49,6 @@ public class Util {
         return "9999-01-01T00:00:00Z";
     }
 
-    public static String buildVariablePrefix() {
-        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
-        StringBuilder prefix = new StringBuilder();
-        for (int i = 0; i < methodName.length(); i++) {
-            Character ch = methodName.charAt(i);
-            if (Character.isUpperCase(ch)) {
-                prefix.append("-");
-            }
-            prefix.append(Character.toLowerCase(ch));
-        }
-        prefix.append("-");
-        return prefix.toString();
-    }
-
-    public static String getFileContent(String path) throws IOException {
-        InputStream in = Util.class.getResourceAsStream(path);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-        StringBuilder datasetBuilder = new StringBuilder();
-        String aux = "";
-
-        while ((aux = reader.readLine()) != null) {
-            datasetBuilder.append(aux);
-        }
-        return datasetBuilder.toString();
-    }
 
     public static class ABNF {
         private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
