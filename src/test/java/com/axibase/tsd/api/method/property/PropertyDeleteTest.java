@@ -3,9 +3,6 @@ package com.axibase.tsd.api.method.property;
 import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
-import com.axibase.tsd.api.transport.http.HTTPMethod;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -31,11 +28,11 @@ public class PropertyDeleteTest extends PropertyMethod {
     }
 
     @Test
-    public void test_FutureDate_TypeEntity_ExactTRUE_PropertyRemain() throws IOException {
+    public void testFutureDateExactTRUE() throws IOException {
         final Property property = new Property("delete-type9", "delete-entity9");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
-        property.setDate(Util.getFutureDate());
+        property.setDate(Util.getNextDay());
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
@@ -44,18 +41,18 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("entity", property.getEntity());
         deleteObj.put("exactMatch", true);
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
 
         assertTrue("Property should be remain", propertyExist(property));
     }
 
 
     @Test
-    public void test_FutureDate_TypeEntity_ExactFALSE_PropertyDisappear() throws IOException {
+    public void testFutureDateExactFALSE() throws IOException {
         final Property property = new Property("delete-type8", "delete-entity8");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
-        property.setDate(Util.getFutureDate());
+        property.setDate(Util.getNextDay());
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
@@ -64,17 +61,17 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("entity", property.getEntity());
         deleteObj.put("exactMatch", false);
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
 
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
     @Test
-    public void test_FutureDate_TypeEntityKey_PropertyDisappear() throws IOException {
+    public void testFutureDateExactDefault() throws IOException {
         final Property property = new Property("delete-type7", "delete-entity7");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
-        property.setDate(Util.getFutureDate());
+        property.setDate(Util.getNextDay());
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
@@ -83,13 +80,13 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("entity", property.getEntity());
         deleteObj.put("key", property.getKey());
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
 
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
     @Test
-    public void test_CommonTypeEntity_TypeEntityKey_FirstDisappear() throws IOException {
+    public void testCommonTypeEntityTypeEntityKey() throws IOException {
         final Property property = new Property("delete-type-6", "delete-entity6");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -108,7 +105,7 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("entity", property.getEntity());
         deleteObj.put("key", property.getKey());
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
 
         assertFalse("First property should be deleted", propertyExist(property));
         assertTrue("Second property should remain", propertyExist(secondProperty));
@@ -116,7 +113,7 @@ public class PropertyDeleteTest extends PropertyMethod {
 
 
     @Test
-    public void test_TypeEntity_ExactFALSE_PropertiesDisappear() throws IOException {
+    public void testTypeEntityExactFalse() throws IOException {
         final Property property = new Property("delete-type-5", "delete-entity5");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -136,7 +133,7 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("entity", property.getEntity());
         deleteObj.put("exactMatch", false);
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
 
         assertFalse("Frist property should be deleted", propertyExist(property));
         assertFalse("Second property should be deleted", propertyExist(secondProperty));
@@ -145,7 +142,7 @@ public class PropertyDeleteTest extends PropertyMethod {
 
 
     @Test
-    public void test_TypeEntityKey_PropertyDisappear() throws IOException {
+    public void testTypeEntityKey() throws IOException {
         final Property property = new Property("delete-type4", "delete-entity4");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -157,13 +154,13 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("entity", property.getEntity());
         deleteObj.put("key", property.getKey());
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
 
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
     @Test
-    public void test_TypeEntity_exactTRUE_PropertiesRemain() throws IOException {
+    public void testMultipleTypeEntityExactTRUE() throws IOException {
         final Property property = new Property("delete-type3", "delete-entity3");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -183,14 +180,14 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("entity", property.getEntity());
         deleteObj.put("exactMatch", true);
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
         assertTrue("First property should remain", propertyExist(property));
         assertTrue("Second property should remain", propertyExist(secondProperty));
     }
 
 
     @Test
-    public void test_TypeEntity_exactTRUE_PropertyRemain() throws IOException {
+    public void testTypeEntityExactTRUE() throws IOException {
         final Property property = new Property("delete-type2", "delete-entity2");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -202,13 +199,13 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("type", property.getType());
         deleteObj.put("exactMatch", true);
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
 
         assertTrue("Property should be remain", propertyExist(property));
     }
 
     @Test
-    public void test_TypeEntityKey_EndDateEQDate_PropertyRemain() throws IOException {
+    public void testEndDateEqDate() throws IOException {
         final Property property = new Property("delete-type1", "delete-entity1");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -222,72 +219,59 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("key", property.getKey());
         deleteObj.put("endDate", property.getDate());
 
-        deleteProperty(deleteObj);
+        deletePropertyCorrect(deleteObj);
 
         assertTrue("Property should be remain", propertyExist(property));
     }
 
     @Test
-    public void test_TypeStartEnd_Exception() throws IOException {
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", "testtype");
-                put("startDate", "2016-06-01T12:04:59.191Z");
-                put("endDate", "2016-06-01T12:04:59.191Z");
-            }});
-        }};
+    public void test_TypeStartEnd() throws IOException {
+        Map<String, Object> request = new HashMap<>();
+        request.put("type", "testtype");
+        request.put("startDate", "2016-06-01T12:04:59.191Z");
+        request.put("endDate", "2016-06-01T12:04:59.191Z");
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+
+        AtsdHttpResponse response = deleteProperty(request);
         assertEquals(400, response.getCode());
         assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.getBody());
     }
 
     @Test
-    public void test_TypeEnd_Exception() throws IOException {
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", "testtype");
-                put("endDate", "2016-06-01T12:04:59.191Z");
-            }});
-        }};
+    public void testTypeEnd() throws IOException {
+        Map<String, Object> request = new HashMap<>();
+        request.put("type", "testtype");
+        request.put("endDate", "2016-06-01T12:04:59.191Z");
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+        AtsdHttpResponse response = deleteProperty(request);
         assertEquals(400, response.getCode());
         assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.getBody());
     }
 
     @Test
-    public void test_TypeStart_Exception() throws IOException {
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", "testtype");
-                put("startDate", "2016-06-01T12:04:59.191Z");
-            }});
-        }};
+    public void testTypeStart() throws IOException {
+        Map<String, Object> request = new HashMap<>();
+        request.put("type", "testtype");
+        request.put("startDate", "2016-06-01T12:04:59.191Z");
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+        AtsdHttpResponse response = deleteProperty(request);
         assertEquals(400, response.getCode());
         assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.getBody());
     }
 
     @Test
-    public void test_Type_Exception() throws IOException {
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", "testtype");
-            }});
-        }};
+    public void testTypeException() throws IOException {
+        Map<String, Object> request = new HashMap<>();
+        request.put("type", "testtype");
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, request.toJSONString());
+
+        AtsdHttpResponse response = deleteProperty(request);
         assertEquals(400, response.getCode());
         assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.getBody());
     }
 
-    private void deleteProperty(final Map deleteObj) throws IOException {
-        JSONArray jsonArray = new JSONArray() {{
-            add(new JSONObject(deleteObj));
-        }};
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, jsonArray.toJSONString());
+    private void deletePropertyCorrect(final Map deleteObj) throws IOException {
+        AtsdHttpResponse response = super.deleteProperty(deleteObj);
         assertEquals("Fail to execute delete query", 200, response.getCode());
     }
 
