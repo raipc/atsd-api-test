@@ -36,6 +36,229 @@ public class PropertyQueryTest extends PropertyMethod {
         prepare();
     }
 
+    @Test
+    public void testExactFalseWildcartNoKey() throws Exception {
+        final Property property = new Property("query-type17", "query-entity17");
+        property.addTag("t1", "tv1");
+        insertPropertyCheck(property);
+
+        final Property secondProperty = new Property(null, "query-entity17-2");
+        secondProperty.setType(property.getType());
+        secondProperty.addTag("t2", "tv2");
+        secondProperty.addKey("k2", "kv2");
+        insertPropertyCheck(secondProperty);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", "*");
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("exactMatch", false);
+
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property);
+            add(secondProperty);
+        }});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
+    }
+
+
+    @Test
+    public void testExactTrueWildcartNoKey() throws Exception {
+        final Property property = new Property("query-type17", "query-entity17");
+        property.addTag("t1", "tv1");
+        insertPropertyCheck(property);
+
+        final Property secondProperty = new Property(null, "query-entity17-2");
+        secondProperty.setType(property.getType());
+        secondProperty.addTag("t2", "tv2");
+        secondProperty.addKey("k2", "kv2");
+        insertPropertyCheck(secondProperty);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", "*");
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("exactMatch", true);
+
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property);
+        }});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
+    }
+
+
+    @Test
+    public void testExactFalseWildcart() throws Exception {
+        final Property property = new Property("query-type16", "query-entity16");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        final Property secondProperty = new Property(null, "query-entity16-2");
+        secondProperty.setType(property.getType());
+        secondProperty.addTag("t2", "tv2");
+        secondProperty.setKey(property.getKey());
+        secondProperty.addKey("k2", "kv2");
+        insertPropertyCheck(secondProperty);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", "*");
+        queryObj.put("key", property.getKey());
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("exactMatch", false);
+
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property);
+            add(secondProperty);
+        }});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
+    }
+
+
+
+    @Test
+    public void testExactTrueWildcartKeyMatch() throws Exception {
+        final Property property = new Property("query-type15", "query-entity15");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        final Property secondProperty = new Property(null, "query-entity15-2");
+        secondProperty.setType(property.getType());
+        secondProperty.addTag("t2", "tv2");
+        secondProperty.addKey("k2", "kv2");
+        insertPropertyCheck(secondProperty);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", "*");
+        queryObj.put("key", property.getKey());
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("exactMatch", true);
+
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property);
+        }});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
+    }
+
+
+    @Test
+    public void testExactFalseDiffKey() throws Exception {
+        final Property property = new Property("query-type14", "query-entity14");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.addKey("k2", "kv2");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("key", new HashMap<String, String>(){{put("misskey", "misskey_value");}});
+        queryObj.put("exactMatch", true);
+
+        JSONAssert.assertEquals("[]", queryProperty(queryObj), false);
+    }
+
+
+    @Test
+    public void testExactTrueDiffKey() throws Exception {
+        final Property property = new Property("query-type13", "query-entity13");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.addKey("k2", "kv2");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("key", new HashMap<String, String>(){{put("misskey", "misskey_value");}});
+        queryObj.put("exactMatch", true);
+
+        JSONAssert.assertEquals("[]", queryProperty(queryObj), false);
+    }
+
+    @Test
+    public void testExactTruePartialMatch() throws Exception {
+        final Property property = new Property("query-type12", "query-entity12");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.addKey("k2", "kv2");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("key", new HashMap<String, String>(){{put("k1", "kv1");}});
+        queryObj.put("exactMatch", true);
+
+        JSONAssert.assertEquals("[]", queryProperty(queryObj), false);
+    }
+
+
+
+    @Test
+    public void testExactFalseFullMatch() throws Exception {
+        final Property property = new Property("query-type11", "query-entity11");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("key", property.getKey());
+        queryObj.put("exactMatch", false);
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property);
+        }});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
+    }
+
+    @Test
+    public void testExactTrueFullMatch() throws Exception {
+        final Property property = new Property("query-type10", "query-entity10");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", "now");
+        queryObj.put("key", property.getKey());
+        queryObj.put("exactMatch", true);
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property);
+        }});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
+    }
 
     @Test
     public void testEntities() throws Exception {
@@ -281,7 +504,7 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
-    public void testTypeEntityStartEnPartkey() throws Exception {
+    public void testTypeEntityStartEndPartkey() throws Exception {
         final Property property = new Property("disk", "nurswgvml007");
         property.addTag("fs_type", "ext4");
         property.addKey("file_system", "/");
