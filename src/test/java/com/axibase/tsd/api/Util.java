@@ -38,9 +38,7 @@ public class Util {
     public static String ISOFormat(long t) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(t);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssXXX");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return dateFormat.format(calendar.getTime());
+        return ISOFormat(calendar.getTime());
     }
 
     public static String getMinDate() {

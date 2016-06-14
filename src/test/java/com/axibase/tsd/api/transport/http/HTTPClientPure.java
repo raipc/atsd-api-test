@@ -37,21 +37,22 @@ public class HTTPClientPure implements HTTPClient {
         url = protocol + "://" + host + ":" + port;
     }
 
-    public AtsdHttpResponse get(String atsdMethod) throws IOException {
+    public AtsdHttpResponse get(String atsdMethod, ContentType contentType) throws IOException {
         String uri = url + atsdMethod;
 
         HttpGet request = new HttpGet(uri);
+        setHeaders(request, contentType, null);
         logger.debug("> {}", uri);
         AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
         request.releaseConnection();
         return atsdHttpResponse;
     }
 
-    public AtsdHttpResponse post(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse post(String atsdMethod, String body, ContentType contentType) throws IOException {
         String uri = url + atsdMethod;
 
         HttpPost request = new HttpPost(uri);
-        setHeaders(request, null);
+        setHeaders(request, contentType, null);
         request.setEntity(new StringEntity(body));
         logger.debug("> {}\n> {}", uri, body);
         AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
@@ -59,11 +60,11 @@ public class HTTPClientPure implements HTTPClient {
         return atsdHttpResponse;
     }
 
-    public AtsdHttpResponse put(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse put(String atsdMethod, String body, ContentType contentType) throws IOException {
         String uri = url + atsdMethod;
 
         HttpPut request = new HttpPut(uri);
-        setHeaders(request, null);
+        setHeaders(request, contentType, null);
         request.setEntity(new StringEntity(body));
         logger.debug("> {}\n> {}", uri, body);
         AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
@@ -71,10 +72,10 @@ public class HTTPClientPure implements HTTPClient {
         return atsdHttpResponse;
     }
 
-    public AtsdHttpResponse patch(String atsdMethod, String body) throws IOException {
+    public AtsdHttpResponse patch(String atsdMethod, String body, ContentType contentType) throws IOException {
         String uri = url + atsdMethod;
         HttpPatch request = new HttpPatch(uri);
-        setHeaders(request, null);
+        setHeaders(request, contentType, null);
         request.setEntity(new StringEntity(body));
 
         logger.debug("> {}\n> {}", uri, body);
@@ -87,15 +88,17 @@ public class HTTPClientPure implements HTTPClient {
         String uri = url + atsdMethod;
 
         HttpDelete request = new HttpDelete(uri);
-        setHeaders(request, null);
+        setHeaders(request, null, null);
         logger.debug("> {}", uri);
         AtsdHttpResponse atsdHttpResponse = parseResponse(httpClient.execute(request, context));
         request.releaseConnection();
         return atsdHttpResponse;
     }
 
-    private void setHeaders(HttpRequestBase request, Map<String, String> headers) {
-        request.addHeader("Content Type", "application/json");
+    private void setHeaders(HttpRequestBase request, ContentType contentType, Map<String, String> headers) {
+        if(null != contentType) {
+            request.addHeader("Content-Type", contentType.getValue());
+        }
         if (null == headers) {
             return;
         }

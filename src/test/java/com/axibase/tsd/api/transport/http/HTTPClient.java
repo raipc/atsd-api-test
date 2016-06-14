@@ -8,13 +8,13 @@ import java.io.IOException;
 interface HTTPClient {
 
 
-    abstract AtsdHttpResponse get(String atsdMethod) throws IOException;
+    abstract AtsdHttpResponse get(String atsdMethod, ContentType contentType) throws IOException;
 
-    abstract AtsdHttpResponse post(String atsdMethod, String body) throws IOException;
+    abstract AtsdHttpResponse post(String atsdMethod, String body, ContentType contentType) throws IOException;
 
-    abstract AtsdHttpResponse put(String atsdMethod, String body) throws IOException;
+    abstract AtsdHttpResponse put(String atsdMethod, String body, ContentType contentType) throws IOException;
 
-    abstract AtsdHttpResponse patch(String atsdMethod, String body) throws IOException;
+    abstract AtsdHttpResponse patch(String atsdMethod, String body, ContentType contentType) throws IOException;
 
     abstract AtsdHttpResponse delete(String atsdMethod) throws IOException;
 }

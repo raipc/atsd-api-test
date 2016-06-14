@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Metric {
     private String name;
+    private Boolean enabled;
     private Map<String, String> parameters;
 
     public Metric(String name) {

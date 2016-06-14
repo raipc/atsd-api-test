@@ -130,6 +130,8 @@ public class PropertyQueryTest extends PropertyMethod {
         }});
 
         JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
+        logger.debug("expected: {}", expected);
+        logger.debug("given: {}", queryProperty(queryObj));
     }
 
     @Test

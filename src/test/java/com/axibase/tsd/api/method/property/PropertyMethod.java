@@ -1,5 +1,6 @@
 package com.axibase.tsd.api.method.property;
 
+import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.method.Method;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
@@ -55,14 +56,26 @@ abstract public class PropertyMethod extends Method {
 
 
     Boolean propertyExist(final Property property) throws IOException {
+        return propertyExist(property, true);
+    }
+
+    Boolean propertyExist(final Property property, Boolean allowExtraFields) throws IOException {
 
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
                 put("entity", property.getEntity());
                 put("type", property.getType());
                 put("key", property.getKey());
-                put("startDate", (property.getDate() == null ? "1970-01-01T00:00:00.000Z" : property.getDate()));
-                put("endDate", "9999-01-12T13:46:40.000Z");
+                if (null == property.getDate()) {
+                    put("startDate", Util.getMinDate());
+                    put("endDate", Util.getMaxDate());
+                } else {
+                    put("startDate", property.getDate());
+                    put("interval", new JSONObject() {{
+                        put("unit", "MILLISECOND");
+                        put("count", "1");
+                    }});
+                }
             }});
         }};
 
@@ -75,7 +88,7 @@ abstract public class PropertyMethod extends Method {
         logger.debug("check: {}\nresponse: {}", propertyJson, response.getBody());
 
         try {
-            JSONAssert.assertEquals(propertyJson, response.getBody(), JSONCompareMode.LENIENT);
+            JSONAssert.assertEquals(propertyJson, response.getBody(), allowExtraFields ? JSONCompareMode.LENIENT : JSONCompareMode.NON_EXTENSIBLE);
         } catch (JSONException e) {
             throw new IOException("Can not deserialize response");
         } catch (AssertionError e) {
@@ -117,4 +130,22 @@ abstract public class PropertyMethod extends Method {
             }
         }};
     }
+
+    protected void deleteProperties(final Property... properties) throws IOException {
+        JSONArray jsonArray = new JSONArray();
+
+        for (final Property property : properties) {
+            jsonArray.add(new JSONObject() {{
+                put("type", property.getType());
+                put("entity", property.getEntity());
+                put("key", property.getKey());
+                put("exactMatch", true);
+
+            }});
+        }
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_DELETE, jsonArray.toJSONString());
+        assertEquals("Fail to delete properties", 200, response.getCode());
+    }
+
+
 }
