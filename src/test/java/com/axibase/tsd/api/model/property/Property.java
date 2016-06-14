@@ -63,7 +63,10 @@ public class Property extends Model {
     }
 
     public Map<String, String> getKey() {
-        return key;
+        if(null == key) {
+            return null;
+        }
+        return new HashMap<>(key);
     }
 
     public void setKey(Map<String, String> key) {
@@ -71,7 +74,10 @@ public class Property extends Model {
     }
 
     public Map<String, String> getTags() {
-        return tags;
+        if(null == tags) {
+            return null;
+        }
+        return new HashMap<>(tags);
     }
 
     public void setTags(Map<String, String> tags) {
