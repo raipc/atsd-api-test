@@ -1,21 +1,14 @@
 package com.axibase.tsd.api.model.series;
 
+import com.axibase.tsd.api.Util;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class Sample {
     private String d;
     private BigDecimal v;
 
     public Sample(long t, BigDecimal v) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(t);
-
-        this.d = dateFormat.format(calendar.getTime());
+        this.d = Util.ISOFormat(t);
         this.v = v;
     }
 

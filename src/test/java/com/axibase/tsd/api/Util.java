@@ -35,6 +35,14 @@ public class Util {
         return dateFormat.format(date);
     }
 
+    public static String ISOFormat(long t) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(t);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssXXX");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.format(calendar.getTime());
+    }
+
     public static String getMinDate() {
         return "1970-01-01T00:00:00Z";
     }

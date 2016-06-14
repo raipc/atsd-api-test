@@ -92,7 +92,7 @@ public class SeriesMethod extends Method {
     }
 
     protected Boolean createOrReplaceMetric(Metric metric) throws IOException {
-        return createOrReplaceMetric(metric.getName(),metric.getParameters());
+        return createOrReplaceMetric(metric.getName(), metric.getParameters());
     }
 
     protected Boolean deleteMetric(String metric) throws IOException {
@@ -109,10 +109,10 @@ public class SeriesMethod extends Method {
         return deleteMetric(metric.getName());
     }
 
-    protected String getDataField(int index, String field){
-        if (returnedSeries == null){
+    protected String getDataField(int index, String field) {
+        if (returnedSeries == null) {
             return "";
-        } else{
+        } else {
             return ((JSONObject) ((JSONArray) ((JSONObject) returnedSeries.get(0)).get("data")).get(index)).get(field).toString();
         }
     }

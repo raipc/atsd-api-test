@@ -1,9 +1,6 @@
 package com.axibase.tsd.api.model.series;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import com.axibase.tsd.api.Util;
 
 public class Query {
     private String entity;
@@ -14,12 +11,8 @@ public class Query {
     public Query(String entity, String metric, long startTime, long endTime) {
         this.entity = entity;
         this.metric = metric;
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(startTime);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-        this.startDate = dateFormat.format(calendar.getTime());
-        calendar.setTimeInMillis(endTime);
-        this.endDate = dateFormat.format(calendar.getTime());
+        this.startDate = Util.ISOFormat(startTime);
+        this.endDate = Util.ISOFormat(endTime);
     }
 
     public Query(String entity, String metric, String startDate, String endDate) {

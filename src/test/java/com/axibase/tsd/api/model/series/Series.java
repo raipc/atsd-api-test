@@ -1,6 +1,8 @@
 package com.axibase.tsd.api.model.series;
 
 import com.axibase.tsd.api.model.Model;
+import com.axibase.tsd.api.registry.SeriesRegistry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,12 @@ public class Series extends Model {
     private Map<String, String> tags;
 
     public Series(String entity, String metric) {
+        if (entity != null){
+            SeriesRegistry.getInstance().registerEntity(entity);
+        }
+        if (metric != null){
+            SeriesRegistry.getInstance().registerMetric(metric);
+        }
         this.entity = entity;
         this.metric = metric;
         this.data = new ArrayList<>();

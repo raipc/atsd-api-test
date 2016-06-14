@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Metric {
     private String name;
-    private Map<String,String> parameters;
+    private Map<String, String> parameters;
 
     public Metric(String name) {
         this.name = name;
