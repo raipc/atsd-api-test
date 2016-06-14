@@ -70,7 +70,7 @@ public class PropertyInsertTest extends PropertyMethod {
 
     @Test
     public void testMultipleInsertSameTypeEntityKey() throws IOException {
-        final long firstTime = System.currentTimeMillis() - 5000;
+        final long firstTime = System.currentTimeMillis() - 5;
         final long secondTime = System.currentTimeMillis();
 
         final Property property = new Property("insert-type2", "insert-entity2");
@@ -101,6 +101,7 @@ public class PropertyInsertTest extends PropertyMethod {
         insertUpdatedObj.put("tags", updatedProperty.getTags());
         insertUpdatedObj.put("date", updatedProperty.getDate());
         insertProperties(insertFirstObj, insertUpdatedObj);
+
         assertTrue(propertyExist(updatedProperty, false));
         assertFalse(propertyExist(property, false));
     }
@@ -108,7 +109,7 @@ public class PropertyInsertTest extends PropertyMethod {
     @Test
     public void testSameTypeEntityKey() throws IOException {
         final Property property = new Property("insert-type1", "insert-entity1");
-        final long firstTime = System.currentTimeMillis() - 5000;
+        final long firstTime = System.currentTimeMillis() - 5;
         final long secondTime = System.currentTimeMillis();
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");

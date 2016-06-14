@@ -28,7 +28,7 @@ public class PropertyDeleteTest extends PropertyMethod {
     }
 
     @Test
-    public void testFutureDateExactTRUE() throws IOException {
+    public void testFutureDateExactTrue() throws IOException {
         final Property property = new Property("delete-type9", "delete-entity9");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -48,7 +48,7 @@ public class PropertyDeleteTest extends PropertyMethod {
 
 
     @Test
-    public void testFutureDateExactFALSE() throws IOException {
+    public void testFutureDateExactFalse() throws IOException {
         final Property property = new Property("delete-type8", "delete-entity8");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -160,7 +160,7 @@ public class PropertyDeleteTest extends PropertyMethod {
     }
 
     @Test
-    public void testMultipleTypeEntityExactTRUE() throws IOException {
+    public void testMultipleTypeEntityExactTrue() throws IOException {
         final Property property = new Property("delete-type3", "delete-entity3");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -187,7 +187,7 @@ public class PropertyDeleteTest extends PropertyMethod {
 
 
     @Test
-    public void testTypeEntityExactTRUE() throws IOException {
+    public void testTypeEntityExactTrue() throws IOException {
         final Property property = new Property("delete-type2", "delete-entity2");
         property.addTag("t1", "v1");
         property.addKey("k1", "v1");
@@ -225,7 +225,7 @@ public class PropertyDeleteTest extends PropertyMethod {
     }
 
     @Test
-    public void test_TypeStartEnd() throws IOException {
+    public void testTypeStartEnd() throws IOException {
         Map<String, Object> request = new HashMap<>();
         request.put("type", "testtype");
         request.put("startDate", "2016-06-01T12:04:59.191Z");
