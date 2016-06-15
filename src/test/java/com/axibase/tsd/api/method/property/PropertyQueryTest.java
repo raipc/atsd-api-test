@@ -2,6 +2,8 @@ package com.axibase.tsd.api.method.property;
 
 
 import com.axibase.tsd.api.Util;
+import com.axibase.tsd.api.method.entity.EntityMethod;
+import com.axibase.tsd.api.model.entity.Entity;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
@@ -21,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Dmitry Korchagin.
@@ -627,6 +630,24 @@ public class PropertyQueryTest extends PropertyMethod {
         AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_QUERY, request.toJSONString());
         assertEquals(400, response.getCode());
         assertEquals("{\"error\":\"IllegalArgumentException: entity or entities or entityGroup or entityExpression must not be empty\"}", response.getBody());
+    }
+
+    @Test
+    public void testEntityTag() throws IOException {
+        EntityMethod entityMethod = new EntityMethod();
+        Entity entity = new Entity("query-entity20");
+        Property property = new Property("$entity_tags", null);
+        property.setEntity(entity.getName());
+        Map tags = new HashMap<String, String>() {{
+            put("t1", "v1");
+            put("t2", "v2");
+        }};
+        entity.setTags(tags);
+        property.setTags(tags);
+        entityMethod.createOrUpdate(entity);
+
+        assertTrue(propertyExist(property));
+
     }
 
 

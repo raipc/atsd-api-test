@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,15 +27,17 @@ public class EntityMethod extends Method {
 
     static final String METHOD_ENTITIES = "/entities/";
 
-    void createOrUpdate(final Entity entity) throws IOException {
+    public void createOrUpdate(final Entity entity) throws IOException {
         final String path = METHOD_ENTITIES + entity.getName();
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.PUT, path, (new JSONObject(entity.getTags()).toJSONString()));
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("tags", entity.getTags());
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.PUT, path, (new JSONObject(payload).toJSONString()));
         if (response.getCode() != 200) {
             throw new IOException("Fail to insert entity");
         }
         if (!entityExist(entity)) {
-            throw new IOException("Fail to check inserted property");
+            throw new IOException("Fail to check entity property");
         }
     }
 
@@ -43,16 +47,14 @@ public class EntityMethod extends Method {
     }
 
     Boolean entityExist(final Entity entity, Boolean allowExtraFields) throws IOException {
-        String propertyJson = jacksonMapper.writeValueAsString(new ArrayList<Entity>() {{
-            add(entity);
-        }});
+        String entityJson = jacksonMapper.writeValueAsString(entity);
 
         AtsdHttpResponse response = httpSender.sendGet(METHOD_ENTITIES + entity.getName());
         assertEquals(200, response.getCode());
-        logger.debug("check: {}\nresponse: {}", propertyJson, response.getBody());
+        logger.debug("check: {}\nresponse: {}", entityJson, response.getBody());
 
         try {
-            JSONAssert.assertEquals(propertyJson, response.getBody(), allowExtraFields ? JSONCompareMode.LENIENT : JSONCompareMode.NON_EXTENSIBLE);
+            JSONAssert.assertEquals(entityJson, response.getBody(), allowExtraFields ? JSONCompareMode.LENIENT : JSONCompareMode.NON_EXTENSIBLE);
         } catch (JSONException e) {
             throw new IOException("Can not deserialize response");
         } catch (AssertionError e) {
