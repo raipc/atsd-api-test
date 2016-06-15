@@ -634,9 +634,11 @@ public class PropertyQueryTest extends PropertyMethod {
 
     @Test
     public void testEntityTags() throws IOException {
+        final String entityTagsType = "$entity_tags";
         EntityMethod entityMethod = new EntityMethod();
         final Entity entity = new Entity("query-entity20");
-        final Property property = new Property("$entity_tags", null);
+        final Property property = new Property();
+        property.setType(entityTagsType);
         property.setEntity(entity.getName());
         Map tags = new HashMap<String, String>() {{
             put("t1", "v1");
@@ -651,9 +653,11 @@ public class PropertyQueryTest extends PropertyMethod {
 
     @Test
     public void testEntityTagsIgnoreKeyExactTrue() throws Exception {
+        final String entityTagsType = "$entity_tags";
         EntityMethod entityMethod = new EntityMethod();
         final Entity entity = new Entity("query-entity21");
-        final Property property = new Property("$entity_tags", null);
+        final Property property = new Property();
+        property.setType(entityTagsType);
         property.setEntity(entity.getName());
         Map tags = new HashMap<String, String>() {{
             put("t1", "v1");
@@ -683,9 +687,11 @@ public class PropertyQueryTest extends PropertyMethod {
 
     @Test
     public void testEntityTagsIgnoreKeyExactFalse() throws Exception {
+        final String entityTagsType = "$entity_tags";
         EntityMethod entityMethod = new EntityMethod();
         final Entity entity = new Entity("query-entity22");
-        final Property property = new Property("$entity_tags", null);
+        final Property property = new Property();
+        property.setType(entityTagsType);
         property.setEntity(entity.getName());
         Map tags = new HashMap<String, String>() {{
             put("t1", "v1");
@@ -716,9 +722,12 @@ public class PropertyQueryTest extends PropertyMethod {
 
     @Test
     public void testEntityTagsIgnoreKeyTagExpressionExactFalse() throws Exception {
+        final String entityTagsType = "$entity_tags";
+
         EntityMethod entityMethod = new EntityMethod();
-        final Entity entity = new Entity("query-entity22");
-        final Property property = new Property("$entity_tags", null);
+        final Entity entity = new Entity("query-entity23");
+        final Property property = new Property();
+        property.setType(entityTagsType);
         property.setEntity(entity.getName());
         Map tags = new HashMap<String, String>() {{
             put("t1", "v1");
@@ -747,9 +756,12 @@ public class PropertyQueryTest extends PropertyMethod {
 
     @Test
     public void testEntityTagsIgnoreKeyTagExpressionExactTrue() throws Exception {
+        final String entityTagsType = "$entity_tags";
+
         EntityMethod entityMethod = new EntityMethod();
-        final Entity entity = new Entity("query-entity23");
-        final Property property = new Property("$entity_tags", null);
+        final Entity entity = new Entity("query-entity24");
+        final Property property = new Property();
+        property.setType(entityTagsType);
         property.setEntity(entity.getName());
         Map tags = new HashMap<String, String>() {{
             put("t1", "v1");
