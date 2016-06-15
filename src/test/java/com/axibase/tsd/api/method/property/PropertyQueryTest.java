@@ -36,6 +36,33 @@ public class PropertyQueryTest extends PropertyMethod {
         prepare();
     }
 
+
+    @Test
+    public void testStartInFuture() throws Exception {
+        final Property property = new Property("query-type19", "query-entity19");
+        property.addTag("t1", "tv1");
+        property.addKey("k1", "kv1");
+        property.setDate(Util.getNextDay());
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", property.getKey());
+        queryObj.put("startDate", property.getDate());
+        queryObj.put("interval", new JSONObject(){{
+            put("unit", "DAY");
+            put("count", 2);
+        }});
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property);
+        }});
+
+        JSONAssert.assertEquals(expected, queryProperty(queryObj), false);
+    }
+
+
     @Test
     public void testExactFalseWildcartNoKey() throws Exception {
         final Property property = new Property("query-type18", "query-entity18");
@@ -529,6 +556,21 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
     @Test
+    public void testTypeEntityStart() throws IOException {
+        JSONArray request = new JSONArray() {{
+            add(new JSONObject() {{
+                put("type", "testtype");
+                put("entity", "testentity");
+                put("startDate", "2016-05-25T05:00:00Z");
+            }});
+        }};
+
+        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_QUERY, request.toJSONString());
+        assertEquals(400, response.getCode());
+        assertEquals("{\"error\":\"IllegalArgumentException: Missing parameters. One of the following combinations is required: interval, interval + startTime/startDate, interval + endTime/endDate, startTime/startDate + endTime/endDate\"}", response.getBody());
+    }
+
+    @Test
     public void testTypeEntity() throws IOException {
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
@@ -555,19 +597,7 @@ public class PropertyQueryTest extends PropertyMethod {
         assertEquals("{\"error\":\"IllegalArgumentException: Missing parameters. One of the following combinations is required: interval, interval + startTime/startDate, interval + endTime/endDate, startTime/startDate + endTime/endDate\"}", response.getBody());
     }
 
-    @Test
-    public void testTypeStartInFuture() throws IOException {
-        JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("type", "testtype");
-                put("startDate", "9999-06-01T12:04:59.191Z");
-            }});
-        }};
 
-        AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_QUERY, request.toJSONString());
-        assertEquals(400, response.getCode());
-        assertEquals("{\"error\":\"IllegalArgumentException: Missing parameters. One of the following combinations is required: interval, interval + startTime/startDate, interval + endTime/endDate, startTime/startDate + endTime/endDate\"}", response.getBody());
-    }
 
 
     @Test

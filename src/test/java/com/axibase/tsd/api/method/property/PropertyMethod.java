@@ -97,7 +97,7 @@ abstract public class PropertyMethod extends Method {
         return true;
     }
 
-    String queryProperty(final Map request) throws IOException {
+    String  queryProperty(final Map request) throws IOException {
 
         JSONArray query = new JSONArray() {{
             add(new JSONObject(request));
