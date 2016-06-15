@@ -38,7 +38,7 @@ public class MessageMethod extends Method {
         return 200 == response.getCode();
     }
 
-    protected Boolean executeQuery(final MessageQuery messageQuery) throws Exception {
+    protected void executeQuery(final MessageQuery messageQuery) throws IOException, ParseException, InterruptedException {
         Thread.sleep(500);
 
         JSONObject request = (JSONObject) jsonParser.parse(jacksonMapper.writeValueAsString(messageQuery));
@@ -50,14 +50,16 @@ public class MessageMethod extends Method {
             logger.error("Failed to execute message query");
         }
         returnedMessages = (JSONArray) jsonParser.parse(response.getBody());
-        return 200 == response.getCode();
     }
 
-    protected String getDataField(int index, String field) {
+    protected String getField(int index, String field) {
         if (returnedMessages == null) {
             return "returnedMessages is null";
         }
         return (((JSONObject) returnedMessages.get(index)).get(field)).toString();
     }
 
+    public String getReturnedMessages() {
+        return returnedMessages.toString();
+    }
 }

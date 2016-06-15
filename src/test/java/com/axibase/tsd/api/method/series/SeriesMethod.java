@@ -9,12 +9,14 @@ import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class SeriesMethod extends Method {
     protected static final String METHOD_SERIES_INSERT = "/series/insert";
@@ -28,15 +30,15 @@ public class SeriesMethod extends Method {
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
                 put("entity", series.getEntity());
-                put("metric", series.getMetricName());
+                put("metric", series.getMetric());
                 put("data", new JSONArray() {{
-                    add(new JSONObject() {{
-                        ArrayList<Sample> data = series.getData();
-                        for (Sample sample : data) {
+                    ArrayList<Sample> data = series.getData();
+                    for (final Sample sample : data) {
+                        add(new JSONObject() {{
                             put("d", sample.getD());
                             put("v", sample.getV());
-                        }
-                    }});
+                        }});
+                    }
                 }});
                 put("tags", new JSONObject(series.getTags()));
             }});
@@ -52,21 +54,17 @@ public class SeriesMethod extends Method {
         return 200 == response.getCode();
     }
 
-    protected Boolean executeQuery(final SeriesQuery seriesQuery) throws Exception {
-        Thread.sleep(500);
+    protected Boolean executeQuery(final SeriesQuery seriesQuery, Boolean wait) throws Exception {
+        if (wait) {
+            Thread.sleep(500);
+        }
 
         JSONArray request = new JSONArray() {{
-            add(new JSONObject() {{
-                put("entity", seriesQuery.getEntity());
-                put("metric", seriesQuery.getMetric());
-                put("startDate", seriesQuery.getStartDate());
-                put("endDate", seriesQuery.getEndDate());
-                put("tags", seriesQuery.getTags());
-
-            }});
+            add(queryToJSONObject(seriesQuery));
         }};
 
-        final AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_SERIES_QUERY, request.toJSONString());
+        String body = request.toJSONString();
+        final AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_SERIES_QUERY, body);
         if (200 == response.getCode()) {
             logger.debug("Query looks succeeded");
         } else {
@@ -76,11 +74,72 @@ public class SeriesMethod extends Method {
         return 200 == response.getCode();
     }
 
+    protected void executeQuery(final SeriesQuery seriesQuery) throws Exception {
+        executeQuery(seriesQuery, true);
+    }
+
+    protected Boolean executeQuery(final ArrayList<SeriesQuery> seriesQueries) throws IOException, ParseException, InterruptedException {
+        Thread.sleep(500);
+        JSONArray request = new JSONArray();
+        for (SeriesQuery seriesQuery : seriesQueries) {
+            request.add(queryToJSONObject(seriesQuery));
+        }
+        final AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_SERIES_QUERY, request.toJSONString());
+        if (200 == response.getCode()) {
+            logger.debug("Query looks succeeded");
+        } else {
+            logger.error("Failed to execute series query");
+        }
+        returnedSeries = (JSONArray) jsonParser.parse(response.getBody());
+        return 200 == response.getCode();
+
+    }
+
+    private JSONObject queryToJSONObject(final SeriesQuery seriesQuery) {
+        return new JSONObject() {
+            {
+                put("entity", seriesQuery.getEntity());
+                put("metric", seriesQuery.getMetric());
+                put("startDate", seriesQuery.getStartDate());
+                put("endDate", seriesQuery.getEndDate());
+                put("tags", seriesQuery.getTags());
+                final Map aggregatePeriod = ((Map) seriesQuery.getAggregatePeriod());
+                final ArrayList<String> aggregateTypes = ((ArrayList<String>) seriesQuery.getAggregateTypes());
+                if (aggregatePeriod != null && aggregateTypes != null) {
+                    put("aggregate", new JSONObject() {{
+                        {
+                            put("types", new JSONArray() {{
+                                for (String aggregateType : aggregateTypes) {
+                                    add(aggregateType);
+                                }
+                            }});
+                            put("period", new JSONObject(aggregatePeriod));
+                        }
+                    }});
+                }
+            };
+        };
+    }
 
     protected String getDataField(int index, String field) {
         if (returnedSeries == null) {
             return "returnedSeries is null";
         }
         return ((JSONObject) ((JSONArray) ((JSONObject) returnedSeries.get(0)).get("data")).get(index)).get(field).toString();
+    }
+
+    protected String getField(int index, String field) {
+        if (returnedSeries == null) {
+            return "returnedSeries is null";
+        }
+        return (((JSONObject) returnedSeries.get(index)).get(field)).toString();
+    }
+
+    public JSONArray getReturnedSeries() {
+        return returnedSeries;
+    }
+
+    public int getReturnedSeriesSize() {
+        return returnedSeries.size();
     }
 }

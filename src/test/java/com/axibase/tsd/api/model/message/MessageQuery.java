@@ -11,6 +11,8 @@ public class MessageQuery {
     private String endDate;
 
     private String type;
+    private String severity;
+    private String source;
     private Map<String, String> tags;
 
     public MessageQuery(String entity, String startDate, String endDate) {
@@ -51,11 +53,27 @@ public class MessageQuery {
         this.tags = tags;
     }
 
-        public String getType() {
+    public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

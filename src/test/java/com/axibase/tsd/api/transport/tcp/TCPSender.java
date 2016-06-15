@@ -21,20 +21,33 @@ public class TCPSender {
     }
 
     public void setCommand(String command) {
-        this.command = new StringBuilder("debug ").append(command);
+        this.command = new StringBuilder(command);
     }
 
     public void appendCommand(String commandPart) {
         command.append(commandPart);
     }
 
-    public boolean send() throws IOException {
+    public boolean sendDebugMode() throws IOException {
         Socket socket = new Socket(url, port);
-        DataOutputStream requesStream = new DataOutputStream(socket.getOutputStream());
+        DataOutputStream requestStream = new DataOutputStream(socket.getOutputStream());
         BufferedReader responseStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        requesStream.writeBytes(command.append('\n').toString());
+        requestStream.writeBytes(command.insert(0,"debug ").append('\n').toString());
         String response = responseStream.readLine();
         return response.equals("ok");
+    }
+
+    public void send() throws IOException {
+        Socket socket = new Socket(url, port);
+        DataOutputStream requestStream = new DataOutputStream(socket.getOutputStream());
+        requestStream.writeBytes(command.append('\n').toString());
+        requestStream.close();
+    }
+    public void send(String command) throws IOException {
+        Socket socket = new Socket(url, port);
+        DataOutputStream requestStream = new DataOutputStream(socket.getOutputStream());
+        requestStream.writeBytes(command + '\n');
+        requestStream.close();
     }
 
 }

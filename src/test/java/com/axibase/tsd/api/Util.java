@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -35,6 +36,12 @@ public class Util {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(t);
         return ISOFormat(calendar.getTime());
+    }
+
+    public static Date getDate(String date) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.parse(date);
     }
 
     public static String getMinDate() {

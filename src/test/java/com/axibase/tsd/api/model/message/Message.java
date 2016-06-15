@@ -14,6 +14,11 @@ public class Message extends Model {
     private String message;
     private Boolean persist;
 
+    public Message(String entity) {
+        if (entity != null)
+            MessageRegistry.getInstance().registerEntity(entity);
+        this.entity = entity;
+    }
     public Message(String entity, String message) {
         if (entity != null)
             MessageRegistry.getInstance().registerEntity(entity);

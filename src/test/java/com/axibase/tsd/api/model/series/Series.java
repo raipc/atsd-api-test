@@ -2,16 +2,21 @@ package com.axibase.tsd.api.model.series;
 
 import com.axibase.tsd.api.model.Model;
 import com.axibase.tsd.api.registry.SeriesRegistry;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Series extends Model {
     private String entity;
     private String metric;
     private ArrayList<Sample> data;
     private Map<String, String> tags;
+
+    public Series() {
+    }
 
     public Series(String entity, String metric) {
         if (entity != null) {
@@ -26,11 +31,19 @@ public class Series extends Model {
         this.tags = new HashMap<>();
     }
 
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
+
+    public void setMetric(String metric) {
+        this.metric = metric;
+    }
+
     public String getEntity() {
         return entity;
     }
 
-    public String getMetricName() {
+    public String getMetric() {
         return metric;
     }
 
