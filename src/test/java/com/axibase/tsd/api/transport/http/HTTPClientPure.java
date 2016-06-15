@@ -96,7 +96,7 @@ public class HTTPClientPure implements HTTPClient {
     }
 
     private void setHeaders(HttpRequestBase request, ContentType contentType, Map<String, String> headers) {
-        if(null != contentType) {
+        if (null != contentType) {
             request.addHeader("Content-Type", contentType.getValue());
         }
         if (null == headers) {

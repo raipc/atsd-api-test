@@ -25,11 +25,10 @@ import static org.junit.Assert.assertEquals;
  */
 @SuppressWarnings("unchecked")
 class PropertyMethod extends Method {
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     static final String METHOD_PROPERTY_INSERT = "/properties/insert";
     static final String METHOD_PROPERTY_QUERY = "/properties/query";
     static final String METHOD_PROPERTY_DELETE = "/properties/delete";
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     void insertPropertyCheck(final Property property) throws IOException {
         JSONArray request = new JSONArray() {{
@@ -97,7 +96,7 @@ class PropertyMethod extends Method {
         return true;
     }
 
-    String  queryProperty(final Map request) throws IOException {
+    String queryProperty(final Map request) throws IOException {
 
         JSONArray query = new JSONArray() {{
             add(new JSONObject(request));

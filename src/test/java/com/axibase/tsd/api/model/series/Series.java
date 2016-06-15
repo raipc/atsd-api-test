@@ -14,10 +14,10 @@ public class Series extends Model {
     private Map<String, String> tags;
 
     public Series(String entity, String metric) {
-        if (entity != null){
+        if (entity != null) {
             SeriesRegistry.getInstance().registerEntity(entity);
         }
-        if (metric != null){
+        if (metric != null) {
             SeriesRegistry.getInstance().registerMetric(metric);
         }
         this.entity = entity;
@@ -42,20 +42,20 @@ public class Series extends Model {
         return data;
     }
 
-    public void setData(ArrayList<Sample> data) {
-        this.data = data;
-    }
-
     public void setData(Sample sample) {
         data = new ArrayList<>();
         addData(sample);
     }
 
-    public void addTag(String key, String value){
+    public void setData(ArrayList<Sample> data) {
+        this.data = data;
+    }
+
+    public void addTag(String key, String value) {
         tags.put(key, value);
     }
 
-    public void addData(Sample sample){
+    public void addData(Sample sample) {
         data.add(sample);
     }
 

@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,9 +22,8 @@ import static org.junit.Assert.assertEquals;
  * @author Dmitry Korchagin.
  */
 public class EntityMethod extends Method {
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     static final String METHOD_ENTITIES = "/entities/";
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public void createOrUpdate(final Entity entity) throws IOException {
         final String path = METHOD_ENTITIES + entity.getName();

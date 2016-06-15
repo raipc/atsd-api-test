@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.file.Path;
 import java.util.Properties;
 
 /**
@@ -26,12 +25,62 @@ public class Config {
     private String dataPath;
     private String metadataPath;
 
+    private Config(String configPath) {
+        logger.debug("Load client properties from file: {}", configPath);
+        Properties clientProperties = new Properties();
+        try (InputStream stream = new FileInputStream(configPath)) {
+            clientProperties.load(stream);
+        } catch (Exception e) {
+            logger.error("Fail to load client properties");
+            e.printStackTrace();
+        }
+
+        login = load("login", clientProperties, null);
+        password = load("password", clientProperties, null);
+        protocol = load("protocol", clientProperties, null);
+        serverName = load("serverName", clientProperties, null);
+        httpPort = Integer.parseInt(load("httpPort", clientProperties, null));
+        tcpPort = Integer.parseInt(load("tcpPort", clientProperties, null));
+        dataPath = load("dataPath", clientProperties, null);
+        metadataPath = load("metadataPath", clientProperties, null);
+        logger.debug(this.toString());
+    }
+
     public static Logger getLogger() {
         return logger;
     }
 
     public static String getDefaultConfigFile() {
         return DEFAULT_CONFIG_FILE;
+    }
+
+    public static Config getInstance() {
+        if (null == instance) {
+            if (new File(DEV_CONFIG_FILE).exists()) {
+                logger.debug("Using dev.client.properties for config");
+                instance = new Config(DEV_CONFIG_FILE);
+            } else {
+                logger.debug("Using client.properties for config");
+                instance = new Config(DEFAULT_CONFIG_FILE);
+            }
+        }
+        return instance;
+    }
+
+    private static String load(String name, Properties clientProperties, String defaultValue) {
+        String value = System.getProperty(name);
+        if (value == null) {
+            value = clientProperties.getProperty(name);
+            if (value == null) {
+                if (defaultValue == null) {
+                    logger.error("Could not find required property: {}", name);
+                    throw new IllegalStateException(name + " property is null");
+                } else {
+                    value = defaultValue;
+                }
+            }
+        }
+        return value;
     }
 
     public String getLogin() {
@@ -64,56 +113,6 @@ public class Config {
 
     public String getMetadataPath() {
         return metadataPath;
-    }
-
-    public static Config getInstance() {
-        if (null == instance) {
-            if(new File(DEV_CONFIG_FILE).exists()) {
-                logger.debug("Using dev.client.properties for config");
-                instance = new Config(DEV_CONFIG_FILE);
-            } else {
-                logger.debug("Using client.properties for config");
-                instance = new Config(DEFAULT_CONFIG_FILE);
-            }
-        }
-        return instance;
-    }
-
-    private Config(String configPath) {
-        logger.debug("Load client properties from file: {}", configPath);
-        Properties clientProperties = new Properties();
-        try (InputStream stream = new FileInputStream(configPath)) {
-            clientProperties.load(stream);
-        } catch (Exception e) {
-            logger.error("Fail to load client properties");
-            e.printStackTrace();
-        }
-
-        login = load("login", clientProperties, null);
-        password = load("password", clientProperties, null);
-        protocol = load("protocol", clientProperties, null);
-        serverName = load("serverName", clientProperties, null);
-        httpPort = Integer.parseInt(load("httpPort", clientProperties, null));
-        tcpPort = Integer.parseInt(load("tcpPort", clientProperties, null));
-        dataPath = load("dataPath", clientProperties, null);
-        metadataPath = load("metadataPath", clientProperties, null);
-        logger.debug(this.toString());
-    }
-
-    private static String load(String name, Properties clientProperties, String defaultValue) {
-        String value = System.getProperty(name);
-        if (value == null) {
-            value = clientProperties.getProperty(name);
-            if (value == null) {
-                if (defaultValue == null) {
-                    logger.error("Could not find required property: {}", name);
-                    throw new IllegalStateException(name + " property is null");
-                } else {
-                    value = defaultValue;
-                }
-            }
-        }
-        return value;
     }
 
     @Override

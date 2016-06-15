@@ -10,7 +10,7 @@ public class SeriesQuery {
     private String metric;
     private String startDate;
     private String endDate;
-    private Map<String,String> tags = new HashMap<>();
+    private Map<String, String> tags = new HashMap<>();
 
     public SeriesQuery(String entity, String metric, long startTime, long endTime) {
         this.entity = entity;
@@ -71,8 +71,8 @@ public class SeriesQuery {
         return tags;
     }
 
-    public void setTags(String tag, String value){
-        tags.put(tag,value);
+    public void setTags(String tag, String value) {
+        tags.put(tag, value);
     }
 
     @Override

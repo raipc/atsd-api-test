@@ -53,7 +53,7 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("entity", property.getEntity());
         queryObj.put("key", property.getKey());
         queryObj.put("startDate", property.getDate());
-        queryObj.put("interval", new JSONObject(){{
+        queryObj.put("interval", new JSONObject() {{
             put("unit", "DAY");
             put("count", 2);
         }});
@@ -155,7 +155,6 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
 
-
     @Test
     public void testExactTrueWildcartKeyMatch() throws Exception {
         final Property property = new Property("query-type15", "query-entity15");
@@ -199,7 +198,9 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("entity", property.getEntity());
         queryObj.put("startDate", Util.getMinDate());
         queryObj.put("endDate", "now");
-        queryObj.put("key", new HashMap<String, String>(){{put("misskey", "misskey_value");}});
+        queryObj.put("key", new HashMap<String, String>() {{
+            put("misskey", "misskey_value");
+        }});
         queryObj.put("exactMatch", true);
 
         JSONAssert.assertEquals("[]", queryProperty(queryObj), false);
@@ -219,7 +220,9 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("entity", property.getEntity());
         queryObj.put("startDate", Util.getMinDate());
         queryObj.put("endDate", "now");
-        queryObj.put("key", new HashMap<String, String>(){{put("misskey", "misskey_value");}});
+        queryObj.put("key", new HashMap<String, String>() {{
+            put("misskey", "misskey_value");
+        }});
         queryObj.put("exactMatch", true);
 
         JSONAssert.assertEquals("[]", queryProperty(queryObj), false);
@@ -238,12 +241,13 @@ public class PropertyQueryTest extends PropertyMethod {
         queryObj.put("entity", property.getEntity());
         queryObj.put("startDate", Util.getMinDate());
         queryObj.put("endDate", "now");
-        queryObj.put("key", new HashMap<String, String>(){{put("k1", "kv1");}});
+        queryObj.put("key", new HashMap<String, String>() {{
+            put("k1", "kv1");
+        }});
         queryObj.put("exactMatch", true);
 
         JSONAssert.assertEquals("[]", queryProperty(queryObj), false);
     }
-
 
 
     @Test
@@ -601,8 +605,6 @@ public class PropertyQueryTest extends PropertyMethod {
     }
 
 
-
-
     @Test
     public void testTypeStart() throws IOException {
         JSONArray request = new JSONArray() {{
@@ -670,9 +672,9 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
         queryObj.put("entity", entity.getName());
-        queryObj.put("key", new HashMap<String , String>(){{
+        queryObj.put("key", new HashMap<String, String>() {{
             put("k1", "kv1");
-                }});
+        }});
         queryObj.put("startDate", Util.getMinDate());
         queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("exactMatch", true);
@@ -704,7 +706,7 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
         queryObj.put("entity", entity.getName());
-        queryObj.put("key", new HashMap<String , String>(){{
+        queryObj.put("key", new HashMap<String, String>() {{
             put("k1", "kv1");
         }});
         queryObj.put("startDate", Util.getMinDate());

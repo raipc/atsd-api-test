@@ -4,7 +4,9 @@ import com.axibase.tsd.api.model.Model;
 import com.axibase.tsd.api.registry.EntityRegistry;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Dmitry Korchagin.
@@ -20,7 +22,7 @@ public class Entity extends Model {
     }
 
     public Entity(String name) {
-        if(null != name) {
+        if (null != name) {
             EntityRegistry.getInstance().registerEntity(name);
         }
         this.name = name;
@@ -35,10 +37,10 @@ public class Entity extends Model {
     }
 
     public Date getLastInsertDate() {
-        if(null == lastInsertDate) {
+        if (null == lastInsertDate) {
             return null;
         }
-        return (Date)lastInsertDate.clone();
+        return (Date) lastInsertDate.clone();
     }
 
     public void setLastInsertDate(Date lastInsertDate) {
