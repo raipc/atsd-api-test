@@ -2,7 +2,6 @@ package com.axibase.tsd.api.method.metrics;
 
 import com.axibase.tsd.api.method.Method;
 import com.axibase.tsd.api.model.metric.Metric;
-import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.json.simple.JSONObject;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 public class MetricMethod extends Method {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -24,7 +22,6 @@ public class MetricMethod extends Method {
     private JSONParser jsonParser = new JSONParser();
 
     public Boolean createOrReplaceMetric(Metric metric) throws Exception {
-//        JSONObject request = new JSONObject(metric.getFields());
         JSONObject request = (JSONObject) jsonParser.parse(jacksonMapper.writeValueAsString(metric));
 
         AtsdHttpResponse response = httpSender.send(HTTPMethod.PUT, METHOD_METRICS + URLEncoder.encode(metric.getName(), "UTF-8"), request.toJSONString());

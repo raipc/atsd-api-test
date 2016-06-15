@@ -80,7 +80,7 @@ public class SeriesMethod extends Method {
 
     protected String getDataField(int index, String field) {
         if (returnedSeries == null) {
-            return "";
+            return "returnedSeries is null";
         }
         return ((JSONObject) ((JSONArray) ((JSONObject) returnedSeries.get(0)).get("data")).get(index)).get(field).toString();
     }

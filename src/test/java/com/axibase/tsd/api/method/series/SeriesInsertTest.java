@@ -41,9 +41,7 @@ public class SeriesInsertTest extends SeriesMethod {
         Assert.assertEquals("Stored big float value rounded incorrect", "10.121212121212121", getDataField(0, "v"));
     }
 
-    /*
-    * #2871
-    * */
+    /* #2871 */
     @Test
     public void testBigDecimalOverflow() throws Exception {
 
@@ -64,9 +62,7 @@ public class SeriesInsertTest extends SeriesMethod {
         Assert.assertFalse("Managed to insert large decimal series", insertSeries(series));
     }
 
-    /*
-    * #2871
-    * */
+    /* #2871 */
     @Test
     public void testBigDecimalPrecision() throws Exception {
 
@@ -90,9 +86,7 @@ public class SeriesInsertTest extends SeriesMethod {
         Assert.assertEquals("Stored small decimal value incorrect", number, getDataField(0, "v"));
     }
 
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testISOFormatsZmsAbsent() throws Exception {
 
@@ -113,9 +107,7 @@ public class SeriesInsertTest extends SeriesMethod {
         Assert.assertEquals("Stored value incorrect", value, getDataField(0, "v"));
     }
 
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testISOFormatsZms() throws Exception {
 
@@ -136,9 +128,7 @@ public class SeriesInsertTest extends SeriesMethod {
         Assert.assertEquals("Stored value incorrect", value, getDataField(0, "v"));
     }
 
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testISOFormatsPlusHoursNoMS() throws Exception {
 
@@ -158,9 +148,7 @@ public class SeriesInsertTest extends SeriesMethod {
         Assert.assertEquals("Stored value incorrect", value, getDataField(0, "v"));
     }
 
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testISOFormatsPlusHoursMS() throws Exception {
 
