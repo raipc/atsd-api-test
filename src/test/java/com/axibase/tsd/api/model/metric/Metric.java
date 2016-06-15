@@ -5,6 +5,9 @@ import com.axibase.tsd.api.model.series.DataType;
 import com.axibase.tsd.api.registry.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Metric extends Model {
     private String name;
@@ -13,6 +16,7 @@ public class Metric extends Model {
     private DataType dataType;
     private String timePrecision;
     private String retentionInterval;
+    private Map<String, String> fields;
 
     public Metric(String name) {
         if (name != null) {
@@ -63,5 +67,25 @@ public class Metric extends Model {
 
     public void setRetentionInterval(String retentionInterval) {
         this.retentionInterval = retentionInterval;
+    }
+
+    public Map<String, Object> getFields() {
+        Map<String, Object> fields = new HashMap<>();
+        if (enabled != null) {
+            fields.put("enabled", enabled);
+        }
+        if (persistent != null) {
+            fields.put("persistent", persistent);
+        }
+        if (dataType != null) {
+            fields.put("dataType", dataType.toString());
+        }
+        if (timePrecision != null) {
+            fields.put("timePrecision", timePrecision);
+        }
+        if (retentionInterval != null) {
+            fields.put("retentionInterval", retentionInterval);
+        }
+        return fields;
     }
 }

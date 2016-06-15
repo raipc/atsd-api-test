@@ -1,6 +1,5 @@
 package com.axibase.tsd.api.method.property;
 
-import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
@@ -44,19 +43,19 @@ public class PropertyInsertTest extends PropertyMethod {
         thirdProperty.addKey("k1", "v1");
 
         Map<String, Object> insertFirstObj = new HashMap<>();
-        insertFirstObj.put("type",firstProperty.getType());
+        insertFirstObj.put("type", firstProperty.getType());
         insertFirstObj.put("entity", firstProperty.getEntity());
         insertFirstObj.put("key", firstProperty.getKey());
         insertFirstObj.put("tags", firstProperty.getTags());
 
         Map<String, Object> insertSecondObj = new HashMap<>();
-        insertSecondObj.put("type",secondProperty.getType());
+        insertSecondObj.put("type", secondProperty.getType());
         insertSecondObj.put("entity", secondProperty.getEntity());
         insertSecondObj.put("key", secondProperty.getKey());
         insertSecondObj.put("tags", secondProperty.getTags());
 
         Map<String, Object> insertThirdObj = new HashMap<>();
-        insertThirdObj.put("type",thirdProperty.getType());
+        insertThirdObj.put("type", thirdProperty.getType());
         insertThirdObj.put("entity", thirdProperty.getEntity());
         insertThirdObj.put("key", thirdProperty.getKey());
         insertThirdObj.put("tags", thirdProperty.getTags());
@@ -82,20 +81,22 @@ public class PropertyInsertTest extends PropertyMethod {
         updatedProperty.setType(property.getType());
         updatedProperty.setEntity(property.getEntity());
         updatedProperty.setKey(property.getKey());
-        updatedProperty.setTags(new HashMap<String, String>(){{put("nt1", "ntv1");}});
+        updatedProperty.setTags(new HashMap<String, String>() {{
+            put("nt1", "ntv1");
+        }});
         updatedProperty.setDate(secondTime);
 
         deleteProperties(property, updatedProperty);
 
         Map<String, Object> insertFirstObj = new HashMap<>();
-        insertFirstObj.put("type",property.getType());
+        insertFirstObj.put("type", property.getType());
         insertFirstObj.put("entity", property.getEntity());
         insertFirstObj.put("key", property.getKey());
         insertFirstObj.put("tags", property.getTags());
         insertFirstObj.put("date", property.getDate());
 
         Map<String, Object> insertUpdatedObj = new HashMap<>();
-        insertUpdatedObj.put("type",updatedProperty.getType());
+        insertUpdatedObj.put("type", updatedProperty.getType());
         insertUpdatedObj.put("entity", updatedProperty.getEntity());
         insertUpdatedObj.put("key", updatedProperty.getKey());
         insertUpdatedObj.put("tags", updatedProperty.getTags());
@@ -119,13 +120,15 @@ public class PropertyInsertTest extends PropertyMethod {
         updatedProperty.setType(property.getType());
         updatedProperty.setEntity(property.getEntity());
         updatedProperty.setKey(property.getKey());
-        updatedProperty.setTags(new HashMap<String, String>(){{put("nt1", "ntv1");}});
+        updatedProperty.setTags(new HashMap<String, String>() {{
+            put("nt1", "ntv1");
+        }});
         updatedProperty.setDate(secondTime);
 
         deleteProperties(property, updatedProperty);
 
         Map<String, Object> insertFirstObj = new HashMap<>();
-        insertFirstObj.put("type",property.getType());
+        insertFirstObj.put("type", property.getType());
         insertFirstObj.put("entity", property.getEntity());
         insertFirstObj.put("key", property.getKey());
         insertFirstObj.put("tags", property.getTags());
@@ -134,7 +137,7 @@ public class PropertyInsertTest extends PropertyMethod {
         assertTrue(propertyExist(property, false));
 
         Map<String, Object> insertUpdatedObj = new HashMap<>();
-        insertUpdatedObj.put("type",updatedProperty.getType());
+        insertUpdatedObj.put("type", updatedProperty.getType());
         insertUpdatedObj.put("entity", updatedProperty.getEntity());
         insertUpdatedObj.put("key", updatedProperty.getKey());
         insertUpdatedObj.put("tags", updatedProperty.getTags());
@@ -149,7 +152,7 @@ public class PropertyInsertTest extends PropertyMethod {
         final Property property = new Property("insert-type3", "insert-entity3");
 
         final Map<String, Object> insertObj = new HashMap<>();
-        insertObj.put("type",property.getType());
+        insertObj.put("type", property.getType());
         insertObj.put("entity", property.getEntity());
         insertObj.put("key", property.getKey());
         insertObj.put("tags", property.getTags());
@@ -169,14 +172,12 @@ public class PropertyInsertTest extends PropertyMethod {
 
     private void insertProperties(final Map... insertObjects) throws IOException {
         JSONArray insertArray = new JSONArray();
-        for(Map obj: insertObjects) {
+        for (Map obj : insertObjects) {
             insertArray.add(new JSONObject(obj));
         }
         AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_PROPERTY_INSERT, insertArray.toJSONString());
         assertEquals("Fail to execute delete query", 200, response.getCode());
     }
-
-
 
 
 }

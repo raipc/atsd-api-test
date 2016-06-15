@@ -12,9 +12,8 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 public class CSVInsertMethod extends SeriesMethod {
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     protected static final String METHOD_CSV_INSERT = "/series/csv/";
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     protected Boolean csvInsert(String entity, String csv, Map<String, String> tags) throws IOException {
 

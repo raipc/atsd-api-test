@@ -1,6 +1,8 @@
 package com.axibase.tsd.api.method.property;
 
 import com.axibase.tsd.api.Util;
+import com.axibase.tsd.api.method.entity.EntityMethod;
+import com.axibase.tsd.api.model.entity.Entity;
 import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import org.junit.BeforeClass;
@@ -269,6 +271,60 @@ public class PropertyDeleteTest extends PropertyMethod {
         assertEquals(400, response.getCode());
         assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.getBody());
     }
+
+
+    @Test
+    public void testEntityTagsExactTrue() throws Exception {
+        final String entityTagsType = "$entity_tags";
+        EntityMethod entityMethod = new EntityMethod();
+        final Entity entity = new Entity("delete-entity10");
+        final Property property = new Property();
+        property.setType(entityTagsType);
+        property.setEntity(entity.getName());
+        Map tags = new HashMap<String, String>() {{
+            put("t1", "v1");
+            put("t2", "v2");
+        }};
+        entity.setTags(tags);
+        property.setTags(tags);
+        entityMethod.createOrUpdate(entity);
+        assertTrue(propertyExist(property));
+
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", "$entity_tags");
+        deleteObj.put("entity", entity.getName());
+        deleteObj.put("exactMatch", true);
+
+        deletePropertyCorrect(deleteObj);
+        assertTrue(propertyExist(property));
+    }
+
+    @Test
+    public void testEntityTagsExactFalse() throws Exception {
+        final String entityTagsType = "$entity_tags";
+        EntityMethod entityMethod = new EntityMethod();
+        final Entity entity = new Entity("delete-entity11");
+        final Property property = new Property();
+        property.setType(entityTagsType);
+        property.setEntity(entity.getName());
+        Map tags = new HashMap<String, String>() {{
+            put("t1", "v1");
+            put("t2", "v2");
+        }};
+        entity.setTags(tags);
+        property.setTags(tags);
+        entityMethod.createOrUpdate(entity);
+        assertTrue(propertyExist(property));
+
+        Map<String, Object> deleteObj = new HashMap<>();
+        deleteObj.put("type", "$entity_tags");
+        deleteObj.put("entity", entity.getName());
+        deleteObj.put("exactMatch", false);
+
+        deletePropertyCorrect(deleteObj);
+        assertTrue(propertyExist(property));
+    }
+
 
     private void deletePropertyCorrect(final Map deleteObj) throws IOException {
         AtsdHttpResponse response = super.deleteProperty(deleteObj);

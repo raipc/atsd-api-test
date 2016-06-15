@@ -7,10 +7,8 @@ import java.util.TreeSet;
  * @author Dmitry Korchagin.
  */
 public class PropertyRegistry {
-    private Set<String> entitySet = new TreeSet<>();
-
     private static PropertyRegistry instance = null;
-
+    private Set<String> entitySet = new TreeSet<>();
     private Set<String> typeSet = new TreeSet<>();
 
     public static PropertyRegistry getInstance() {

@@ -63,7 +63,7 @@ public class Property extends Model {
     }
 
     public Map<String, String> getKey() {
-        if(null == key) {
+        if (null == key) {
             return null;
         }
         return new HashMap<>(key);
@@ -74,7 +74,7 @@ public class Property extends Model {
     }
 
     public Map<String, String> getTags() {
-        if(null == tags) {
+        if (null == tags) {
             return null;
         }
         return new HashMap<>(tags);
@@ -91,12 +91,12 @@ public class Property extends Model {
         return Util.ISOFormat(date);
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public void setDate(Long millis) {
         this.date = new Date(millis);
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Override

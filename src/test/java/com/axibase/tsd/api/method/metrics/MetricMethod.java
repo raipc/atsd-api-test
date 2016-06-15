@@ -14,10 +14,8 @@ import java.lang.invoke.MethodHandles;
 import java.net.URLEncoder;
 
 public class MetricMethod extends Method {
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     protected static final String METHOD_METRICS = "/metrics/";
-
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private JSONObject returnedMetric;
     private JSONParser jsonParser = new JSONParser();
 

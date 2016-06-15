@@ -2,7 +2,10 @@ package com.axibase.tsd.api.method.series;
 
 import com.axibase.tsd.api.method.metrics.MetricMethod;
 import com.axibase.tsd.api.model.metric.Metric;
-import com.axibase.tsd.api.model.series.*;
+import com.axibase.tsd.api.model.series.DataType;
+import com.axibase.tsd.api.model.series.Sample;
+import com.axibase.tsd.api.model.series.Series;
+import com.axibase.tsd.api.model.series.SeriesQuery;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

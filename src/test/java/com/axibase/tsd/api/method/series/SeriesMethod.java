@@ -17,10 +17,9 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 
 public class SeriesMethod extends Method {
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     protected static final String METHOD_SERIES_INSERT = "/series/insert";
     protected static final String METHOD_SERIES_QUERY = "/series/query";
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private JSONArray returnedSeries;
     private JSONParser jsonParser = new JSONParser();
 
