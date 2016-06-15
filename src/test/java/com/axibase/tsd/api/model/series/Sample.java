@@ -1,18 +1,18 @@
 package com.axibase.tsd.api.model.series;
 
 import com.axibase.tsd.api.Util;
-import java.math.BigDecimal;
+import com.axibase.tsd.api.model.Model;
 
-public class Sample {
+public class Sample extends Model {
     private String d;
-    private BigDecimal v;
+    private String v;
 
-    public Sample(long t, BigDecimal v) {
+    public Sample(long t, String v) {
         this.d = Util.ISOFormat(t);
         this.v = v;
     }
 
-    public Sample(String d, BigDecimal v) {
+    public Sample(String d, String v) {
         this.d = d;
         this.v = v;
     }
@@ -21,15 +21,8 @@ public class Sample {
         return d;
     }
 
-    public void setD(String d) {
-        this.d = d;
-    }
-
-    public BigDecimal getV() {
+    public String getV() {
         return v;
     }
 
-    public void setV(BigDecimal v) {
-        this.v = v;
-    }
 }

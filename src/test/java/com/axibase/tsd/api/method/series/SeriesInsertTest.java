@@ -1,14 +1,14 @@
 package com.axibase.tsd.api.method.series;
 
+import com.axibase.tsd.api.method.metrics.MetricMethod;
 import com.axibase.tsd.api.model.series.Metric;
-import com.axibase.tsd.api.model.series.Query;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
+import com.axibase.tsd.api.model.series.SeriesQuery;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 
 public class SeriesInsertTest extends SeriesMethod {
 
@@ -17,70 +17,86 @@ public class SeriesInsertTest extends SeriesMethod {
         prepare();
     }
 
+    /*
+    * #2871
+    * */
     @Test
     public void testBigFloatOverflow() throws Exception {
 
         String entityName = "e-float-1";
         String metricName = "m-float-1";
-        String smallNumber = "1.12";
         String largeNumber = "10.121212121212121212212121212121212121212121";
         final long t = 1465485524888l;
+        MetricMethod metricMethod = new MetricMethod();
 
         Series series = new Series(entityName, metricName);
-        series.addData(new Sample(t, new BigDecimal(largeNumber)));
-        series.addTag("key", "value");
+        series.addData(new Sample(t, largeNumber));
 
         Metric metric = new Metric(metricName);
         metric.setDataType("FLOAT");
 
-        Assert.assertTrue("Failed to create metric", createOrReplaceMetric(metric));
+        Assert.assertTrue("Failed to create metric", metricMethod.createOrReplaceMetric(metric));
         Assert.assertTrue("Failed to insert float series", insertSeries(series));
 
-        Query query = new Query(series.getEntity(), series.getMetricName(), t - 1000, t + 1000);
-        executeQuery(query);
+        SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetricName(), t, t + 1);
+        executeQuery(seriesQuery);
         Assert.assertEquals("Stored big float value rounded incorrect", "10.121212121212121", getDataField(0, "v"));
-
-        series.setData(new Sample(t, new BigDecimal(smallNumber)));
-        Assert.assertTrue("Failed to insert small float value series", insertSeries(series));
-
-        query = new Query(series.getEntity(), series.getMetricName(), t - 1000, t + 1000);
-        executeQuery(query);
-        Assert.assertEquals("Stored small float value incorrect", smallNumber, getDataField(0, "v"));
-
-        Assert.assertTrue("Failed to delete metric", deleteMetric(metric));
     }
 
+    /*
+    * #2871
+    * */
     @Test
     public void testBigDecimalOverflow() throws Exception {
 
         String entityName = "e-decimal-1";
         String metricName = "m-decimal-1";
-        String smallNumber = "1.12";
         String largeNumber = "10.121212121212121212212121212121212121212121";
         final long t = 1465485524888l;
+        MetricMethod metricMethod = new MetricMethod();
+
 
         Series series = new Series(entityName, metricName);
-        series.addData(new Sample(t, new BigDecimal(largeNumber)));
-        series.addTag("key", "value");
+        series.addData(new Sample(t, largeNumber));
 
         Metric metric = new Metric(metricName);
         metric.setDataType("DECIMAL");
 
-        Assert.assertTrue("Failed to insert create or replace metric", createOrReplaceMetric(metric));
+        Assert.assertTrue("Failed to insert create or replace metric", metricMethod.createOrReplaceMetric(metric));
         Assert.assertFalse("Managed to insert large decimal series", insertSeries(series));
-
-        series.setData(new Sample(t, new BigDecimal(smallNumber)));
-        Assert.assertTrue("Failed to insert small decimal series", insertSeries(series));
-
-        Query query = new Query(series.getEntity(), series.getMetricName(), t - 1000, t + 1000);
-        executeQuery(query);
-        Assert.assertEquals("Stored small decimal value incorrect", smallNumber, getDataField(0, "v"));
-
-        Assert.assertTrue("Failed to delete metric", deleteMetric(metric));
     }
 
+    /*
+    * #2871
+    * */
     @Test
-    public void testISOFormats() throws Exception {
+    public void testBigDecimalPrecision() throws Exception {
+
+        String entityName = "e-decimal-2";
+        String metricName = "m-decimal-2";
+        String number = "1.3477777777777777";
+        final long t = 1465485524888l;
+        MetricMethod metricMethod = new MetricMethod();
+
+        Metric metric = new Metric(metricName);
+        metric.setDataType("DECIMAL");
+
+        Assert.assertTrue("Failed to insert create or replace metric", metricMethod.createOrReplaceMetric(metric));
+
+        Series series = new Series(entityName, metricName);
+        series.addData(new Sample(t, number));
+        Assert.assertTrue("Failed to insert small decimal series", insertSeries(series));
+
+        SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetricName(), t, t + 1);
+        executeQuery(seriesQuery);
+        Assert.assertEquals("Stored small decimal value incorrect", number, getDataField(0, "v"));
+    }
+
+    /*
+    * #2009
+    * */
+    @Test
+    public void testISOFormatsZmsAbsent() throws Exception {
 
         String entityName = "e-iso-1";
         String metricName = "m-iso-1";
@@ -88,37 +104,81 @@ public class SeriesInsertTest extends SeriesMethod {
 
         String storedDate = "2016-06-09T17:08:09.000Z";
         Series series = new Series(entityName, metricName);
-        series.addData(new Sample("2016-06-09T17:08:09Z", new BigDecimal(value)));
-        series.addTag("key", "value");
+        String d = "2016-06-09T17:08:09Z";
+        series.addData(new Sample(d, value));
 
-        Assert.assertTrue("Failed to insert iso format", insertSeries(series));
+        Assert.assertTrue("Failed to insert series", insertSeries(series));
 
-        Query query = new Query(series.getEntity(), series.getMetricName(), "2016-06-09T17:08:00Z", "2016-06-09T17:08:10Z");
-        executeQuery(query);
+        SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetricName(), d, "2016-06-09T17:08:09.001Z");
+        executeQuery(seriesQuery);
         Assert.assertEquals("Stored date incorrect", storedDate, getDataField(0, "d"));
         Assert.assertEquals("Stored value incorrect", value, getDataField(0, "v"));
-
-        Assert.assertTrue("Failed to delete metric", deleteMetric(series.getMetricName()));
-
-
-        series.setData(new Sample("2016-06-09T17:08:09+00:00", new BigDecimal(value)));
-        Assert.assertTrue("Failed to insert iso format", insertSeries(series));
-
-        query = new Query(series.getEntity(), series.getMetricName(), "2016-06-09T17:08:00Z", "2016-06-09T17:08:10Z");
-        executeQuery(query);
-        Assert.assertEquals("Stored date incorrect", storedDate, getDataField(0, "d"));
-        Assert.assertEquals("Stored value incorrect", value, getDataField(0, "v"));
-
-        Assert.assertTrue("Failed to delete metric", deleteMetric(series.getMetricName()));
     }
 
+    /*
+    * #2009
+    * */
     @Test
-    public void testCreateOrReplaceMetric() throws Exception {
+    public void testISOFormatsZms() throws Exception {
 
-        Metric metric = new Metric("m-create-or-replace");
-        metric.setDataType("DECIMAL");
+        String entityName = "e-iso-2";
+        String metricName = "m-iso-2";
+        String value = "0";
 
-        Assert.assertTrue("Failed to insert create or replace metric", createOrReplaceMetric(metric));
-        Assert.assertTrue("Failed to delete metric", deleteMetric(metric));
+        String storedDate = "2016-06-09T17:08:09.100Z";
+        Series series = new Series(entityName, metricName);
+        String d = "2016-06-09T17:08:09.100Z";
+        series.addData(new Sample(d, value));
+
+        Assert.assertTrue("Failed to insert series", insertSeries(series));
+
+        SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetricName(), d, "2016-06-09T17:08:09.101Z");
+        executeQuery(seriesQuery);
+        Assert.assertEquals("Stored date incorrect", storedDate, getDataField(0, "d"));
+        Assert.assertEquals("Stored value incorrect", value, getDataField(0, "v"));
+    }
+
+    /*
+    * #2009
+    * */
+    @Test
+    public void testISOFormatsPlusHoursNoMS() throws Exception {
+
+        String entityName = "e-iso-3";
+        String metricName = "m-iso-3";
+        String value = "0";
+
+        Series series = new Series(entityName, metricName);
+        String d = "2016-06-09T10:08:09.000Z";
+        series.addData(new Sample("2016-06-09T17:08:09+07:00", value));
+
+        Assert.assertTrue("Failed to insert series", insertSeries(series));
+
+        SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetricName(), d, "2016-06-09T10:08:09.100Z");
+        executeQuery(seriesQuery);
+        Assert.assertEquals("Stored date incorrect", d, getDataField(0, "d"));
+        Assert.assertEquals("Stored value incorrect", value, getDataField(0, "v"));
+    }
+
+    /*
+    * #2009
+    * */
+    @Test
+    public void testISOFormatsPlusHoursMS() throws Exception {
+
+        String entityName = "e-iso-4";
+        String metricName = "m-iso-4";
+        String value = "0";
+
+        Series series = new Series(entityName, metricName);
+        String d = "2016-06-09T10:08:09.999Z";
+        series.addData(new Sample("2016-06-09T17:08:09.999+07:00", value));
+
+        Assert.assertTrue("Failed to insert series", insertSeries(series));
+
+        SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetricName(), d, "2016-06-09T10:08:10Z");
+        executeQuery(seriesQuery);
+        Assert.assertEquals("Stored date incorrect", d, getDataField(0, "d"));
+        Assert.assertEquals("Stored value incorrect", value, getDataField(0, "v"));
     }
 }

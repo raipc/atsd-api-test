@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.net.URLEncoder;
 import java.util.Map;
 
 public class CSVInsertMethod extends SeriesMethod {
@@ -22,7 +23,7 @@ public class CSVInsertMethod extends SeriesMethod {
         }
 
         StringBuilder uri = new StringBuilder(METHOD_CSV_INSERT);
-        uri.append(entity);
+        uri.append(URLEncoder.encode(entity, "UTF-8"));
         if (tags != null && tags.size() > 0) {
             uri.append("?");
             for (String key : tags.keySet()) {
