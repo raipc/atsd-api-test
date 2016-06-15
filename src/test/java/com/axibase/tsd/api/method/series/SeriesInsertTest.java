@@ -1,10 +1,7 @@
 package com.axibase.tsd.api.method.series;
 
 import com.axibase.tsd.api.method.metrics.MetricMethod;
-import com.axibase.tsd.api.model.series.Metric;
-import com.axibase.tsd.api.model.series.Sample;
-import com.axibase.tsd.api.model.series.Series;
-import com.axibase.tsd.api.model.series.SeriesQuery;
+import com.axibase.tsd.api.model.series.*;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,7 +30,7 @@ public class SeriesInsertTest extends SeriesMethod {
         series.addData(new Sample(t, largeNumber));
 
         Metric metric = new Metric(metricName);
-        metric.setDataType("FLOAT");
+        metric.setDataType(DataType.FLOAT);
 
         Assert.assertTrue("Failed to create metric", metricMethod.createOrReplaceMetric(metric));
         Assert.assertTrue("Failed to insert float series", insertSeries(series));
@@ -60,7 +57,7 @@ public class SeriesInsertTest extends SeriesMethod {
         series.addData(new Sample(t, largeNumber));
 
         Metric metric = new Metric(metricName);
-        metric.setDataType("DECIMAL");
+        metric.setDataType(DataType.DECIMAL);
 
         Assert.assertTrue("Failed to insert create or replace metric", metricMethod.createOrReplaceMetric(metric));
         Assert.assertFalse("Managed to insert large decimal series", insertSeries(series));
@@ -79,7 +76,7 @@ public class SeriesInsertTest extends SeriesMethod {
         MetricMethod metricMethod = new MetricMethod();
 
         Metric metric = new Metric(metricName);
-        metric.setDataType("DECIMAL");
+        metric.setDataType(DataType.DECIMAL);
 
         Assert.assertTrue("Failed to insert create or replace metric", metricMethod.createOrReplaceMetric(metric));
 
