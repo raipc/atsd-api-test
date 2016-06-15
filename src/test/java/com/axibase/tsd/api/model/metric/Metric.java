@@ -1,11 +1,13 @@
-package com.axibase.tsd.api.model.series;
+package com.axibase.tsd.api.model.metric;
 
 import com.axibase.tsd.api.model.Model;
+import com.axibase.tsd.api.model.series.DataType;
 import com.axibase.tsd.api.registry.MetricRegistry;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Metric extends Model {
     private String name;
     private String enabled;
@@ -66,8 +68,8 @@ public class Metric extends Model {
         this.retentionInterval = retentionInterval;
     }
 
-    public Map<String, String> getFields() {
-        fields = new HashMap<>();
+    public Map<String, Object> getFields() {
+        Map<String, Object> fields = new HashMap<>();
         if (enabled != null) {
             fields.put("enabled", enabled);
         }

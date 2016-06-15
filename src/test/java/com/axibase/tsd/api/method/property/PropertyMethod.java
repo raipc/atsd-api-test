@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
  * @author Dmitry Korchagin.
  */
 @SuppressWarnings("unchecked")
-abstract public class PropertyMethod extends Method {
+class PropertyMethod extends Method {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     static final String METHOD_PROPERTY_INSERT = "/properties/insert";

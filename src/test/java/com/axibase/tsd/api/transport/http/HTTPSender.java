@@ -47,6 +47,10 @@ public class HTTPSender {
         return atsdHttpResponse;
     }
 
+    public AtsdHttpResponse sendGet(String uri) throws IOException {
+        return send(HTTPMethod.GET, uri, null);
+    }
+
     public AtsdHttpResponse send(HTTPMethod method, String uri, String body) throws IOException {
         logger.debug("> METHOD: {}", method);
         AtsdHttpResponse atsdHttpResponse;
