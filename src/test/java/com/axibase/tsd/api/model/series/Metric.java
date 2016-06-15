@@ -10,7 +10,7 @@ public class Metric extends Model {
     private String name;
     private String enabled;
     private String persistent;
-    private String dataType;
+    private DataType dataType;
     private String timePrecision;
     private String retentionInterval;
     private Map<String, String> fields;
@@ -42,11 +42,11 @@ public class Metric extends Model {
         this.persistent = persistent;
     }
 
-    public String getDataType() {
+    public DataType getDataType() {
         return dataType;
     }
 
-    public void setDataType(String dataType) {
+    public void setDataType(DataType dataType) {
         this.dataType = dataType;
     }
 
@@ -75,7 +75,7 @@ public class Metric extends Model {
             fields.put("persistent", persistent);
         }
         if (dataType != null) {
-            fields.put("dataType", dataType);
+            fields.put("dataType", dataType.toString());
         }
         if (timePrecision != null) {
             fields.put("timePrecision", timePrecision);
