@@ -9,7 +9,6 @@ import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
@@ -32,13 +31,6 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("unchecked")
 public class PropertyQueryTest extends PropertyMethod {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-
-    @BeforeClass
-    public static void setUpBeforeClass() {
-        prepare();
-    }
-
 
     @Test
     public void testStartInFuture() throws Exception {

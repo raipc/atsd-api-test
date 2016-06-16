@@ -2,19 +2,12 @@ package com.axibase.tsd.api.method.series;
 
 import com.axibase.tsd.api.model.series.SeriesQuery;
 import junit.framework.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CSVInsertTest extends CSVInsertMethod {
-
-    @BeforeClass
-    public static void setUpBeforeClass() {
-        prepare();
-    }
-
     /*
     * #2009
     * */

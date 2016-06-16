@@ -5,7 +5,6 @@ import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +22,6 @@ import static org.junit.Assert.*;
 @SuppressWarnings("unchecked")
 public class PropertyInsertTest extends PropertyMethod {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    @BeforeClass
-    public static void setUpBeforeClass() {
-        prepare();
-    }
-
 
     @Test
     public void test_MultipleInsertDifferentKey_GetAll() throws IOException {
