@@ -5,6 +5,7 @@ import com.axibase.tsd.api.transport.http.HTTPClientPure;
 import com.axibase.tsd.api.transport.http.HTTPSender;
 import com.axibase.tsd.api.transport.tcp.TCPSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,8 @@ public abstract class Method {
     protected static TCPSender tcpSender;
     protected static ObjectMapper jacksonMapper;
 
-    protected static void prepare() {
+    @BeforeClass
+    public static void prepare() {
         Config config = Config.getInstance();
         HTTPClientPure driver = new HTTPClientPure(config.getProtocol(), config.getServerName(), config.getHttpPort(), config.getLogin(), config.getPassword());
         httpSender = new HTTPSender(driver, config.getDataPath(), config.getMetadataPath());
