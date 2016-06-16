@@ -704,7 +704,7 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
         queryObj.put("entity", entity.getName());
-        queryObj.put("key", new HashMap<String, String>(){{
+        queryObj.put("key", new HashMap<String, String>() {{
             put("t1", "v1");
         }});
         queryObj.put("startDate", Util.getMinDate());
@@ -738,7 +738,7 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
         queryObj.put("entity", entity.getName());
-        queryObj.put("key", new HashMap<String, String>(){{
+        queryObj.put("key", new HashMap<String, String>() {{
             put("t1", "v1");
         }});
         queryObj.put("startDate", Util.getMinDate());
@@ -772,7 +772,7 @@ public class PropertyQueryTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
         queryObj.put("entity", entity.getName());
-        queryObj.put("key", new HashMap<String, String>(){{
+        queryObj.put("key", new HashMap<String, String>() {{
             put("t1", "v3");
         }});
         queryObj.put("startDate", Util.getMinDate());
@@ -960,5 +960,90 @@ public class PropertyQueryTest extends PropertyMethod {
         JSONAssert.assertEquals("[]", queryProperty(queryObj), false);
     }
 
+    @Test
+    public void testEntityWildcardKey() throws Exception {
+        final String entityTagType = "$entity_tags";
+        Entity entity1 = new Entity("wc-query-entity33");
+        entity1.addTag("wct1", "wcv1");
+        Entity entity2 = new Entity("wc-query-entity34");
+        entity2.addTag("wct1", "wcV1");
+        Entity entity3 = new Entity("wc-query-entity35");
+        entity3.addTag("wct1", "wcv1");
+        entity3.addTag("wct2", "wcv2");
+        Entity entity4 = new Entity("wc-query-entity36");
+        entity4.addTag("wct2", "wcV2");
+        new EntityMethod().createOrUpdate(entity1, entity2, entity3, entity4);
 
+
+        final Property property1 = new Property();
+        property1.setType(entityTagType);
+        property1.setEntity(entity1.getName());
+        property1.setTags(entity1.getTags());
+
+        final Property property3 = new Property();
+        property3.setType(entityTagType);
+        property3.setEntity(entity3.getName());
+        property3.setTags(entity3.getTags());
+
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", entityTagType);
+        queryObj.put("entity", "wc-*");
+        queryObj.put("key", entity1.getTags());
+
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property1);
+            add(property3);
+        }});
+
+        JSONAssert.assertEquals(expected,queryProperty(queryObj),false);
+    }
+
+
+    @Test
+    public void testEntityWildcardKeyExpression() throws Exception {
+        final String entityTagType = "$entity_tags";
+        Entity entity1 = new Entity("wc-query-entity37");
+        entity1.addTag("wc2t1", "wc2v1");
+        Entity entity2 = new Entity("wc-query-entity38");
+        entity2.addTag("wc2t1", "wc2V1");
+        Entity entity3 = new Entity("wc-query-entity39");
+        entity3.addTag("wc2t1", "wc2v1");
+        entity3.addTag("wc2t2", "wc2v2");
+        Entity entity4 = new Entity("wc-query-entity40");
+        entity4.addTag("wc2t2", "wc2V2");
+        new EntityMethod().createOrUpdate(entity1, entity2, entity3, entity4);
+
+
+        final Property property2 = new Property();
+        property2.setType(entityTagType);
+        property2.setEntity(entity2.getName());
+        property2.setTags(entity2.getTags());
+
+        final Property property3 = new Property();
+        property3.setType(entityTagType);
+        property3.setEntity(entity3.getName());
+        property3.setTags(entity3.getTags());
+
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", entityTagType);
+        queryObj.put("entity", "wc-*");
+        queryObj.put("keyTagExpression", "keys.wc2t1 = 'wc2V1' OR tags.wc2t2 = 'wc2v2'");
+
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+
+
+        String expected = jacksonMapper.writeValueAsString(new ArrayList<Property>() {{
+            add(property2);
+            add(property3);
+        }});
+
+        JSONAssert.assertEquals(expected,queryProperty(queryObj),false);
+    }
 }
