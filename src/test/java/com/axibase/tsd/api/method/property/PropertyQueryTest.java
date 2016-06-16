@@ -648,7 +648,7 @@ public class PropertyQueryTest extends PropertyMethod {
         }};
         entity.setTags(tags);
         property.setTags(tags);
-        entityMethod.createOrUpdate(entity);
+        entityMethod.createOrUpdateCheck(entity);
 
         assertTrue(propertyExist(property));
     }
@@ -667,7 +667,7 @@ public class PropertyQueryTest extends PropertyMethod {
         }};
         entity.setTags(tags);
         property.setTags(tags);
-        entityMethod.createOrUpdate(entity);
+        entityMethod.createOrUpdateCheck(entity);
 
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
@@ -699,7 +699,7 @@ public class PropertyQueryTest extends PropertyMethod {
         }};
         entity.setTags(tags);
         property.setTags(tags);
-        entityMethod.createOrUpdate(entity);
+        entityMethod.createOrUpdateCheck(entity);
 
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
@@ -733,7 +733,7 @@ public class PropertyQueryTest extends PropertyMethod {
         }};
         entity.setTags(tags);
         property.setTags(tags);
-        entityMethod.createOrUpdate(entity);
+        entityMethod.createOrUpdateCheck(entity);
 
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
@@ -767,7 +767,7 @@ public class PropertyQueryTest extends PropertyMethod {
         }};
         entity.setTags(tags);
         property.setTags(tags);
-        entityMethod.createOrUpdate(entity);
+        entityMethod.createOrUpdateCheck(entity);
 
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", "$entity_tags");
@@ -796,7 +796,7 @@ public class PropertyQueryTest extends PropertyMethod {
         }};
         entity.setTags(tags);
         property.setTags(tags);
-        entityMethod.createOrUpdate(entity);
+        entityMethod.createOrUpdateCheck(entity);
         assertTrue(propertyExist(property));
 
 
@@ -829,7 +829,7 @@ public class PropertyQueryTest extends PropertyMethod {
         }};
         entity.setTags(tags);
         property.setTags(tags);
-        entityMethod.createOrUpdate(entity);
+        entityMethod.createOrUpdateCheck(entity);
         assertTrue(propertyExist(property));
 
         Map<String, Object> queryObj = new HashMap<>();
@@ -963,16 +963,16 @@ public class PropertyQueryTest extends PropertyMethod {
     @Test
     public void testEntityWildcardKey() throws Exception {
         final String entityTagType = "$entity_tags";
-        Entity entity1 = new Entity("wc-query-entity33");
+        Entity entity1 = new Entity("wck-query-entity33");
         entity1.addTag("wct1", "wcv1");
-        Entity entity2 = new Entity("wc-query-entity34");
+        Entity entity2 = new Entity("wck-query-entity34");
         entity2.addTag("wct1", "wcV1");
-        Entity entity3 = new Entity("wc-query-entity35");
+        Entity entity3 = new Entity("wck-query-entity35");
         entity3.addTag("wct1", "wcv1");
         entity3.addTag("wct2", "wcv2");
-        Entity entity4 = new Entity("wc-query-entity36");
+        Entity entity4 = new Entity("wck-query-entity36");
         entity4.addTag("wct2", "wcV2");
-        new EntityMethod().createOrUpdate(entity1, entity2, entity3, entity4);
+        new EntityMethod().createOrUpdateCheck(entity1, entity2, entity3, entity4);
 
 
         final Property property1 = new Property();
@@ -988,7 +988,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", entityTagType);
-        queryObj.put("entity", "wc-*");
+        queryObj.put("entity", "wck-*");
         queryObj.put("key", entity1.getTags());
 
         queryObj.put("startDate", Util.getMinDate());
@@ -1007,16 +1007,16 @@ public class PropertyQueryTest extends PropertyMethod {
     @Test
     public void testEntityWildcardKeyExpression() throws Exception {
         final String entityTagType = "$entity_tags";
-        Entity entity1 = new Entity("wc-query-entity37");
+        Entity entity1 = new Entity("wcke-query-entity37");
         entity1.addTag("wc2t1", "wc2v1");
-        Entity entity2 = new Entity("wc-query-entity38");
+        Entity entity2 = new Entity("wcke-query-entity38");
         entity2.addTag("wc2t1", "wc2V1");
-        Entity entity3 = new Entity("wc-query-entity39");
+        Entity entity3 = new Entity("wcke-query-entity39");
         entity3.addTag("wc2t1", "wc2v1");
         entity3.addTag("wc2t2", "wc2v2");
-        Entity entity4 = new Entity("wc-query-entity40");
+        Entity entity4 = new Entity("wcke-query-entity40");
         entity4.addTag("wc2t2", "wc2V2");
-        new EntityMethod().createOrUpdate(entity1, entity2, entity3, entity4);
+        new EntityMethod().createOrUpdateCheck(entity1, entity2, entity3, entity4);
 
 
         final Property property2 = new Property();
@@ -1032,7 +1032,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", entityTagType);
-        queryObj.put("entity", "wc-*");
+        queryObj.put("entity", "wcke-*");
         queryObj.put("keyTagExpression", "keys.wc2t1 = 'wc2V1' OR tags.wc2t2 = 'wc2v2'");
 
         queryObj.put("startDate", Util.getMinDate());
@@ -1045,5 +1045,32 @@ public class PropertyQueryTest extends PropertyMethod {
         }});
 
         JSONAssert.assertEquals(expected,queryProperty(queryObj),false);
+    }
+
+
+    @Test
+    public void testEntityTagsKeyCaseSensitive() throws Exception {
+        final String entityTagType = "$entity_tags";
+        Entity entity = new Entity("query-entity41");
+        entity.addTag("t1", "tV1");
+        new EntityMethod().createOrUpdateCheck(entity);
+
+
+        final Property property = new Property();
+        property.setType(entityTagType);
+        property.setEntity(entity.getName());
+        property.setTags(entity.getTags());
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", entityTagType);
+        queryObj.put("entity", entity.getName());
+        queryObj.put("key", new HashMap<String , String >() {{
+            put("t1", "tv1");
+        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+
+
+        JSONAssert.assertEquals("[]",queryProperty(queryObj),false);
     }
 }
