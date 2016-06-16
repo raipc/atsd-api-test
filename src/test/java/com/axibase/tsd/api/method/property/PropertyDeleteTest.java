@@ -7,6 +7,7 @@ import com.axibase.tsd.api.model.property.Property;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -322,6 +323,130 @@ public class PropertyDeleteTest extends PropertyMethod {
         deleteObj.put("exactMatch", false);
 
         deletePropertyCorrect(deleteObj);
+        assertTrue(propertyExist(property));
+    }
+
+    @Test
+    public void testExtraKeyExactTrue() throws Exception {
+        final Property property = new Property("delete-type12", "delete-entity12");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", new HashMap<String, String>(property.getKey()) {{
+            put("k2", "kv2");
+        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+        queryObj.put("exactMatch", true);
+
+        deletePropertyCorrect(queryObj);
+        assertTrue(propertyExist(property));
+    }
+
+    @Test
+    public void testExtraKeyExactFalse() throws Exception {
+        final Property property = new Property("delete-type13", "delete-entity13");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", new HashMap<String, String>(property.getKey()) {{
+            put("k2", "kv2");
+        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+        queryObj.put("exactMatch", false);
+
+        deletePropertyCorrect(queryObj);
+        assertTrue(propertyExist(property));
+    }
+
+    @Test
+    public void testExtraKeyPropNoKeyExactTrue() throws Exception {
+        final Property property = new Property("delete-type14", "delete-entity14");
+        property.addTag("t1", "v1");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", new HashMap<String, String>() {{
+            put("k2", "kv2");
+        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+        queryObj.put("exactMatch", true);
+
+        deletePropertyCorrect(queryObj);
+        assertTrue(propertyExist(property));
+    }
+
+    @Test
+    public void testExtraKeyPropNoKeyExactFalse() throws Exception {
+        final Property property = new Property("delete-type15", "delete-entity15");
+        property.addTag("t1", "v1");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", new HashMap<String, String>() {{
+            put("k2", "kv2");
+        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+        queryObj.put("exactMatch", false);
+
+        deletePropertyCorrect(queryObj);
+        assertTrue(propertyExist(property));
+    }
+
+    @Test
+    public void testKeyMissmatchExactTrue() throws Exception {
+        final Property property = new Property("delete-type16", "delete-entity16");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", new HashMap<String, String>() {{
+            put("k1", "kv2");
+        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+        queryObj.put("exactMatch", true);
+
+        deletePropertyCorrect(queryObj);
+        assertTrue(propertyExist(property));
+    }
+
+    @Test
+    public void testKeyMissmatchExactFalse() throws Exception {
+        final Property property = new Property("delete-type17", "delete-entity17");
+        property.addTag("t1", "v1");
+        property.addKey("k1", "kv1");
+        insertPropertyCheck(property);
+
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", new HashMap<String, String>() {{
+            put("k1", "kv2");
+        }});
+        queryObj.put("startDate", Util.getMinDate());
+        queryObj.put("endDate", Util.getMaxDate());
+        queryObj.put("exactMatch", false);
+
+        deletePropertyCorrect(queryObj);
         assertTrue(propertyExist(property));
     }
 
