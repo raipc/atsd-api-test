@@ -25,6 +25,12 @@ public class EntityMethod extends Method {
     static final String METHOD_ENTITIES = "/entities/";
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    public void createOrUpdate(final Entity... entities) throws IOException {
+        for(Entity e: entities) {
+            createOrUpdate(e);
+        }
+    }
+
     public void createOrUpdate(final Entity entity) throws IOException {
         final String path = METHOD_ENTITIES + entity.getName();
 

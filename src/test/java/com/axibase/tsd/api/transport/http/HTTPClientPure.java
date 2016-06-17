@@ -1,5 +1,6 @@
 package com.axibase.tsd.api.transport.http;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -117,7 +119,12 @@ public class HTTPClientPure implements HTTPClient {
         while ((line = br.readLine()) != null) {
             sb.append(line);
         }
-        atsdHttpResponse = new AtsdHttpResponse(responseCode, null, sb.toString());
+
+        Map<String, String> headers = new LinkedHashMap<>();
+        for (Header header : httpResponse.getAllHeaders()) {
+            headers.put(header.getName(), header.getValue());
+        }
+        atsdHttpResponse = new AtsdHttpResponse(responseCode, headers, sb.toString());
         if (responseCode == 200) {
             logger.debug("< code: {}\n< header: {}\n< body: {}", atsdHttpResponse.getCode(), atsdHttpResponse.getHeaders(), atsdHttpResponse.getBody());
         } else {

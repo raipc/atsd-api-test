@@ -54,4 +54,11 @@ public class Entity extends Model {
     public void setTags(Map<String, String> tags) {
         this.tags = tags;
     }
+
+    public void addTag(String tagName, String tagValue) {
+        if (tags == null) {
+            tags = new HashMap<>();
+        }
+        tags.put(tagName, tagValue);
+    }
 }

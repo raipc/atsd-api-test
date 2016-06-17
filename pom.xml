@@ -107,6 +107,7 @@
                 </configuration>
             </plugin>
             <plugin>
+                <version>2.5.1</version>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
