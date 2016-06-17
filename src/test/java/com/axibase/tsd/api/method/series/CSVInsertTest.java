@@ -8,9 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CSVInsertTest extends CSVInsertMethod {
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testISOFormatZNoMS() throws Exception {
         String entity = "e-iso-5";
@@ -35,9 +33,7 @@ public class CSVInsertTest extends CSVInsertMethod {
         Assert.assertEquals("Stored value incorrect", "10.8", getDataField(0, "v"));
     }
 
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testISOFormatZMS() throws Exception {
         String entity = "e-iso-6";
@@ -62,9 +58,7 @@ public class CSVInsertTest extends CSVInsertMethod {
         Assert.assertEquals("Stored value incorrect", "10.8", getDataField(0, "v"));
     }
 
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testISOFormatPlusHourNoMS() throws Exception {
         String entity = "e-iso-7";
@@ -89,9 +83,7 @@ public class CSVInsertTest extends CSVInsertMethod {
         Assert.assertEquals("Stored value incorrect", "10.8", getDataField(0, "v"));
     }
 
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testISOFormatPlusHourMS() throws Exception {
         String entity = "e-iso-8";
@@ -114,12 +106,9 @@ public class CSVInsertTest extends CSVInsertMethod {
         executeQuery(seriesQuery);
         Assert.assertEquals("Stored date incorrect", "2016-05-21T00:00:15.001Z", getDataField(0, "d"));
         Assert.assertEquals("Stored value incorrect", "10.8", getDataField(0, "v"));
-
     }
 
-    /*
-    * #2009
-    * */
+    /* #2009 */
     @Test
     public void testMultipleISOFormat() throws Exception {
         String entity = "e-iso-9";
@@ -155,6 +144,5 @@ public class CSVInsertTest extends CSVInsertMethod {
         executeQuery(seriesQuery);
         Assert.assertEquals("Stored date incorrect", "2016-05-21T00:00:15.001Z", getDataField(0, "d"));
         Assert.assertEquals("Stored value incorrect", "10", getDataField(0, "v"));
-
     }
 }

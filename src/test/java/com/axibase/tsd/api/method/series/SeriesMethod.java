@@ -26,7 +26,6 @@ public class SeriesMethod extends Method {
     private JSONParser jsonParser = new JSONParser();
 
     protected Boolean insertSeries(final Series series) throws IOException {
-
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
                 put("entity", series.getEntity());
@@ -56,7 +55,7 @@ public class SeriesMethod extends Method {
 
     protected Boolean executeQuery(final SeriesQuery seriesQuery, Boolean wait) throws Exception {
         if (wait) {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         }
 
         JSONArray request = new JSONArray() {{
@@ -79,7 +78,7 @@ public class SeriesMethod extends Method {
     }
 
     protected Boolean executeQuery(final ArrayList<SeriesQuery> seriesQueries) throws IOException, ParseException, InterruptedException {
-        Thread.sleep(500);
+        Thread.sleep(1000);
         JSONArray request = new JSONArray();
         for (SeriesQuery seriesQuery : seriesQueries) {
             request.add(queryToJSONObject(seriesQuery));
@@ -117,7 +116,7 @@ public class SeriesMethod extends Method {
                         }
                     }});
                 }
-            };
+            }
         };
     }
 
@@ -137,9 +136,5 @@ public class SeriesMethod extends Method {
 
     public JSONArray getReturnedSeries() {
         return returnedSeries;
-    }
-
-    public int getReturnedSeriesSize() {
-        return returnedSeries.size();
     }
 }
