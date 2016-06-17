@@ -20,7 +20,6 @@ public class MetricMethod extends Method {
     private JSONParser jsonParser = new JSONParser();
 
     public Boolean createOrReplaceMetric(Metric metric) throws Exception {
-//        JSONObject request = new JSONObject(metric.getFields());
         JSONObject request = (JSONObject) jsonParser.parse(jacksonMapper.writeValueAsString(metric));
 
         AtsdHttpResponse response = httpSender.send(HTTPMethod.PUT, METHOD_METRICS + URLEncoder.encode(metric.getName(), "UTF-8"), request.toJSONString());

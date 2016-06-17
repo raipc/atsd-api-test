@@ -5,7 +5,7 @@ import com.axibase.tsd.api.model.series.DataType;
 import junit.framework.Assert;
 import org.junit.Test;
 
-public class MetricTest extends MetricMethod {
+public class MetricCreateOrReplaceTest extends MetricMethod {
 
     @Test
     public void testCreateOrReplaceMetric() throws Exception {
@@ -15,6 +15,6 @@ public class MetricTest extends MetricMethod {
 
         Assert.assertTrue("Failed to insert create or replace metric", createOrReplaceMetric(metric));
         Assert.assertTrue(getMetric(metric));
-        Assert.assertEquals(metric.getDataType(), getMetricField("dataType"));
+        Assert.assertEquals(metric.getDataType().toString(), getMetricField("dataType"));
     }
 }
