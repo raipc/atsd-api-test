@@ -11,12 +11,9 @@ import org.junit.Test;
 
 
 public class SeriesInsertTest extends SeriesMethod {
-    /*
-    * #2871
-    * */
+    /* #2871 */
     @Test
     public void testBigFloatOverflow() throws Exception {
-
         String entityName = "e-float-1";
         String metricName = "m-float-1";
         String largeNumber = "10.121212121212121212212121212121212121212121";
@@ -40,7 +37,6 @@ public class SeriesInsertTest extends SeriesMethod {
     /* #2871 */
     @Test
     public void testBigDecimalOverflow() throws Exception {
-
         String entityName = "e-decimal-1";
         String metricName = "m-decimal-1";
         String largeNumber = "10.121212121212121212212121212121212121212121";
@@ -61,7 +57,6 @@ public class SeriesInsertTest extends SeriesMethod {
     /* #2871 */
     @Test
     public void testBigDecimalPrecision() throws Exception {
-
         String entityName = "e-decimal-2";
         String metricName = "m-decimal-2";
         String number = "0.6083333332";
@@ -87,12 +82,9 @@ public class SeriesInsertTest extends SeriesMethod {
         Assert.assertEquals("Stored small decimal value incorrect", "7.2999999984", getDataField(0, "v"));
     }
 
-    /*
-    * #2871
-    * */
+    /* #2871 */
     @Test
     public void testDoublePrecision() throws Exception {
-
         String entityName = "e-double-3";
         String metricName = "m-double-3";
         String number = "0.6083333332";
@@ -119,12 +111,9 @@ public class SeriesInsertTest extends SeriesMethod {
         Assert.assertEquals("Stored small double value incorrect", "7.299999998400001", getDataField(0, "v"));
     }
 
-    /*
-    * #2871
-    * */
+    /* #2871 */
     @Test
     public void testDoublePrecisionSingle() throws Exception {
-
         String entityName = "e-double-4";
         String metricName = "m-double-4";
         String number = "0.6083333332";
@@ -152,7 +141,6 @@ public class SeriesInsertTest extends SeriesMethod {
     /* #2009 */
     @Test
     public void testISOFormatsZmsAbsent() throws Exception {
-
         String entityName = "e-iso-1";
         String metricName = "m-iso-1";
         String value = "0";
@@ -173,7 +161,6 @@ public class SeriesInsertTest extends SeriesMethod {
     /* #2009 */
     @Test
     public void testISOFormatsZms() throws Exception {
-
         String entityName = "e-iso-2";
         String metricName = "m-iso-2";
         String value = "0";
@@ -194,7 +181,6 @@ public class SeriesInsertTest extends SeriesMethod {
     /* #2009 */
     @Test
     public void testISOFormatsPlusHoursNoMS() throws Exception {
-
         String entityName = "e-iso-3";
         String metricName = "m-iso-3";
         String value = "0";
@@ -214,7 +200,6 @@ public class SeriesInsertTest extends SeriesMethod {
     /* #2009 */
     @Test
     public void testISOFormatsPlusHoursMS() throws Exception {
-
         String entityName = "e-iso-4";
         String metricName = "m-iso-4";
         String value = "0";
@@ -235,7 +220,6 @@ public class SeriesInsertTest extends SeriesMethod {
     /* #2913 */
     @Test
     public void testUnderscoreSequence() throws Exception {
-
         final long t = 1465485524888l;
 
         Series series = new Series("e___underscore", "m___underscore");

@@ -14,11 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PropertyCommandTest extends PropertyMethod {
-
     /* #2412 */
     @Test
     public void testMaxLength() throws ParseException, IOException, InterruptedException, JSONException {
-        int maxLength = 128 * 1024;
+        final int MAX_LENGTH = 128 * 1024;
 
         String startDate = "2016-05-21T00:00:00.000Z";
         String endDate = "2016-05-21T00:00:01Z";
@@ -34,14 +33,14 @@ public class PropertyCommandTest extends PropertyMethod {
         sb.append(" t:").append(property.getType());
         sb.append(" v:").append("type=").append(property.getTags().get("type"));
 
-        for (int i = 0; sb.length() < maxLength; i++) {
+        for (int i = 0; sb.length() < MAX_LENGTH; i++) {
             String tagName = "name" + i;
             String textValue = "sda" + i;
             sb.append(" v:").append(tagName).append("=").append(textValue);
             property.addTag(tagName, textValue);
         }
 
-        Assert.assertEquals("Command length is not maximal", maxLength, sb.length());
+        Assert.assertEquals("Command length is not maximal", MAX_LENGTH, sb.length());
         tcpSender.send(sb.toString());
 
         Map<String, Object> queryObj = new HashMap<>();
@@ -58,6 +57,6 @@ public class PropertyCommandTest extends PropertyMethod {
         }});
         String storedProperty = propertyMethod.queryProperty(queryObj);
 
-        JSONAssert.assertEquals(sentProperty, storedProperty, JSONCompareMode.NON_EXTENSIBLE);
+        JSONAssert.assertEquals(sentProperty, storedProperty, JSONCompareMode.LENIENT);
     }
 }

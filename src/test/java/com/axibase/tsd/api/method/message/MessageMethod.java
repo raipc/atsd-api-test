@@ -24,7 +24,6 @@ public class MessageMethod extends Method {
     private JSONParser jsonParser = new JSONParser();
 
     protected Boolean insertMessages(final Message message) throws IOException, ParseException {
-
         JSONArray request = new JSONArray() {{
             add(jsonParser.parse(jacksonMapper.writeValueAsString(message)));
         }};

@@ -17,7 +17,7 @@ public class MessageCommandTest extends MessageMethod {
     /* #2412 */
     @Test
     public void testMaxLength() throws IOException, ParseException, JSONException, InterruptedException {
-        final int maxLength = 128 * 1024;
+        final int MAX_LENGTH = 128 * 1024;
 
         String startDate = "2016-05-21T00:00:00.000Z";
         String endDate = "2016-05-21T00:00:01.000Z";
@@ -37,14 +37,14 @@ public class MessageCommandTest extends MessageMethod {
         sb.append(" m:");
 
         StringBuilder m = new StringBuilder();
-        for (int i = 0; i < maxLength - sb.length(); i++) {
+        for (int i = 0; i < MAX_LENGTH - sb.length(); i++) {
             m.append('m');
         }
 
         message.setMessage(m.toString());
         sb.append(message.getMessage());
 
-        Assert.assertEquals("Command length is not maximal", maxLength, sb.length());
+        Assert.assertEquals("Command length is not maximal", MAX_LENGTH, sb.length());
         tcpSender.send(sb.toString());
 
         MessageQuery messageQuery = new MessageQuery(message.getEntity(), startDate, endDate);
