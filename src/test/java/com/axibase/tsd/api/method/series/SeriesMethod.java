@@ -78,7 +78,7 @@ public class SeriesMethod extends Method {
     }
 
     protected Boolean executeQuery(final ArrayList<SeriesQuery> seriesQueries) throws IOException, ParseException, InterruptedException {
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         JSONArray request = new JSONArray();
         for (SeriesQuery seriesQuery : seriesQueries) {
             request.add(queryToJSONObject(seriesQuery));

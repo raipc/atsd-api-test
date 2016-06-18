@@ -1,6 +1,5 @@
 package com.axibase.tsd.api.method.series;
 
-import com.axibase.tsd.api.registry.SeriesRegistry;
 import com.axibase.tsd.api.transport.http.AtsdHttpResponse;
 import com.axibase.tsd.api.transport.http.HTTPMethod;
 import org.slf4j.Logger;
@@ -16,11 +15,6 @@ public class CSVInsertMethod extends SeriesMethod {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     protected Boolean csvInsert(String entity, String csv, Map<String, String> tags) throws IOException {
-
-        if (entity != null) {
-            SeriesRegistry.getInstance().registerEntity(entity);
-        }
-
         StringBuilder uri = new StringBuilder(METHOD_CSV_INSERT);
         uri.append(URLEncoder.encode(entity, "UTF-8"));
         if (tags != null && tags.size() > 0) {
