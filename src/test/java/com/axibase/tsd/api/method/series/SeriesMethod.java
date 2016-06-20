@@ -25,7 +25,7 @@ public class SeriesMethod extends Method {
     private JSONArray returnedSeries;
     private JSONParser jsonParser = new JSONParser();
 
-    protected Boolean insertSeries(final Series series) throws IOException {
+    protected Boolean insertSeries(final Series series, long sleepDuration) throws IOException, InterruptedException {
         JSONArray request = new JSONArray() {{
             add(new JSONObject() {{
                 put("entity", series.getEntity());
@@ -45,6 +45,7 @@ public class SeriesMethod extends Method {
 
 
         AtsdHttpResponse response = httpSender.send(HTTPMethod.POST, METHOD_SERIES_INSERT, request.toJSONString());
+        Thread.sleep(sleepDuration);
         if (200 == response.getCode()) {
             logger.debug("Series looks inserted");
         } else {
@@ -53,11 +54,11 @@ public class SeriesMethod extends Method {
         return 200 == response.getCode();
     }
 
-    protected Boolean executeQuery(final SeriesQuery seriesQuery, Boolean wait) throws Exception {
-        if (wait) {
-            Thread.sleep(1000);
-        }
+    protected Boolean insertSeries(final Series series) throws IOException, InterruptedException {
+        return insertSeries(series, 0);
+    }
 
+    protected Boolean executeQuery(final SeriesQuery seriesQuery) throws Exception {
         JSONArray request = new JSONArray() {{
             add(queryToJSONObject(seriesQuery));
         }};
@@ -73,12 +74,7 @@ public class SeriesMethod extends Method {
         return 200 == response.getCode();
     }
 
-    protected void executeQuery(final SeriesQuery seriesQuery) throws Exception {
-        executeQuery(seriesQuery, true);
-    }
-
-    protected Boolean executeQuery(final ArrayList<SeriesQuery> seriesQueries) throws IOException, ParseException, InterruptedException {
-        Thread.sleep(1000);
+    protected Boolean executeQuery(final ArrayList<SeriesQuery> seriesQueries) throws IOException, ParseException {
         JSONArray request = new JSONArray();
         for (SeriesQuery seriesQuery : seriesQueries) {
             request.add(queryToJSONObject(seriesQuery));

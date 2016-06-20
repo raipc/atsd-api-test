@@ -27,7 +27,7 @@ public class SeriesInsertTest extends SeriesMethod {
         metric.setDataType(DataType.FLOAT);
 
         Assert.assertTrue("Failed to create metric", metricMethod.createOrReplaceMetric(metric));
-        Assert.assertTrue("Failed to insert float series", insertSeries(series));
+        Assert.assertTrue("Failed to insert float series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), t, t + 1);
         executeQuery(seriesQuery);
@@ -51,7 +51,7 @@ public class SeriesInsertTest extends SeriesMethod {
         metric.setDataType(DataType.DECIMAL);
 
         Assert.assertTrue("Failed to insert create or replace metric", metricMethod.createOrReplaceMetric(metric));
-        Assert.assertFalse("Managed to insert large decimal series", insertSeries(series));
+        Assert.assertFalse("Managed to insert large decimal series", insertSeries(series, 1000));
     }
 
     /* #2871 */
@@ -73,7 +73,7 @@ public class SeriesInsertTest extends SeriesMethod {
         for (int i = 0; i < 12; i++) {
             series.addData(new Sample(t + i * 5000, number));
         }
-        Assert.assertTrue("Failed to insert small decimal series", insertSeries(series));
+        Assert.assertTrue("Failed to insert small decimal series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), t, t + 1 + 11 * 5000);
         seriesQuery.addAggregateType("SUM");
@@ -101,7 +101,7 @@ public class SeriesInsertTest extends SeriesMethod {
         for (int i = 0; i < 12; i++) {
             series.addData(new Sample(t + i * 5000, number));
         }
-        Assert.assertTrue("Failed to insert small decimal series", insertSeries(series));
+        Assert.assertTrue("Failed to insert small decimal series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), t, t + 1 + 11 * 5000);
         seriesQuery.addAggregateType("SUM");
@@ -128,7 +128,7 @@ public class SeriesInsertTest extends SeriesMethod {
 
         Series series = new Series(entityName, metricName);
         series.addData(new Sample(t, number));
-        Assert.assertTrue("Failed to insert small decimal series", insertSeries(series));
+        Assert.assertTrue("Failed to insert small decimal series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), t, t + 1);
         seriesQuery.addAggregateType("SUM");
@@ -150,7 +150,7 @@ public class SeriesInsertTest extends SeriesMethod {
         String d = "2016-06-09T17:08:09Z";
         series.addData(new Sample(d, value));
 
-        Assert.assertTrue("Failed to insert series", insertSeries(series));
+        Assert.assertTrue("Failed to insert series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), d, "2016-06-09T17:08:09.001Z");
         executeQuery(seriesQuery);
@@ -170,7 +170,7 @@ public class SeriesInsertTest extends SeriesMethod {
         String d = "2016-06-09T17:08:09.100Z";
         series.addData(new Sample(d, value));
 
-        Assert.assertTrue("Failed to insert series", insertSeries(series));
+        Assert.assertTrue("Failed to insert series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), d, "2016-06-09T17:08:09.101Z");
         executeQuery(seriesQuery);
@@ -189,7 +189,7 @@ public class SeriesInsertTest extends SeriesMethod {
         String d = "2016-06-09T10:08:09.000Z";
         series.addData(new Sample("2016-06-09T17:08:09+07:00", value));
 
-        Assert.assertTrue("Failed to insert series", insertSeries(series));
+        Assert.assertTrue("Failed to insert series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), d, "2016-06-09T10:08:09.100Z");
         executeQuery(seriesQuery);
@@ -208,7 +208,7 @@ public class SeriesInsertTest extends SeriesMethod {
         String d = "2016-06-09T10:08:09.999Z";
         series.addData(new Sample("2016-06-09T17:08:09.999+07:00", value));
 
-        Assert.assertTrue("Failed to insert series", insertSeries(series));
+        Assert.assertTrue("Failed to insert series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), d, "2016-06-09T10:08:10Z");
         executeQuery(seriesQuery);
@@ -225,7 +225,7 @@ public class SeriesInsertTest extends SeriesMethod {
         Series series = new Series("e___underscore", "m___underscore");
         series.addData(new Sample(t, "0"));
 
-        Assert.assertTrue("Failed to insert float series", insertSeries(series));
+        Assert.assertTrue("Failed to insert float series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), t, t + 1);
         executeQuery(seriesQuery);
