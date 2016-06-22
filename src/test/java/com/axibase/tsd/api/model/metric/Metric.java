@@ -2,11 +2,11 @@ package com.axibase.tsd.api.model.metric;
 
 import com.axibase.tsd.api.model.Model;
 import com.axibase.tsd.api.model.series.DataType;
-import com.axibase.tsd.api.registry.MetricRegistry;
+import com.axibase.tsd.api.Registry;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Metric extends Model {
+public class Metric {
     private String name;
     private String enabled;
     private String persistent;
@@ -14,15 +14,23 @@ public class Metric extends Model {
     private String timePrecision;
     private String retentionInterval;
 
+    public Metric() {}
+
     public Metric(String name) {
         if (name != null) {
-            MetricRegistry.getInstance().registerMetric(name);
+            Registry.Metric.register(name);
         }
         this.name = name;
     }
 
+
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEnabled() {
