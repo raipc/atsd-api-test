@@ -14,6 +14,8 @@ import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
 import java.util.Map;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.junit.Assert.*;
 
 /**
@@ -32,13 +34,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", property.getType());
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("exactMatch", true);
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("exactMatch", true);
 
-        deletePropertyCorrect(deleteObj);
-
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue("Property should be remain", propertyExist(property));
     }
 
@@ -52,13 +53,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", property.getType());
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("exactMatch", false);
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("exactMatch", false);
 
-        deletePropertyCorrect(deleteObj);
-
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
@@ -71,13 +71,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", property.getType());
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("key", property.getKey());
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", property.getKey());
 
-        deletePropertyCorrect(deleteObj);
-
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
@@ -96,13 +95,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(secondProperty);
         logger.info("secondProperty inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", property.getType());
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("key", property.getKey());
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", property.getKey());
 
-        deletePropertyCorrect(deleteObj);
-
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertFalse("First property should be deleted", propertyExist(property));
         assertTrue("Second property should remain", propertyExist(secondProperty));
     }
@@ -124,13 +122,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(secondProperty);
         logger.info("secondProperty inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", property.getType());
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("exactMatch", false);
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("exactMatch", false);
 
-        deletePropertyCorrect(deleteObj);
-
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertFalse("Frist property should be deleted", propertyExist(property));
         assertFalse("Second property should be deleted", propertyExist(secondProperty));
 
@@ -145,13 +142,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", property.getType());
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("key", property.getKey());
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("key", property.getKey());
 
-        deletePropertyCorrect(deleteObj);
-
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertFalse("Property should be deleted", propertyExist(property));
     }
 
@@ -171,12 +167,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(secondProperty);
         logger.info("Second property inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", property.getType());
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("exactMatch", true);
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", property.getType());
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("exactMatch", true);
 
-        deletePropertyCorrect(deleteObj);
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue("First property should remain", propertyExist(property));
         assertTrue("Second property should remain", propertyExist(secondProperty));
     }
@@ -190,13 +186,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("type", property.getType());
-        deleteObj.put("exactMatch", true);
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("type", property.getType());
+        queryObj.put("exactMatch", true);
 
-        deletePropertyCorrect(deleteObj);
-
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue("Property should be remain", propertyExist(property));
     }
 
@@ -209,14 +204,13 @@ public class PropertyDeleteTest extends PropertyMethod {
         insertPropertyCheck(property);
         logger.info("Property inserted");
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("entity", property.getEntity());
-        deleteObj.put("type", property.getType());
-        deleteObj.put("key", property.getKey());
-        deleteObj.put("endDate", property.getDate());
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("entity", property.getEntity());
+        queryObj.put("type", property.getType());
+        queryObj.put("key", property.getKey());
+        queryObj.put("endDate", property.getDate());
 
-        deletePropertyCorrect(deleteObj);
-
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue("Property should be remain", propertyExist(property));
     }
 
@@ -229,8 +223,8 @@ public class PropertyDeleteTest extends PropertyMethod {
 
 
         Response response = deleteProperty(request);
-        assertEquals(400, response.getStatus());
-        assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.readEntity(String.class));
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", formatToJsonString(response));
     }
 
     @Test
@@ -240,8 +234,8 @@ public class PropertyDeleteTest extends PropertyMethod {
         request.put("endDate", "2016-06-01T12:04:59.191Z");
 
         Response response = deleteProperty(request);
-        assertEquals(400, response.getStatus());
-        assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.readEntity(String.class));
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", formatToJsonString(response));
     }
 
     @Test
@@ -251,8 +245,8 @@ public class PropertyDeleteTest extends PropertyMethod {
         request.put("startDate", "2016-06-01T12:04:59.191Z");
 
         Response response = deleteProperty(request);
-        assertEquals(400, response.getStatus());
-        assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.readEntity(String.class));
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", formatToJsonString(response));
     }
 
     @Test
@@ -262,8 +256,8 @@ public class PropertyDeleteTest extends PropertyMethod {
 
 
         Response response = deleteProperty(request);
-        assertEquals(400, response.getStatus());
-        assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", response.readEntity(String.class));
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals("{\"error\":\"IllegalArgumentException: Entity is required\"}", formatToJsonString(response));
     }
 
 
@@ -284,12 +278,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         entityMethod.createOrUpdateCheck(entity);
         assertTrue(propertyExist(property));
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", "$entity_tags");
-        deleteObj.put("entity", entity.getName());
-        deleteObj.put("exactMatch", true);
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", "$entity_tags");
+        queryObj.put("entity", entity.getName());
+        queryObj.put("exactMatch", true);
 
-        deletePropertyCorrect(deleteObj);
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue(propertyExist(property));
     }
 
@@ -310,12 +304,12 @@ public class PropertyDeleteTest extends PropertyMethod {
         entityMethod.createOrUpdateCheck(entity);
         assertTrue(propertyExist(property));
 
-        Map<String, Object> deleteObj = new HashMap<>();
-        deleteObj.put("type", "$entity_tags");
-        deleteObj.put("entity", entity.getName());
-        deleteObj.put("exactMatch", false);
+        Map<String, Object> queryObj = new HashMap<>();
+        queryObj.put("type", "$entity_tags");
+        queryObj.put("entity", entity.getName());
+        queryObj.put("exactMatch", false);
 
-        deletePropertyCorrect(deleteObj);
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue(propertyExist(property));
     }
 
@@ -336,7 +330,7 @@ public class PropertyDeleteTest extends PropertyMethod {
         queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("exactMatch", true);
 
-        deletePropertyCorrect(queryObj);
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue(propertyExist(property));
     }
 
@@ -357,7 +351,7 @@ public class PropertyDeleteTest extends PropertyMethod {
         queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("exactMatch", false);
 
-        deletePropertyCorrect(queryObj);
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue(propertyExist(property));
     }
 
@@ -377,7 +371,7 @@ public class PropertyDeleteTest extends PropertyMethod {
         queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("exactMatch", true);
 
-        deletePropertyCorrect(queryObj);
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue(propertyExist(property));
     }
 
@@ -397,7 +391,7 @@ public class PropertyDeleteTest extends PropertyMethod {
         queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("exactMatch", false);
 
-        deletePropertyCorrect(queryObj);
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue(propertyExist(property));
     }
 
@@ -418,8 +412,8 @@ public class PropertyDeleteTest extends PropertyMethod {
         queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("exactMatch", true);
 
-        deletePropertyCorrect(queryObj);
-        assertTrue(propertyExist(property));
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
+
     }
 
     @Test
@@ -439,15 +433,10 @@ public class PropertyDeleteTest extends PropertyMethod {
         queryObj.put("endDate", Util.getMaxDate());
         queryObj.put("exactMatch", false);
 
-        deletePropertyCorrect(queryObj);
+        assertEquals("Fail to execute delete query", OK.getStatusCode(), deleteProperty(queryObj).getStatus());
         assertTrue(propertyExist(property));
     }
 
-
-    private void deletePropertyCorrect(final Map deleteObj) throws IOException {
-        Response response = super.deleteProperty(deleteObj);
-        assertEquals("Fail to execute delete query", 200, response.getStatus());
-    }
 
 
 }

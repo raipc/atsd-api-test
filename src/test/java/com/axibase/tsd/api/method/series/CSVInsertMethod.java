@@ -11,11 +11,13 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
 
+import static javax.ws.rs.core.Response.Status.OK;
+
 public class CSVInsertMethod extends SeriesMethod {
     protected static final String METHOD_CSV_INSERT = "/series/csv/";
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    protected Boolean csvInsert(String entity, String csv, Map<String, String> tags, long sleepDuration) throws IOException, InterruptedException {
+    protected boolean csvInsert(String entity, String csv, Map<String, String> tags, long sleepDuration) throws IOException, InterruptedException {
         WebTarget csvInsert = httpApiResource.path(METHOD_CSV_INSERT).path("{entity}");
         if (tags != null && tags.size() > 0) {
             for (Map.Entry<String, String> entry : tags.entrySet()) {
@@ -25,23 +27,23 @@ public class CSVInsertMethod extends SeriesMethod {
 
         Response response = csvInsert.resolveTemplate("entity", entity).request().post(Entity.entity(csv, new MediaType("text", "csv")));
         Thread.sleep(sleepDuration);
-        if (200 == response.getStatus()) {
+        if (OK.getStatusCode() == response.getStatus()) {
             logger.debug("CSV looks inserted");
         } else {
             logger.error("Fail to insert csv");
         }
-        return 200 == response.getStatus();
+        return OK.getStatusCode() == response.getStatus();
     }
 
-    protected Boolean csvInsert(String entity, String csv, Map<String, String> tags) throws IOException, InterruptedException {
+    protected boolean csvInsert(String entity, String csv, Map<String, String> tags) throws IOException, InterruptedException {
         return csvInsert(entity, csv, tags, 0);
     }
 
-    protected Boolean csvInsert(String entity, String csv, long sleepDuration) throws IOException, InterruptedException {
+    protected boolean csvInsert(String entity, String csv, long sleepDuration) throws IOException, InterruptedException {
         return csvInsert(entity, csv, null, sleepDuration);
     }
 
-    protected Boolean csvInsert(String entity, String csv) throws IOException, InterruptedException {
+    protected boolean csvInsert(String entity, String csv) throws IOException, InterruptedException {
         return csvInsert(entity, csv, null, 0);
     }
 }
