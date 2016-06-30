@@ -1,8 +1,11 @@
 package com.axibase.tsd.api.model.message;
 
-import com.axibase.tsd.api.model.Model;
 import com.axibase.tsd.api.Registry;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message {
@@ -13,6 +16,9 @@ public class Message {
     private String severity;
     private String message;
     private Boolean persist;
+    private Map<String, String> tags = new HashMap<>();
+
+    public Message() {}
 
     public Message(String entity) {
         if (entity != null) {
@@ -86,5 +92,14 @@ public class Message {
 
     public void setPersist(Boolean persist) {
         this.persist = persist;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public Map<String, String> getTags() {
+        return Collections.unmodifiableMap(tags);
+    }
+
+    public void setTags(Map<String, String> tags) {
+        this.tags = new HashMap<>(tags);
     }
 }
