@@ -6,7 +6,10 @@ import com.axibase.tsd.api.model.property.Property;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+
+import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,106 +20,107 @@ import java.util.Map;
 
 public class PropertyQueryOffsetTest extends PropertyMethod {
     private final static String propertyType = "query-offset-type1";
-    private final static String entityName = "query-offset-entity1";
-    private final static Property propertyPast;
-    private final static Property propertyMiddle;
-    private final static Property propertyCurrent1;
-    private final static Property propertyCurrent2;
-
-    static {
-        long offsetPastMillis = 20L;
-        long offsetMiddleMillis = 10L;
-        long currentTimeMillis = System.currentTimeMillis();
-
-        propertyPast = new Property(propertyType, entityName);
-        propertyPast.addTag("t1", "tv1");
-        propertyPast.addKey("k1", "KV1");
-        propertyPast.setDate(currentTimeMillis - offsetPastMillis);
-
-        propertyMiddle = new Property();
-        propertyMiddle.setType(propertyType);
-        propertyMiddle.setEntity(entityName);
-        propertyMiddle.addTag("t2", "tv2");
-        propertyMiddle.addKey("k2", "KV2");
-        propertyMiddle.setDate(currentTimeMillis - offsetMiddleMillis);
-
-        propertyCurrent1 = new Property();
-        propertyCurrent1.setType(propertyType);
-        propertyCurrent1.setEntity(entityName);
-        propertyCurrent1.addTag("t3", "tv3");
-        propertyCurrent1.addKey("k3", "KV3");
-        propertyCurrent1.setDate(currentTimeMillis);
-
-        propertyCurrent2 = new Property();
-        propertyCurrent2.setType(propertyType);
-        propertyCurrent2.setEntity(entityName);
-        propertyCurrent2.addTag("t3", "tv3");
-        propertyCurrent2.addKey("k4", "KV4");
-        propertyCurrent2.setDate(currentTimeMillis);
-    }
+    private final static Property propertyPast1 = buildProperty("query-offset-entity1", "2016-06-29T00:00:00.010Z", "k1", "kv1");
+    private final static Property propertyMiddl = buildProperty("query-offset-entity1", "2016-06-29T00:00:00.015Z", "k2", "kv2");
+    private final static Property propertyLast1 = buildProperty("query-offset-entity2", "2016-06-29T00:00:00.020Z", "k3", "kv3");
+    private final static Property propertyLast2 = buildProperty("query-offset-entity3", "2016-06-29T00:00:00.020Z", "k4", "kv4");
 
 
     @BeforeClass
     public static void prepareProperty() throws IOException {
-        insertPropertyCheck(propertyPast);
-        insertPropertyCheck(propertyMiddle);
-        insertPropertyCheck(propertyCurrent1);
-        insertPropertyCheck(propertyCurrent2);
+        insertPropertyCheck(propertyPast1);
+        insertPropertyCheck(propertyMiddl);
+        insertPropertyCheck(propertyLast1);
+        insertPropertyCheck(propertyLast2);
     }
 
     //#2947
+    /*
+    Last offset = 0, = 0 therefore Last include
+    Middle offset = 5, > 0 therefore Past do not include
+    Past offset = 10, > 0 therefore Past do not include
+     */
     @Test
-    public void testOffset0() throws Exception {
-        Map<String, Object> queryObj = new HashMap<>();
-        queryObj.put("type", propertyType);
-        queryObj.put("entity", entityName);
-        queryObj.put("startDate", Util.getMinDate());
-        queryObj.put("endDate", Util.getMaxDate());
-        queryObj.put("offset", 0);
+    public void testOffset0SelectsLast() throws Exception {
+        String expected = jacksonMapper.writeValueAsString(Arrays.asList(propertyLast1, propertyLast2));
 
-        String expected = jacksonMapper.writeValueAsString(Arrays.asList(propertyCurrent1, propertyCurrent2));
-
-        JSONAssert.assertEquals(expected, getProperty(queryObj).readEntity(String.class), false);
+        JSONAssert.assertEquals(expected, executeOffsetQuery(0).readEntity(String.class), false);
     }
 
     //#2947
+    /*
+    offset < 0 therefore include ALL.
+    */
     @Test
-    public void testOffsetNegative() throws Exception {
-        Map<String, Object> queryObj = new HashMap<>();
-        queryObj.put("type", propertyType);
-        queryObj.put("entity", entityName);
-        queryObj.put("startDate", Util.getMinDate());
-        queryObj.put("endDate", Util.getMaxDate());
-        queryObj.put("offset", -1);
+    public void testOffsetNegativeSelectAll() throws Exception {
+        String expected = jacksonMapper.writeValueAsString(Arrays.asList(propertyPast1, propertyMiddl, propertyLast1, propertyLast2));
 
-        String expected = jacksonMapper.writeValueAsString(Arrays.asList(propertyPast, propertyMiddle, propertyCurrent1, propertyCurrent2));
-
-        JSONAssert.assertEquals(expected, getProperty(queryObj).readEntity(String.class), false);
-
-        queryObj.put("offset", -5);
-        JSONAssert.assertEquals(expected, getProperty(queryObj).readEntity(String.class), false);
-
-        queryObj.put("offset", -50);
-        JSONAssert.assertEquals(expected, getProperty(queryObj).readEntity(String.class), false);
+        JSONAssert.assertEquals(expected, executeOffsetQuery(-5).readEntity(String.class), false);
     }
 
     //#2947
+     /*
+    Middle offset = 5, Last offset = 0, <= 5 therefore Middle&Last include
+    Past offset = 10, > 5 therefore Past do not include
+     */
     @Test
-    public void testOffsetPositive() throws Exception {
-        Long middleMillis = Util.getDate(propertyMiddle.getDate()).getTime();
-        Long presentMillis = Util.getDate(propertyCurrent1.getDate()).getTime();
+    public void testOffsetEqualDateDiffSelectsDateInclusive() throws Exception {
+        String expected = jacksonMapper.writeValueAsString(Arrays.asList(propertyMiddl, propertyLast1, propertyLast2));
 
+        JSONAssert.assertEquals(expected, executeOffsetQuery(5).readEntity(String.class), false);
+    }
+
+    //#2947
+    /*
+    Middle offset = 5, Last offset = 0, < 6 therefore Middle&Last include
+    Past offset = 10, > 6 therefore Past do not include
+     */
+    @Test
+    public void testOffsetMoreDateSelectsLessOrEqualDate() throws Exception {
+        String expected = jacksonMapper.writeValueAsString(Arrays.asList(propertyMiddl, propertyLast1, propertyLast2));
+
+        JSONAssert.assertEquals(expected, executeOffsetQuery(6).readEntity(String.class), false);
+    }
+
+    //#2947
+     /*
+    Middle offset = 5, Last offset = 0, Past offset = 10 < 100 therefore Past&Middle&Last include
+     */
+    @Test
+    public void testOffsetLargeSelectAll() throws Exception {
+        String expected = jacksonMapper.writeValueAsString(Arrays.asList(propertyPast1, propertyMiddl, propertyLast1, propertyLast2));
+
+        JSONAssert.assertEquals(expected, executeOffsetQuery(100).readEntity(String.class), false);
+    }
+
+    private static Property buildProperty(String entityName, String date, String... key) {
+        if (key.length % 2 != 0) {
+            throw new IllegalArgumentException("Key should be specified as name=value pairs");
+        }
+        Property property = new Property();
+        property.setType(propertyType);
+        property.setEntity(entityName);
+        for (int i = 0; i < key.length; i += 2) {
+            property.addKey(key[i], key[i + 1]);
+        }
+        property.addTag("defaultname", "defaultval");
+        try {
+            property.setDate(date);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Can not parse currentDate string");
+        }
+
+        return property;
+    }
+
+    private static Response executeOffsetQuery(int offset) {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", propertyType);
-        queryObj.put("entity", entityName);
+        queryObj.put("entity", "*");
         queryObj.put("startDate", Util.getMinDate());
         queryObj.put("endDate", Util.getMaxDate());
-        queryObj.put("offset", presentMillis - middleMillis);
-
-
-        String expected = jacksonMapper.writeValueAsString(Arrays.asList(propertyMiddle, propertyCurrent1, propertyCurrent2));
-
-        JSONAssert.assertEquals(expected, getProperty(queryObj).readEntity(String.class), false);
+        queryObj.put("offset", offset);
+        return getProperty(queryObj);
     }
 
 }

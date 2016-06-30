@@ -549,8 +549,9 @@ public class PropertyQueryTest extends PropertyMethod {
 
         Response response = getProperty(request);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("{\"error\":\"IllegalArgumentException: Missing parameters. One of the following combinations is required: interval, interval + startTime/startDate, interval + endTime/endDate, startTime/startDate + endTime/endDate\"}", formatToJsonString(response));
+        assertEquals("{\"error\":\"IllegalArgumentException: Insufficient parameters. One of the following combinations is required: interval, interval + startDate, interval + endDate, startDate + endDate\"}", formatToJsonString(response));
     }
+
 
     @Test
     public void testStartDateAbsent() throws IOException {
@@ -560,7 +561,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
         Response response = getProperty(request);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("{\"error\":\"IllegalArgumentException: Missing parameters. One of the following combinations is required: interval, interval + startTime/startDate, interval + endTime/endDate, startTime/startDate + endTime/endDate\"}", formatToJsonString(response));
+        assertEquals("{\"error\":\"IllegalArgumentException: Insufficient parameters. One of the following combinations is required: interval, interval + startDate, interval + endDate, startDate + endDate\"}", formatToJsonString(response));
     }
 
     @Test
@@ -570,7 +571,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
         Response response = getProperty(request);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("{\"error\":\"IllegalArgumentException: Missing parameters. One of the following combinations is required: interval, interval + startTime/startDate, interval + endTime/endDate, startTime/startDate + endTime/endDate\"}", formatToJsonString(response));
+        assertEquals("{\"error\":\"IllegalArgumentException: Insufficient parameters. One of the following combinations is required: interval, interval + startDate, interval + endDate, startDate + endDate\"}", formatToJsonString(response));
     }
 
 
@@ -583,7 +584,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
         Response response = getProperty(request);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("{\"error\":\"IllegalArgumentException: Missing parameters. One of the following combinations is required: interval, interval + startTime/startDate, interval + endTime/endDate, startTime/startDate + endTime/endDate\"}", formatToJsonString(response));
+        assertEquals("{\"error\":\"IllegalArgumentException: Insufficient parameters. One of the following combinations is required: interval, interval + startDate, interval + endDate, startDate + endDate\"}", formatToJsonString(response));
     }
 
     @Test
@@ -1387,7 +1388,6 @@ public class PropertyQueryTest extends PropertyMethod {
 
         queryObj.put("limit", -5);
         assertEquals(3, calculateJsonArraySize(formatToJsonString(getProperty(queryObj))));
-
     }
 
 

@@ -19,7 +19,6 @@ import java.util.Collections;
 
 import static javax.ws.rs.core.Response.Status.OK;
 
-
 public class MessageMethod extends BaseMethod {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
