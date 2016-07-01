@@ -1,6 +1,7 @@
 package com.axibase.tsd.api.method.csv;
 
 import com.axibase.tsd.api.method.BaseMethod;
+import org.glassfish.jersey.media.multipart.Boundary;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
@@ -31,7 +32,7 @@ public class CSVUploadMethod extends BaseMethod {
         FileDataBodyPart fileDataBodyPart
                 = new FileDataBodyPart("file", configPath, getMediaTypeFromFile(configPath));
         multiPart.bodyPart(fileDataBodyPart);
-        Response response = builder.post(Entity.entity(multiPart, multiPart.getMediaType()));
+        Response response = builder.post(Entity.entity(multiPart, Boundary.addBoundary(MediaType.MULTIPART_FORM_DATA_TYPE)));
         response.close();
         return response.getStatus() == OK.getStatusCode();
     }
@@ -48,7 +49,7 @@ public class CSVUploadMethod extends BaseMethod {
         Response response = httpApiResource.path("csv")
                 .queryParam("config", parserName)
                 .queryParam("wait", true)
-                .request().post(Entity.entity(multiPart, multiPart.getMediaType()));
+                .request().post(Entity.entity(multiPart, Boundary.addBoundary(MediaType.MULTIPART_FORM_DATA_TYPE)));
         response.close();
         return response;
     }

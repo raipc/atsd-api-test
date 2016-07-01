@@ -3,10 +3,9 @@ package com.axibase.tsd.api.method;
 import com.axibase.tsd.api.Config;
 import com.axibase.tsd.api.transport.tcp.TCPSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.jetty.connector.JettyConnectorProvider;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.json.JSONArray;
@@ -56,7 +55,7 @@ public abstract class BaseMethod {
             clientConfig.register(httpAuthenticationFeature);
             clientConfig.register(MultiPartFeature.class);
             clientConfig.register(new LoggingFeature());
-            clientConfig.connectorProvider(new ApacheConnectorProvider());
+            clientConfig.connectorProvider(new JettyConnectorProvider());
             httpRootResource = ClientBuilder.newClient(clientConfig).target(UriBuilder.fromPath("")
                     .scheme(config.getProtocol())
                     .host(config.getServerName())
