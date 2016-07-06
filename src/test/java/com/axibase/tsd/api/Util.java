@@ -17,7 +17,7 @@ public class Util {
     public static final String MIN_QUERYABLE_DATE = "1000-01-01T00:00:00.000Z";
     public static final String MAX_QUERYABLE_DATE = "9999-12-31T23:59:59.999Z";
     public static final String MIN_STORABLE_DATE = "1970-01-01T00:00:00.000Z";
-    public static final String MAX_STORABLE_DATE = "2106-02-07T07:28:14.999Z";
+    public static final String MAX_STORABLE_DATE = "2106-02-07T06:59:59.999Z";
 
     public static Date getCurrentDate() {
         return new Date();
@@ -44,10 +44,8 @@ public class Util {
         return ISOFormat(calendar.getTime());
     }
 
-    public static Date getDate(String date) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return dateFormat.parse(date);
+    public static Date parseDate(String date){
+        return javax.xml.bind.DatatypeConverter.parseDateTime(date).getTime();
     }
 
     public static String getMinDate() {
@@ -146,5 +144,13 @@ public class Util {
             sb.append(c);
         }
         return sb.toString();
+    }
+
+    public static String addOneMS(String date) {
+        return ISOFormat(parseDate(date).getTime() + 1);
+    }
+
+    public static Long getMillis(String date) throws ParseException {
+        return parseDate(date).getTime();
     }
 }
