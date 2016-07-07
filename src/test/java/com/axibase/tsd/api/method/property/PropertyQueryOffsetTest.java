@@ -9,7 +9,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,11 +103,7 @@ public class PropertyQueryOffsetTest extends PropertyMethod {
             property.addKey(key[i], key[i + 1]);
         }
         property.addTag("defaultname", "defaultval");
-        try {
-            property.setDate(date);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException("Can not parse currentDate string");
-        }
+        property.setDate(date);
 
         return property;
     }
@@ -117,8 +112,8 @@ public class PropertyQueryOffsetTest extends PropertyMethod {
         Map<String, Object> queryObj = new HashMap<>();
         queryObj.put("type", propertyType);
         queryObj.put("entity", "*");
-        queryObj.put("startDate", Util.getMinDate());
-        queryObj.put("endDate", Util.getMaxDate());
+        queryObj.put("startDate", Util.MIN_STORABLE_DATE);
+        queryObj.put("endDate", Util.MAX_QUERYABLE_DATE);
         queryObj.put("offset", offset);
         return getProperty(queryObj);
     }

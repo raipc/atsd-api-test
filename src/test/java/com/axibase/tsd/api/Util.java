@@ -35,15 +35,20 @@ public class Util {
     }
 
     public static String ISOFormat(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return dateFormat.format(date);
+        return ISOFormat(date, true, "UTC");
     }
 
     public static String ISOFormat(long t) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(t);
-        return ISOFormat(calendar.getTime());
+        return ISOFormat(new Date(t));
+    }
+    public static String ISOFormat(long t, boolean withMillis, String timeZoneName) {
+        return ISOFormat(new Date(t), withMillis, timeZoneName);
+    }
+    public static String ISOFormat(Date date, boolean withMillis, String timeZoneName) {
+        String pattern = (withMillis) ? "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" : "yyyy-MM-dd'T'HH:mm:ssXXX";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        dateFormat.setTimeZone(TimeZone.getTimeZone(timeZoneName));
+        return dateFormat.format(date);
     }
 
     public static Date parseDate(String date) {
@@ -54,14 +59,6 @@ public class Util {
             throw new RuntimeException(e);
         }
         return d;
-    }
-
-    public static String getMinDate() {
-        return "1970-01-01T00:00:00Z";
-    }
-
-    public static String getMaxDate() {
-        return "9999-01-01T00:00:00Z";
     }
 
 
@@ -79,27 +76,6 @@ public class Util {
             for (int i = 97; i < 122; i++) { //a-z
                 pool.add((char) i);
             }
-
-//            for (int i = 0x21; i < 0x7e; i++) { //visible character
-//                pool.add((char) i);
-//            }
-
-//            for (int i = 0x80; i < 0xFF; i++) { //Latin-1 Supplement
-//                pool.add((char) i);
-//            }
-
-//            for (int i = 0x100; i < 0x17F; i++) { //Latin Extended-A
-//                pool.add((char) i);
-//            }
-//
-//            for (int i = 0x370; i < 0x52F; i++) { //Greek and Coptic, Cyrillic, Cyrillic Supplement
-//                pool.add((char) i);
-//            }
-
-//            for (int i = 0x4E00; i < 0x4E5F; i++) {//9FFF; i++) { //CJK Unified Ideographs
-//                pool.add((char) i);
-//            }
-//            logger.debug("visible character pool: {}", pool);
             return pool;
 
         }

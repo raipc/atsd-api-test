@@ -69,7 +69,10 @@ public class ParserEncodingTest extends CSVUploadMethod {
 
         Thread.sleep(1000L);
 
-        MessageQuery messageQuery = new MessageQuery(entityName, Util.getMinDate(), Util.getMaxDate());
+        MessageQuery messageQuery = new MessageQuery();
+        messageQuery.setEntity(entityName);
+        messageQuery.setStartDate(Util.MIN_QUERYABLE_DATE);
+        messageQuery.setEndDate(Util.MAX_QUERYABLE_DATE);
         List<Message> storedMessageList = MessageMethod.executeQuery(messageQuery).readEntity(new GenericType<List<Message>>(){});
 
         assertEquals("Unexpected message body", controlSequence, storedMessageList.get(0).getMessage());

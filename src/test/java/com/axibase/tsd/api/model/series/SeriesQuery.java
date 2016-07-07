@@ -1,6 +1,7 @@
 package com.axibase.tsd.api.model.series;
 
 import com.axibase.tsd.api.Util;
+import com.axibase.tsd.api.model.Interval;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
@@ -13,8 +14,10 @@ public class SeriesQuery {
     private String metric;
     private String startDate;
     private String endDate;
+    private Interval interval;
     private Map<String, String> tags = new HashMap<>();
     private Map<String, Object> aggregate;
+    private String timeFormat;
 
     public void addAggregateType(String type) {
         if (aggregate == null) {
@@ -47,6 +50,7 @@ public class SeriesQuery {
         aggregate.put("period", period);
     }
 
+    public SeriesQuery() {}
     public SeriesQuery(String entity, String metric, long startTime, long endTime) {
         this.entity = entity;
         this.metric = metric;
@@ -118,5 +122,21 @@ public class SeriesQuery {
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 '}';
+    }
+
+    public String getTimeFormat() {
+        return timeFormat;
+    }
+
+    public void setTimeFormat(String timeFormat) {
+        this.timeFormat = timeFormat;
+    }
+
+    public Interval getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Interval interval) {
+        this.interval = interval;
     }
 }
