@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 
 public class SeriesInsertTest extends SeriesMethod {
     final String NEXT_AFTER_MAX_STORABLE_DATE = addOneMS(MAX_STORABLE_DATE);
+
     /* #2871 */
     @Test
     public void testBigFloatOverflow() throws Exception {
@@ -270,6 +271,7 @@ public class SeriesInsertTest extends SeriesMethod {
         assertEquals("Stored date incorrect", d, seriesList.get(0).getData().get(0).getD());
         assertEquals("Stored value incorrect", new BigDecimal(value), seriesList.get(0).getData().get(0).getV());
     }
+
     /* #2850 */
     @Test
     public void testISOFormatsMinusHoursNoMS() throws Exception {
@@ -422,7 +424,7 @@ public class SeriesInsertTest extends SeriesMethod {
                 NEXT_AFTER_MAX_STORABLE_DATE, addOneMS(NEXT_AFTER_MAX_STORABLE_DATE));
         List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
 
-        assertEquals("Managed to insert series with d out of range",0, seriesList.get(0).getData().size());
+        assertEquals("Managed to insert series with d out of range", 0, seriesList.get(0).getData().size());
     }
 
     /* #2927 */
@@ -548,5 +550,4 @@ public class SeriesInsertTest extends SeriesMethod {
         assertEquals("Incorrect response status code", BAD_REQUEST.getStatusCode(), response.getStatus());
         JSONAssert.assertEquals("{\"error\":\"org.codehaus.jackson.map.JsonMappingException: Expected '-' character but found '5' (through reference chain: com.axibase.tsd.model.api.ApiTimeSeriesModel[\\\"data\\\"]->com.axibase.tsd.model.api.ApiTimeSeriesValue[\\\"d\\\"])\"}", response.readEntity(String.class), true);
     }
-
 }
