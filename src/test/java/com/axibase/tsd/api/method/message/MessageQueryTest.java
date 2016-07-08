@@ -48,7 +48,7 @@ public class MessageQueryTest extends MessageMethod {
     @Test
     public void testISOTimezonePlusHourMinute() throws Exception {
         MessageQuery messageQuery = buildMessageQuery();
-        messageQuery.setStartDate("2016-05-21T00:01:23+01:23");
+        messageQuery.setStartDate("2016-05-21T01:23:00+01:23");
 
         List<Message> storedMessageList = executeQuery(messageQuery).readEntity(new GenericType<List<Message>>(){});
         Message storedMessage = storedMessageList.get(0);
@@ -62,7 +62,7 @@ public class MessageQueryTest extends MessageMethod {
     @Test
     public void testISOTimezoneMinusHourMinute() throws Exception {
         MessageQuery messageQuery = buildMessageQuery();
-        messageQuery.setStartDate("2016-05-20T22:37:23-01:23");
+        messageQuery.setStartDate("2016-05-20T22:37:00-01:23");
 
         List<Message> storedMessageList = executeQuery(messageQuery).readEntity(new GenericType<List<Message>>(){});
         Message storedMessage = storedMessageList.get(0);
