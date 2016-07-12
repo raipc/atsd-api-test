@@ -155,7 +155,7 @@ public class SeriesQueryTest extends SeriesMethod {
 
         insertSeriesCheck(series);
 
-        SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), MAX_STORABLE_DATE, MAX_QUERYABLE_DATE);
+        SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), addOneMS(MAX_STORABLE_DATE), MAX_QUERYABLE_DATE);
         List<Sample> data = executeQueryReturnSeries(seriesQuery).get(0).getData();
 
         assertEquals("Not empty data for disjoint query and stored interval", 0, data.size());
