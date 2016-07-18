@@ -37,8 +37,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
         final Response response = httpSqlApiResource
                 .request()
                 .get();
+        response.bufferEntity();
         Assert.assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -48,8 +48,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
         final Response response = httpSqlApiResource
                 .request()
                 .post(Entity.entity("", MediaType.APPLICATION_FORM_URLENCODED));
+        response.bufferEntity();
         Assert.assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
-        response.close();
     }
 
 
@@ -59,9 +59,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
                 .queryParam("q", "SELECT * FROM 'sql-response-codes-metric'")
                 .request()
                 .get();
-
+        response.bufferEntity();
         Assert.assertEquals(OK.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -74,8 +73,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
                 .post(Entity.entity(
                         form,
                         MediaType.APPLICATION_FORM_URLENCODED));
+        response.bufferEntity();
         Assert.assertEquals(OK.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -90,8 +89,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
                 .post(Entity.entity(
                         form,
                         MediaType.APPLICATION_FORM_URLENCODED));
+        response.bufferEntity();
         Assert.assertEquals(OK.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -105,9 +104,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
                 .post(Entity.entity(
                         form,
                         MediaType.APPLICATION_FORM_URLENCODED));
-
+        response.bufferEntity();
         Assert.assertEquals(OK.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -118,8 +116,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
                 .queryParam("outputFormat", OutputFormat.JSON)
                 .request()
                 .get();
+        response.bufferEntity();
         Assert.assertEquals(OK.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -130,9 +128,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
                 .queryParam("outputFormat", OutputFormat.CSV)
                 .request()
                 .get();
-
+        response.bufferEntity();
         Assert.assertEquals(OK.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -143,8 +140,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
                 .queryParam("outputFormat", OutputFormat.CSV)
                 .request()
                 .get();
+        response.bufferEntity();
         Assert.assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -154,8 +151,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
         final Response response = httpSqlApiResource
                 .request()
                 .put(Entity.entity("", MediaType.APPLICATION_JSON));
+        response.bufferEntity();
         Assert.assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
-        response.close();
 
     }
 
@@ -164,9 +161,8 @@ public class SqlApiResponseCodesTests extends SqlMethod {
         final Response response = httpSqlApiResource
                 .request()
                 .delete();
+        response.bufferEntity();
         Assert.assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
-        response.close();
-
     }
 
 }

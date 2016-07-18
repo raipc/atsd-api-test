@@ -42,9 +42,7 @@ public class SqlApiResponseHeadersTests extends SqlMethod {
                 .request()
                 .head();
         Set<String> responseAllowedMethods = parseResponseAllowedMethods(response);
-        response.close();
-
-
+        response.bufferEntity();
         Assert.assertEquals(expectedAllowedMethods, responseAllowedMethods);
     }
 
@@ -55,9 +53,8 @@ public class SqlApiResponseHeadersTests extends SqlMethod {
                 .queryParam("q", "SELECT * FROM 'sql-response-headers-metric'")
                 .request()
                 .get();
+        response.bufferEntity();
         Assert.assertEquals("application/json; charset=UTF-8", response.getHeaderString(CONTENT_TYPE));
-        response.close();
-
     }
 
     @Test
@@ -67,9 +64,8 @@ public class SqlApiResponseHeadersTests extends SqlMethod {
                 .queryParam("outputFormat", "csv")
                 .request()
                 .get();
+        response.bufferEntity();
         Assert.assertEquals("text/csv;charset=UTF-8", response.getHeaderString(CONTENT_TYPE));
-        response.close();
-
     }
 
     @Test
@@ -81,8 +77,8 @@ public class SqlApiResponseHeadersTests extends SqlMethod {
                 .request()
                 .post(Entity.entity(form,
                         MediaType.APPLICATION_FORM_URLENCODED));
+        response.bufferEntity();
         Assert.assertEquals("application/json; charset=UTF-8", response.getHeaderString(CONTENT_TYPE));
-        response.close();
 
     }
 
