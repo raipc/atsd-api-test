@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * @author Igor Shmagrinskiy
  */
-public class SqlNullDataTypeTests extends SqlMethod {
+public class SqlNullDataTypeTest extends SqlMethod {
     private static final String TEST_PREFIX = "sql-data-type-null";
 
 

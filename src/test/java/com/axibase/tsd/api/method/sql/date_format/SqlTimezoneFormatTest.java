@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Igor Shmagrinskiy
  */
-public class SqlTimezoneFormatTests extends SqlTest {
+public class SqlTimezoneFormatTest extends SqlTest {
     private static final String TEST_PREFIX = "sql-date-format-timezone-";
 
 

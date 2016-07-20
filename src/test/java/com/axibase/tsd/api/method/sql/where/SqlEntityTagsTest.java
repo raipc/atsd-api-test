@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * @author Igor Shmagrinskiy
  */
-public class SqlEntityTags extends SqlTest {
+public class SqlEntityTagsTest extends SqlTest {
     private static final String TESTS_PREFIX = "sql-where-entity-tags-support-";
 
 

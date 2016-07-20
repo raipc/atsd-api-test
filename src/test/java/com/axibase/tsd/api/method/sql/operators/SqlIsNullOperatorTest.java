@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * @author Igor Shmagrinskiy
  */
-public class SqlIsNullOperator extends SqlTest {
+public class SqlIsNullOperatorTest extends SqlTest {
     private final static String TEST_PREFIX = "sql-operator-is-null-";
 
 

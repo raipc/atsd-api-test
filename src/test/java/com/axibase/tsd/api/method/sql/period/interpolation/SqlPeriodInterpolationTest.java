@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * @author Igor Shmagrinskiy
  */
-public class SqlPeriodInterpolationTests extends SqlMethod {
+public class SqlPeriodInterpolationTest extends SqlMethod {
     private static final String TEST_PREFIX = "sql-period-interpolation";
     private static final Set<String> DEFAULT_ROW_FILTER = new HashSet<>(Arrays.asList("datetime", "AVG(value)"));
 

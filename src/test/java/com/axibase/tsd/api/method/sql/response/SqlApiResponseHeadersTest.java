@@ -18,7 +18,7 @@ import java.util.Set;
 /**
  * @author Igor Shmagrinslkiy
  */
-public class SqlApiResponseHeadersTests extends SqlMethod {
+public class SqlApiResponseHeadersTest extends SqlMethod {
     private static final String TEST_PREFIX = "sql-response-headers";
     private static final String ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
     private static final String CONTENT_TYPE = "Content-type";

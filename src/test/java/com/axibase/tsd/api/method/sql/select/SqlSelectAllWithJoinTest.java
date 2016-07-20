@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Igor Shmagrinskiy
  */
-public class SqlSelectAllWithJoinTests extends SqlTest {
+public class SqlSelectAllWithJoinTest extends SqlTest {
     private static final String TEST_PREFIX = "sql-select-all-join-";
     private static final String TEST_METRIC1_NAME = TEST_PREFIX + "metric-1";
     private static final String TEST_METRIC2_NAME = TEST_PREFIX + "metric-2";

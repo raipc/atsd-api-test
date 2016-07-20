@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Igor Shmagrinskiy
  */
-public class SqlModuloTests extends SqlTest {
+public class SqlModuloTest extends SqlTest {
     private static final String TEST_PREFIX = "sql-modulo-";
     private static double EPS = 10e-4;
 

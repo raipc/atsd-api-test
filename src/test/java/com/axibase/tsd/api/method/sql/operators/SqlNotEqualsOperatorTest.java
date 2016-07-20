@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Igor Shmagrinskiy
  */
-public class SqlNotEqualsOperator extends SqlMethod {
+public class SqlNotEqualsOperatorTest extends SqlMethod {
     private static final String TEST_PREFIX = "sql-not-equals-syntax-";
 
 

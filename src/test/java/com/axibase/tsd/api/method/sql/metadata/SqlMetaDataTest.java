@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * @author Igor SHmagrinskiy
  */
-public class SqlMetaDataTests extends SqlMethod {
+public class SqlMetaDataTest extends SqlMethod {
     private static final String TEST_PREFIX = "sql-metadata";
     private static Series testSeries = new Series(TEST_PREFIX + "-entity", TEST_PREFIX + "-metric");
     private static StringTable resultTable;
