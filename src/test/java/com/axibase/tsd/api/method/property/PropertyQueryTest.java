@@ -1572,7 +1572,7 @@ public class PropertyQueryTest extends PropertyMethod {
 
         queryObj.put("entity", "query-entity57-b-limitentityo*");
         queryObj.put("limit", 1);
-        assertEquals("One property should be received", calculateJsonArraySize(formatToJsonString(getProperty(queryObj))));
+        assertEquals("One property should be received", 1, calculateJsonArraySize(formatToJsonString(getProperty(queryObj))));
     }
 
 
