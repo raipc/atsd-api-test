@@ -9,13 +9,6 @@ addons:
         - atsd.travis.com
 install: true
 script:
-    #- sleep 1
-    #- sudo hostname "$(hostname | cut -c1-63)"
-    #- sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
-    #- cat /etc/hosts # optionally check the content *after*
-    #- docker run -d -p 8088:8088 -p 8081:8081 --name="atsd-api-test" -e axiname="$travisLogin" -e axipass="$travisPassword" axibase/atsd:api_test
-    - docker run -d --name="atsd-api-test" -e axiname="$travisLogin" -e axipass="$travisPassword" axibase/atsd:api_test
-      #- docker inspect atsd-api-test
-      #- while ! curl atsd.travis.com:8088 >/dev/null 2>&1; do echo "waiting to start $name server ..."; sleep 3; done
+    - docker run -d --name="atsd-api-test" -e axiname="$travisLogin" -e axipass="$travisPassword" -e timezone="Asia/Kathmandu" axibase/atsd:api_test
     - while ! curl 172.17.0.2:8088 >/dev/null 2>&1; do echo "waiting to start $name server ..."; sleep 3; done
     - mvn clean test -Dmaven.test.failure.ignore=false -DserverName="172.17.0.2" -Dlogin=$travisLogin -Dpassword=$travisPassword -DloggerLevel=info
