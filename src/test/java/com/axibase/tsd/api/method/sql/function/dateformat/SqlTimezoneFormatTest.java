@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,7 +48,10 @@ public class SqlTimezoneFormatTest extends SqlTest {
 
         StringTable resultTable = executeQuery(sqlQuery).readEntity(StringTable.class);
 
-        List<String> expectedColumnValues = Collections.singletonList(formatISODAte("2016-06-03T09:23:00+0000", "yyyy-MM-dd'T'HH:mm:ssZ"));
+        List<String> expectedColumnValues = Collections.singletonList(
+                Util.formatDate(Util.parseDate("2016-06-03T09:23:00.000Z"), "yyyy-MM-dd'T'HH:mm:ssZ")
+        );
+
         assertTableContainsColumnValues(expectedColumnValues, resultTable, "f-date");
     }
 
@@ -66,7 +68,9 @@ public class SqlTimezoneFormatTest extends SqlTest {
 
         StringTable resultTable = executeQuery(sqlQuery).readEntity(StringTable.class);
 
-        List<String> expectedColumnValues = Collections.singletonList(formatISODAte("2016-06-03T09:23:00+0000", "yyyy-MM-dd'T'HH:mm:ss"));
+        List<String> expectedColumnValues = Collections.singletonList(
+                Util.formatDate(Util.parseDate("2016-06-03T09:23:00.000Z"), "yyyy-MM-dd'T'HH:mm:ss")
+        );
 
         assertTableContainsColumnValues(expectedColumnValues, resultTable, "f-date");
     }
@@ -125,15 +129,5 @@ public class SqlTimezoneFormatTest extends SqlTest {
         assertTableContainsColumnValues(expectedColumnValues, resultTable, "f-date");
     }
 
-    private static String formatISODAte(String date, String pattern) {
-        SimpleDateFormat format;
-        try {
-            format = new SimpleDateFormat(pattern);
-            format.setTimeZone(Util.getServerTimeZone());
-        } catch (JSONException e) {
-            throw new IllegalStateException("Failed to format date!");
-        }
 
-        return format.format(Util.parseDate(date));
-    }
 }

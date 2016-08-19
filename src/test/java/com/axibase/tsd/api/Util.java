@@ -43,7 +43,20 @@ public class Util {
 
     }
 
-    public static TimeZone getServerTimeZone() throws JSONException {
+
+    public static String formatDate(Date date, String pattern) {
+        SimpleDateFormat format;
+        try {
+            format = new SimpleDateFormat(pattern);
+            format.setTimeZone(Util.getServerTimeZone());
+        } catch (JSONException e) {
+            throw new IllegalStateException("Failed to format date!");
+        }
+
+        return format.format(date);
+    }
+
+    private static TimeZone getServerTimeZone() throws JSONException {
         Response response = BaseMethod.queryATSDVersion();
         JSONObject jsonObject = new JSONObject(response.readEntity(String.class));
         return TimeZone.getTimeZone(jsonObject

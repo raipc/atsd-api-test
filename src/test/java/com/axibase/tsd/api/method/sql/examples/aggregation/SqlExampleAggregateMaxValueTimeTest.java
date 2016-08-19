@@ -1,6 +1,7 @@
 package com.axibase.tsd.api.method.sql.examples.aggregation;
 
 import com.axibase.tsd.api.Registry;
+import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.method.series.SeriesMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
@@ -9,7 +10,6 @@ import com.axibase.tsd.api.model.sql.StringTable;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,8 +60,23 @@ public class SqlExampleAggregateMaxValueTimeTest extends SqlTest {
         StringTable resultTable = executeQuery(sqlQuery).readEntity(StringTable.class);
 
         List<List<String>> expectedRows = Arrays.asList(
-                Arrays.asList(TEST_ENTITY1_NAME, "2.0", "2016-06-17 19:16:02"),
-                Arrays.asList(TEST_ENTITY2_NAME, "4.0", "2016-06-17 19:16:04")
+                Arrays.asList(
+                        TEST_ENTITY1_NAME,
+                        "2.0",
+                        Util.formatDate(
+                                Util.parseDate("2016-06-17T19:16:02.000Z"),
+                                "yyyy-MM-dd HH:mm:ss"
+                        )
+                ),
+                Arrays.asList(
+                        TEST_ENTITY2_NAME,
+                        "4.0",
+                        Util.formatDate(
+                                Util.parseDate("2016-06-17T19:16:04.000Z"),
+                                "yyyy-MM-dd HH:mm:ss"
+                        )
+                )
+
         );
 
         assertTableRows(expectedRows, resultTable);
