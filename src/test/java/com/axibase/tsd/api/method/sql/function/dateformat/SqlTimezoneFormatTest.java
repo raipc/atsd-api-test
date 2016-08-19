@@ -1,10 +1,12 @@
 package com.axibase.tsd.api.method.sql.function.dateformat;
 
+import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.method.series.SeriesMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
+import org.json.JSONException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -37,7 +39,7 @@ public class SqlTimezoneFormatTest extends SqlTest {
      * issue #2904
      */
     @Test
-    public void testSimpleDateFormatWithZeroZone() {
+    public void testSimpleDateFormatWithZeroZone() throws JSONException {
         String sqlQuery = String.format(
                 "SELECT time, date_format(time, \"yyyy-MM-dd'T'HH:mm:ssZ\") AS 'f-date'" +
                         "FROM '%s' WHERE datetime = '2016-06-03T09:23:00.000Z'",
@@ -46,7 +48,9 @@ public class SqlTimezoneFormatTest extends SqlTest {
 
         StringTable resultTable = executeQuery(sqlQuery).readEntity(StringTable.class);
 
-        List<String> expectedColumnValues = Collections.singletonList("2016-06-03T09:23:00+0000");
+        List<String> expectedColumnValues = Collections.singletonList(
+                Util.formatDate(Util.parseDate("2016-06-03T09:23:00.000Z"), "yyyy-MM-dd'T'HH:mm:ssZ")
+        );
 
         assertTableContainsColumnValues(expectedColumnValues, resultTable, "f-date");
     }
@@ -64,7 +68,9 @@ public class SqlTimezoneFormatTest extends SqlTest {
 
         StringTable resultTable = executeQuery(sqlQuery).readEntity(StringTable.class);
 
-        List<String> expectedColumnValues = Collections.singletonList("2016-06-03T09:23:00");
+        List<String> expectedColumnValues = Collections.singletonList(
+                Util.formatDate(Util.parseDate("2016-06-03T09:23:00.000Z"), "yyyy-MM-dd'T'HH:mm:ss")
+        );
 
         assertTableContainsColumnValues(expectedColumnValues, resultTable, "f-date");
     }
@@ -122,4 +128,6 @@ public class SqlTimezoneFormatTest extends SqlTest {
 
         assertTableContainsColumnValues(expectedColumnValues, resultTable, "f-date");
     }
+
+
 }

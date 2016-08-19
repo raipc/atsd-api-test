@@ -1,9 +1,13 @@
 package com.axibase.tsd.api;
 
+import com.axibase.tsd.api.method.BaseMethod;
 import com.fasterxml.jackson.databind.util.ISO8601Utils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.core.Response;
 import java.lang.invoke.MethodHandles;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -37,6 +41,29 @@ public class Util {
     public static Date getPreviousDay() {
         return new Date(System.currentTimeMillis() - MILLIS_IN_DAY);
 
+    }
+
+
+    public static String formatDate(Date date, String pattern) {
+        SimpleDateFormat format;
+        try {
+            format = new SimpleDateFormat(pattern);
+            format.setTimeZone(Util.getServerTimeZone());
+        } catch (JSONException e) {
+            throw new IllegalStateException("Failed to format date!");
+        }
+
+        return format.format(date);
+    }
+
+    private static TimeZone getServerTimeZone() throws JSONException {
+        Response response = BaseMethod.queryATSDVersion();
+        JSONObject jsonObject = new JSONObject(response.readEntity(String.class));
+        return TimeZone.getTimeZone(jsonObject
+                .getJSONObject("date")
+                .getJSONObject("timeZone")
+                .getString("name")
+        );
     }
 
     public static Date getNextDay() {
