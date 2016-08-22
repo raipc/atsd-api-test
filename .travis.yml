@@ -4,9 +4,6 @@ jdk:
     - openjdk7
 services:
     - docker
-addons:
-    hosts:
-        - atsd.travis.com
 install: true
 script:
     - docker run -d --name="atsd-api-test" -e axiname="$travisLogin" -e axipass="$travisPassword" -e timezone="Asia/Kathmandu" axibase/atsd:api_test
