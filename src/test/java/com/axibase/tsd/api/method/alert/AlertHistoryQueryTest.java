@@ -59,7 +59,7 @@ public class AlertHistoryQueryTest extends AlertMethod {
     /**
      * #2979
      */
-    @Test
+    @Test(enabled = false)
     public void testEntitiesWildcardQuestionChar() throws Exception {
         final String entityName = "alert-historyquery-entity-3";
         Registry.Entity.register(entityName);
