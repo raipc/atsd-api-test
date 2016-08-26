@@ -17,7 +17,7 @@ public class AlertHistoryQueryTest extends AlertMethod {
     /**
      * #2991
      */
-    @Test
+    @Test(enabled = false)
     public void testEntityWildcardStarChar() throws Exception {
         final String entityName = "alert-historyquery-entity-1";
         Registry.Entity.register(entityName);
@@ -36,7 +36,7 @@ public class AlertHistoryQueryTest extends AlertMethod {
     /**
      * #2979
      */
-    @Test
+    @Test(enabled = false)
     public void testEntitiesWildcardStarChar() throws Exception {
         final String entityName = "alert-historyquery-entity-2";
         Registry.Entity.register(entityName);
@@ -55,7 +55,7 @@ public class AlertHistoryQueryTest extends AlertMethod {
     /**
      * #2979
      */
-    @Test
+    @Test(enabled = false)
     public void testEntitiesWildcardQuestionChar() throws Exception {
         final String entityName = "alert-historyquery-entity-3";
         Registry.Entity.register(entityName);
@@ -74,7 +74,7 @@ public class AlertHistoryQueryTest extends AlertMethod {
     /**
      * #2981
      */
-    @Test
+    @Test(enabled = false)
     public void testEntityExpressionFilterExist() throws Exception {
         final String entityName = "alert-history-query-entity-4";
         Registry.Entity.register(entityName);
