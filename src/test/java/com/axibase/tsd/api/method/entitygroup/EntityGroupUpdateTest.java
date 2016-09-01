@@ -40,8 +40,42 @@ public class EntityGroupUpdateTest extends EntityGroupMethod {
     public void testNameContainsCyrillic() throws Exception {
         EntityGroup entityGroup = new EntityGroup("urlencodeupdateйёentitygroup3");
         assertUrlEncodePathHandledCorrectly(entityGroup);
-
     }
+
+    /**
+     * #3301
+     */
+    @Test
+    public void testCanSetEmptyExpression() throws Exception {
+        EntityGroup entityGroup = new EntityGroup("update-entitygroup-4");
+        entityGroup.setExpression(SYNTAX_ALLOWED_ENTITYGROUP_EXPRESSION);
+        createOrReplaceEntityGroupCheck(entityGroup);
+
+        entityGroup.setExpression("");
+
+        assertEquals("Fail to execute updateEntityGroup query", OK.getStatusCode(), updateEntityGroup(entityGroup).getStatus());
+        assertTrue("Specified entityGroup does not exist", entityGroupExist(entityGroup));
+    }
+
+    /**
+     * #3301
+     */
+    @Test(enabled = false) //TODO wait for solution about tag matcher
+    public void testCanSetEmptyTags() throws Exception {
+        EntityGroup entityGroup = new EntityGroup("update-entitygroup-5");
+        entityGroup.addTag("tagName", "tagValue");
+        createOrReplaceEntityGroupCheck(entityGroup);
+
+        entityGroup.setTags(null);
+        entityGroup.addTag("*", "");
+
+        assertEquals("Fail to execute updateEntityGroup query", OK.getStatusCode(), updateEntityGroup(entityGroup).getStatus());
+
+        entityGroup.setTags(null);
+        assertTrue("Specified entityGroup should not have any tag", entityGroupExist(entityGroup));
+    }
+
+
 
     public void assertUrlEncodePathHandledCorrectly(final EntityGroup entityGroup) throws Exception {
         entityGroup.addTag("oldtag1", "oldtagvalue1");
