@@ -4,11 +4,10 @@ import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.method.BaseMethod;
 import com.axibase.tsd.api.method.compaction.CompactionMethod;
 import com.axibase.tsd.api.method.metric.MetricMethod;
+import com.axibase.tsd.api.model.Interval;
+import com.axibase.tsd.api.model.TimeUnit;
 import com.axibase.tsd.api.model.metric.Metric;
-import com.axibase.tsd.api.model.series.DataType;
-import com.axibase.tsd.api.model.series.Sample;
-import com.axibase.tsd.api.model.series.Series;
-import com.axibase.tsd.api.model.series.SeriesQuery;
+import com.axibase.tsd.api.model.series.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.testng.annotations.Test;
 
@@ -22,8 +21,8 @@ import static org.testng.AssertJUnit.*;
 
 
 public class SeriesInsertTest extends SeriesMethod {
-    public static final String EMPTY_TAG_ERROR = "IllegalArgumentException: Tag \"%s\" has empty value";
-    final String NEXT_AFTER_MAX_STORABLE_DATE = addOneMS(MAX_STORABLE_DATE);
+    private static final String EMPTY_TAG_ERROR = "IllegalArgumentException: Tag \"%s\" has empty value";
+    private final String NEXT_AFTER_MAX_STORABLE_DATE = addOneMS(MAX_STORABLE_DATE);
 
     /**
      * #2871
@@ -93,8 +92,7 @@ public class SeriesInsertTest extends SeriesMethod {
         assertTrue("Failed to insert small decimal series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), t, t + 1 + 11 * 5000);
-        seriesQuery.addAggregateType("SUM");
-        seriesQuery.setAggregatePeriod(1, "MINUTE");
+        seriesQuery.setAggregate(new Aggregate(AggregationType.SUM, new Interval(1, TimeUnit.MINUTE)));
         List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
         assertEquals("Stored small decimal value incorrect", new BigDecimal("7.2999999984"), seriesList.get(0).getData().get(0).getV());
     }
@@ -122,8 +120,7 @@ public class SeriesInsertTest extends SeriesMethod {
         assertTrue("Failed to insert small decimal series", insertSeries(series, 1000));
 
         SeriesQuery seriesQuery = new SeriesQuery(series.getEntity(), series.getMetric(), t, t + 1 + 11 * 5000);
-        seriesQuery.addAggregateType("SUM");
-        seriesQuery.setAggregatePeriod(1, "MINUTE");
+        seriesQuery.setAggregate(new Aggregate(AggregationType.SUM, new Interval(1, TimeUnit.MINUTE)));
 
         List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
         assertEquals("Stored small double value incorrect", new BigDecimal("7.299999998400001"), seriesList.get(0).getData().get(0).getV());
@@ -612,7 +609,7 @@ public class SeriesInsertTest extends SeriesMethod {
     @Test
     public void testEmptyTagValueRaisesError() throws Exception {
         Series series = new Series("e-empty-tag-1", "m-empty-tag-1");
-        series.addData(new Sample(1465502400000l, "1"));
+        series.addData(new Sample(1465502400000L, "1"));
         String emptyTagName = "empty-tag";
 
         series.addTag(emptyTagName, "");
@@ -630,7 +627,7 @@ public class SeriesInsertTest extends SeriesMethod {
     @Test
     public void testNullTagValueRaisesError() throws Exception {
         Series series = new Series("e-empty-tag-2", "m-empty-tag-2");
-        series.addData(new Sample(1465502400000l, "1"));
+        series.addData(new Sample(1465502400000L, "1"));
         String emptyTagName = "empty-tag";
 
         series.addTag(emptyTagName, null);
@@ -648,7 +645,7 @@ public class SeriesInsertTest extends SeriesMethod {
     @Test
     public void testNullTagValueWithNormalTagsRaisesError() throws Exception {
         Series series = new Series("e-empty-tag-3", "m-empty-tag-3");
-        series.addData(new Sample(1465502400000l, "1"));
+        series.addData(new Sample(1465502400000L, "1"));
         String emptyTagName = "empty-tag";
 
         series.addTag("nonempty-tag", "value");
@@ -667,7 +664,7 @@ public class SeriesInsertTest extends SeriesMethod {
     @Test
     public void testEmptyTagValueWithNormalTagsRaisesError() throws Exception {
         Series series = new Series("e-empty-tag-4", "m-empty-tag-4");
-        series.addData(new Sample(1465502400000l, "1"));
+        series.addData(new Sample(1465502400000L, "1"));
         String emptyTagName = "empty-tag";
 
         series.addTag("nonempty-tag", "value");
