@@ -91,10 +91,12 @@ public abstract class BaseMethod {
         logger.debug("===Comparing Json String===\nStrict: {}\nExpected:\n{}\nGiven:\n{}", strict, expected, given);
         try {
             JSONAssert.assertEquals(expected, given, strict ? JSONCompareMode.NON_EXTENSIBLE : JSONCompareMode.LENIENT);
+            logger.debug("===Json strings are equal===");
             return true;
         } catch (JSONException e) {
             throw new Exception("Can not deserialize response");
         } catch (AssertionError e) {
+            logger.debug("===Json strings are NOT equal===");
             return false;
         }
 
