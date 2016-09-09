@@ -511,7 +511,7 @@ public class SeriesQueryTest extends SeriesMethod {
         Response response = querySeries(query);
 
         assertEquals("Aggregate query without period should fail", BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("Error message mismatch", AGGREGATE_NON_DETAIL_REQUIRE_PERIOD, extractErrorMessage(response));
+        assertEquals("Error message mismatch", String.format(AGGREGATE_NON_DETAIL_REQUIRE_PERIOD, query.getAggregate().getType()), extractErrorMessage(response));
     }
 
 
