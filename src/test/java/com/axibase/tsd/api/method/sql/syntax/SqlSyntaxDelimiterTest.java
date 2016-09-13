@@ -47,7 +47,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
                 Arrays.asList(TEST_ENTITY_NAME, "2016-06-29T08:00:00.000Z", "0")
         );
 
-        assertTableRows(expectedRows, resultTable);
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -69,7 +69,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
         );
 
 
-        assertTableRows(expectedRows, resultTable);
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -91,7 +91,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
         );
 
 
-        assertTableRows(expectedRows, resultTable);
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -113,7 +113,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
         );
 
 
-        assertTableRows(expectedRows, resultTable);
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -135,7 +135,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
         );
 
 
-        assertTableRows(expectedRows, resultTable);
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
     /**
@@ -156,7 +156,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
         );
 
 
-        assertTableRows(expectedRows, resultTable);
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -212,7 +212,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
         );
 
 
-        assertTableRows(expectedRows, resultTable);
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -230,7 +230,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
 
         assertBadRequest("Query must return correct table",
                 response, "Syntax error at line 2 position 42: extraneous input ';123' " +
-                        "expecting {<EOF>, AND, OR, ORDER, GROUP, LIMIT, WITH}");
+                        "expecting {<EOF>, AND, OR, ORDER, GROUP, LIMIT, WITH, OPTION}");
     }
 
     /**

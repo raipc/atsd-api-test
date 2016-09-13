@@ -9,8 +9,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
-import java.util.List;
 
 public class SqlLimitParamTest extends SqlTest {
     private static final String TEST_PREFIX = "sql-response-limit-param-";
@@ -42,9 +40,11 @@ public class SqlLimitParamTest extends SqlTest {
 
         StringTable resultTable = response.readEntity(StringTable.class);
 
-        List<String> expectedColumn = Arrays.asList("0.0", "1.0", "2.0");
+        String[][] expectedRows = {
+                {"0.0"}, {"1.0"}, {"2.0"}
+        };
 
-        assertTableContainsColumnValues(expectedColumn, resultTable, "value");
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -62,9 +62,11 @@ public class SqlLimitParamTest extends SqlTest {
 
         StringTable resultTable = response.readEntity(StringTable.class);
 
-        List<String> expectedColumn = Arrays.asList("0.0", "1.0", "2.0");
+        String[][] expectedRows = {
+                {"0.0"}, {"1.0"}, {"2.0"}
+        };
 
-        assertTableContainsColumnValues(expectedColumn, resultTable, "value");
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
     /**
@@ -81,9 +83,13 @@ public class SqlLimitParamTest extends SqlTest {
 
         StringTable resultTable = response.readEntity(StringTable.class);
 
-        List<String> expectedColumn = Arrays.asList("0.0", "1.0", "2.0");
+        String[][] expectedRows = {
+                {"0.0"},
+                {"1.0"},
+                {"2.0"}
+        };
 
-        assertTableContainsColumnValues(expectedColumn, resultTable, "value");
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -101,9 +107,11 @@ public class SqlLimitParamTest extends SqlTest {
 
         StringTable resultTable = response.readEntity(StringTable.class);
 
-        List<String> expectedColumn = Arrays.asList("0.0", "1.0", "2.0", "3.0");
+        String[][] expectedRows = {
+                {"0.0"}, {"1.0"}, {"2.0"}, {"3.0"}
+        };
 
-        assertTableContainsColumnValues(expectedColumn, resultTable, "value");
+        assertTableRowsExist(expectedRows, resultTable, "value");
     }
 
 
@@ -121,9 +129,11 @@ public class SqlLimitParamTest extends SqlTest {
 
         StringTable resultTable = response.readEntity(StringTable.class);
 
-        List<String> expectedColumn = Arrays.asList("0.0", "1.0", "2.0");
+        String[][] expectedRows = {
+                {"0.0"}, {"1.0"}, {"2.0"}
+        };
 
-        assertTableContainsColumnValues(expectedColumn, resultTable, "value");
+        assertTableRowsExist(expectedRows, resultTable);
     }
 
 
@@ -141,8 +151,11 @@ public class SqlLimitParamTest extends SqlTest {
 
         StringTable resultTable = response.readEntity(StringTable.class);
 
-        List<String> expectedColumn = Arrays.asList("0.0", "1.0", "2.0", "3.0", "4.0");
 
-        assertTableContainsColumnValues(expectedColumn, resultTable, "value");
+        String[][] expectedRows = {
+                {"0.0"}, {"1.0"}, {"2.0"}, {"3.0"}, {"4.0"}
+        };
+
+        assertTableRowsExist(expectedRows, resultTable);
     }
 }
