@@ -11,9 +11,6 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @author Dmitry Korchagin.
- */
 public class Util {
 
     public static final Long MILLIS_IN_DAY = 1000 * 60 * 60 * 24L;
@@ -78,14 +75,6 @@ public class Util {
         return d;
     }
 
-    public static String generateStringFromChar(char c, int length) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            sb.append(c);
-        }
-        return sb.toString();
-    }
-
     public static String addOneMS(String date) {
         return ISOFormat(parseDate(date).getTime() + 1);
     }
@@ -107,5 +96,12 @@ public class Util {
         instance.setTime(parseDate(date));
         instance.add(Calendar.MINUTE, -offsetMinutes);
         return ISOFormat(instance.getTime());
+    }
+
+    public static StringBuilder appendChar(StringBuilder sb, char c, int count) {
+        for(int i = 0; i < count; i++) {
+            sb.append(c);
+        }
+        return sb;
     }
 }
