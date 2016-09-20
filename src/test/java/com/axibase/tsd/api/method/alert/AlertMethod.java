@@ -1,8 +1,8 @@
 package com.axibase.tsd.api.method.alert;
 
-import com.axibase.tsd.api.Util;
 import com.axibase.tsd.api.method.BaseMethod;
 import com.axibase.tsd.api.method.series.SeriesMethod;
+import com.axibase.tsd.api.method.version.VersionMethod;
 import com.axibase.tsd.api.model.alert.Alert;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
@@ -18,10 +18,12 @@ public class AlertMethod extends BaseMethod {
     private static final String METHOD_ALERTS_HISTORY_QUERY = "/alerts/history/query";
 
     public static <T> Response queryAlerts(T... queries) {
+        Entity<List<T>> json = Entity.json(Arrays.asList(queries));
+        System.out.println(json);
         Response response = httpApiResource
                 .path(METHOD_ALERTS_QUERY)
                 .request()
-                .post(Entity.json(Arrays.asList(queries)));
+                .post(json);
         response.bufferEntity();
         return response;
     }
@@ -73,8 +75,8 @@ public class AlertMethod extends BaseMethod {
         Series series = new Series();
         series.setEntity(entityName);
         series.setMetric(BaseMethod.RULE_METRIC_NAME);
-        series.addData(new Sample(Util.ISOFormat(new Date()), BaseMethod.ALERT_OPEN_VALUE));
-        SeriesMethod.insertSeriesCheck(series);
+        series.addData(new Sample(VersionMethod.queryVersionCheck().getDate().getCurrentDate(), BaseMethod.ALERT_OPEN_VALUE));
+        SeriesMethod.insertSeries(Collections.singletonList(series));
     }
 
 
