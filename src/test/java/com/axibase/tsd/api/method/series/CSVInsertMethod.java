@@ -35,7 +35,7 @@ public class CSVInsertMethod extends SeriesMethod {
     }
     public static Response csvInsert(String entity, String csv, Map<String, String> tags) throws InterruptedException {
         Response response = csvInsert(entity, csv, tags, null, null);
-        Thread.sleep(BaseMethod.REQUEST_INTERVAL);
+        Thread.sleep(BaseMethod.DEFAULT_EXPECTED_PROCESSING_TIME);
         return response;
     }
 

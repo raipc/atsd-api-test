@@ -28,7 +28,7 @@ public class EqualCharEscapeTest extends PropertyMethod {
         property.setDate(Util.getCurrentDate());
 
         String command = buildPropertyCommandFromProperty(property);
-        tcpSender.send(command, PROPERTY_EXPECTED_PROCESSING_TIME);
+        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
 
         property.setEntity(property.getEntity().replace("\"", ""));
         assertTrue("Inserted property can not be received", PropertyMethod.propertyExist(property));
@@ -44,7 +44,7 @@ public class EqualCharEscapeTest extends PropertyMethod {
         property.setDate(Util.getCurrentDate());
 
         String command = buildPropertyCommandFromProperty(property);
-        tcpSender.send(command, PROPERTY_EXPECTED_PROCESSING_TIME);
+        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
 
         property.setType(property.getType().replace("\"", ""));
         assertTrue("Inserted property can not be received", PropertyMethod.propertyExist(property));
