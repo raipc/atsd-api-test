@@ -38,7 +38,7 @@ public abstract class BaseMethod {
     public static final String MAX_STORABLE_DATE = "2106-02-07T06:59:59.999Z";
     public static final String ALERT_OPEN_VALUE = "1";
     public static final String ENTITY_TAGS_PROPERTY_TYPE = "$entity_tags";
-    private static final Integer SOCKET_READ_TIMEOUT = 120000;
+    private static final Integer TIMEOUT_INFINITY = 0;
 
 
     private static final Logger logger = LoggerFactory.getLogger(BaseMethod.class);
@@ -69,7 +69,8 @@ public abstract class BaseMethod {
             clientConfig.register(new LoggingFeature());
             clientConfig.register(HttpAuthenticationFeature.basic(config.getLogin(), config.getPassword()));
             clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, RequestConfig.custom()
-                    .setSocketTimeout(SOCKET_READ_TIMEOUT)
+                    .setSocketTimeout(TIMEOUT_INFINITY)
+                    .setConnectTimeout(TIMEOUT_INFINITY)
                     .build());
             httpRootResource = ClientBuilder.newClient(clientConfig).target(UriBuilder.fromPath("")
                     .scheme(config.getProtocol())
