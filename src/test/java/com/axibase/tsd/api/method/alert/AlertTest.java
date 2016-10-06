@@ -17,7 +17,7 @@ public class AlertTest extends AlertMethod {
         Registry.Metric.register(RULE_METRIC_NAME);
     }
 
-    public static void generateAlertForEntity(final String entityName) throws Exception {
+    public static synchronized void generateAlertForEntity(final String entityName) throws Exception {
         Series series = new Series();
         series.setEntity(entityName);
         series.setMetric(RULE_METRIC_NAME);
