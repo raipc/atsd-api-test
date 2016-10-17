@@ -1,13 +1,11 @@
 package com.axibase.tsd.api.method.series;
 
-import com.axibase.tsd.api.method.BaseMethod;
 import com.axibase.tsd.api.method.metric.MetricMethod;
 import com.axibase.tsd.api.model.Interval;
 import com.axibase.tsd.api.model.TimeUnit;
 import com.axibase.tsd.api.model.metric.Metric;
 import com.axibase.tsd.api.model.series.*;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
@@ -23,7 +21,6 @@ import static com.axibase.tsd.api.AtsdErrorMessage.AGGREGATE_NON_DETAIL_REQUIRE_
 import static com.axibase.tsd.api.AtsdErrorMessage.INTERPOLATE_TYPE_REQUIRED;
 import static com.axibase.tsd.api.Util.*;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.OK;
 import static org.testng.AssertJUnit.*;
 
 public class SeriesQueryTest extends SeriesMethod {
@@ -46,6 +43,7 @@ public class SeriesQueryTest extends SeriesMethod {
             fail("Can not store common dataset");
         }
     }
+
 
     /**
      * #2850
@@ -151,10 +149,9 @@ public class SeriesQueryTest extends SeriesMethod {
         String entityName = "e-query-range-14";
         String metricName = "m-query-range-14";
         BigDecimal v = new BigDecimal("7");
-        String d = MIN_STORABLE_DATE;
 
         Series series = new Series(entityName, metricName);
-        series.addData(new Sample(d, v));
+        series.addData(new Sample(MIN_STORABLE_DATE, v));
 
         insertSeriesCheck(Collections.singletonList(series));
 
@@ -172,10 +169,9 @@ public class SeriesQueryTest extends SeriesMethod {
         String entityName = "e-query-range-15";
         String metricName = "m-query-range-15";
         BigDecimal v = new BigDecimal("7");
-        String d = MIN_STORABLE_DATE;
 
         Series series = new Series(entityName, metricName);
-        series.addData(new Sample(d, v));
+        series.addData(new Sample(MIN_STORABLE_DATE, v));
 
         insertSeriesCheck(Collections.singletonList(series));
 
@@ -193,10 +189,9 @@ public class SeriesQueryTest extends SeriesMethod {
         String entityName = "e-query-range-16";
         String metricName = "m-query-range-16";
         BigDecimal v = new BigDecimal("7");
-        String d = MIN_STORABLE_DATE;
 
         Series series = new Series(entityName, metricName);
-        series.addData(new Sample(d, v));
+        series.addData(new Sample(MIN_STORABLE_DATE, v));
 
         insertSeriesCheck(Collections.singletonList(series));
 
@@ -216,10 +211,9 @@ public class SeriesQueryTest extends SeriesMethod {
         String entityName = "e-query-range-17";
         String metricName = "m-query-range-17";
         BigDecimal v = new BigDecimal("7");
-        String d = MIN_STORABLE_DATE;
 
         Series series = new Series(entityName, metricName);
-        series.addData(new Sample(d, v));
+        series.addData(new Sample(MIN_STORABLE_DATE, v));
 
         insertSeriesCheck(Collections.singletonList(series));
 
@@ -239,10 +233,9 @@ public class SeriesQueryTest extends SeriesMethod {
         String entityName = "e-query-range-18";
         String metricName = "m-query-range-18";
         BigDecimal v = new BigDecimal("7");
-        String d = MIN_STORABLE_DATE;
 
         Series series = new Series(entityName, metricName);
-        series.addData(new Sample(d, v));
+        series.addData(new Sample(MIN_STORABLE_DATE, v));
 
         insertSeriesCheck(Collections.singletonList(series));
 
@@ -515,12 +508,12 @@ public class SeriesQueryTest extends SeriesMethod {
         assertEquals("Error message mismatch", String.format(AGGREGATE_NON_DETAIL_REQUIRE_PERIOD, query.getAggregate().getType()), extractErrorMessage(response));
     }
 
-
     private void setRandomTimeDuringNextDay(Calendar calendar) {
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         calendar.set(Calendar.HOUR_OF_DAY, (int) (Math.random() * 24));
         calendar.set(Calendar.MINUTE, (int) (Math.random() * 60));
     }
+
 
     private SeriesQuery buildQuery() {
         SeriesQuery seriesQuery = new SeriesQuery();
