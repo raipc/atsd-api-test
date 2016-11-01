@@ -16,6 +16,7 @@ import java.util.Map;
 public class CSVInsertMethod extends SeriesMethod {
     protected static final String METHOD_CSV_INSERT = "/series/csv/{entity}";
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final long CSV_EXPECTED_PROCESSING_TIME = 2 * DEFAULT_EXPECTED_PROCESSING_TIME;
 
     public static Response csvInsert(String entity, String csv, Map<String, String> tags, String user, String password) {
         WebTarget webTarget = httpApiResource.path(METHOD_CSV_INSERT).resolveTemplate("entity", entity);
@@ -32,9 +33,10 @@ public class CSVInsertMethod extends SeriesMethod {
         response.bufferEntity();
         return response;
     }
+
     public static Response csvInsert(String entity, String csv, Map<String, String> tags) throws InterruptedException {
         Response response = csvInsert(entity, csv, tags, null, null);
-        Thread.sleep(DEFAULT_EXPECTED_PROCESSING_TIME);
+        Thread.sleep(CSV_EXPECTED_PROCESSING_TIME);
         return response;
     }
 
