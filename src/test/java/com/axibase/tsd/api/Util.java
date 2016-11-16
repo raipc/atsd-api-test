@@ -104,13 +104,6 @@ public class Util {
         return list;
     }
 
-    public static String transformDateToServerTimeZone(String date, int offsetMinutes) {
-        Calendar instance = Calendar.getInstance();
-        instance.setTime(parseDate(date));
-        instance.add(Calendar.MINUTE, -offsetMinutes);
-        return ISOFormat(instance.getTime());
-    }
-
     public static StringBuilder appendChar(StringBuilder sb, char c, int count) {
         for (int i = 0; i < count; i++) {
             sb.append(c);
