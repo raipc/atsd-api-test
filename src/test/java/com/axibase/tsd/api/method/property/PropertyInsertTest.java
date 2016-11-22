@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.axibase.tsd.api.util.ErrorTemplate.DATE_FILTER_INVALID_FORMAT;
+import static com.axibase.tsd.api.util.Mocks.MAX_STORABLE_DATE;
+import static com.axibase.tsd.api.util.Mocks.MIN_STORABLE_DATE;
 import static com.axibase.tsd.api.util.Util.addOneMS;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -152,7 +154,6 @@ public class PropertyInsertTest extends PropertyMethod {
         property.setDate(MIN_STORABLE_DATE);
 
         Response response = insertProperty(property);
-        Thread.sleep(DEFAULT_EXPECTED_PROCESSING_TIME);
         assertEquals("Failed to insert property", response.getStatus(), OK.getStatusCode());
 
         assertTrue(propertyExist(property));

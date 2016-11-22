@@ -1,11 +1,14 @@
 package com.axibase.tsd.api.method.message.command;
 
-import com.axibase.tsd.api.util.Util;
+import com.axibase.tsd.api.method.extended.CommandMethod;
 import com.axibase.tsd.api.method.message.MessageMethod;
+import com.axibase.tsd.api.model.command.MessageCommand;
+import com.axibase.tsd.api.model.command.PlainCommand;
 import com.axibase.tsd.api.model.message.Message;
+import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.Test;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static com.axibase.tsd.api.method.message.MessageTest.assertMessageExisting;
 
 public class EqualCharEscapeTest extends MessageMethod {
 
@@ -18,10 +21,9 @@ public class EqualCharEscapeTest extends MessageMethod {
         message.setMessage("message4");
         message.setDate(Util.getCurrentDate());
 
-        String command = buildMessageCommandFromMessage(message);
-        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
-
-        assertTrue("Inserted message can not be received", MessageMethod.messageExist(message));
+        PlainCommand command = new MessageCommand(message);
+        CommandMethod.send(command);
+        assertMessageExisting("Inserted message can not be received", message);
     }
 
     /**
@@ -33,10 +35,9 @@ public class EqualCharEscapeTest extends MessageMethod {
         message.setMessage("message5");
         message.setDate(Util.getCurrentDate());
 
-        String command = buildMessageCommandFromMessage(message);
-        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
-
-        assertTrue("Inserted message can not be received", MessageMethod.messageExist(message));
+        PlainCommand command = new MessageCommand(message);
+        CommandMethod.send(command);
+        assertMessageExisting("Inserted message can not be received", message);
     }
 
     /**
@@ -48,10 +49,9 @@ public class EqualCharEscapeTest extends MessageMethod {
         message.setMessage("mess=age6");
         message.setDate(Util.getCurrentDate());
 
-        String command = buildMessageCommandFromMessage(message);
-        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
-
-        assertTrue("Inserted message can not be received", MessageMethod.messageExist(message));
+        PlainCommand command = new MessageCommand(message);
+        CommandMethod.send(command);
+        assertMessageExisting("Inserted message can not be received", message);
     }
 
 }

@@ -1,10 +1,14 @@
 package com.axibase.tsd.api.method.message;
 
-import com.axibase.tsd.api.util.Util;
+import com.axibase.tsd.api.Checker;
 import com.axibase.tsd.api.method.BaseMethod;
+import com.axibase.tsd.api.method.checks.AbstractCheck;
+import com.axibase.tsd.api.method.checks.MessageCheck;
 import com.axibase.tsd.api.model.message.Message;
 import com.axibase.tsd.api.model.message.MessageQuery;
 import com.axibase.tsd.api.model.series.Series;
+import com.axibase.tsd.api.util.Util;
+import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,11 +54,11 @@ public class MessageMethod extends BaseMethod {
         return response;
     }
 
-    public static Boolean insertMessage(final Message message, long sleepDuration) throws Exception {
-        return insertMessage(Collections.singletonList(message), sleepDuration);
+    public static Boolean insertMessage(final Message message) throws Exception {
+        return insertMessage(Collections.singletonList(message));
     }
 
-    public static Boolean insertMessage(List<Message> messageList, long sleepDuration) throws Exception {
+    public static Boolean insertMessage(List<Message> messageList) throws Exception {
         Response response = httpApiResource.path(METHOD_MESSAGE_INSERT).request().post(Entity.json(messageList));
         response.bufferEntity();
         if (OK.getStatusCode() == response.getStatus()) {
@@ -62,26 +66,23 @@ public class MessageMethod extends BaseMethod {
         } else {
             logger.error("Fail to insert message");
         }
-        Thread.sleep(sleepDuration); //give ATSD a few time to handle message
         return OK.getStatusCode() == response.getStatus();
-    }
-
-    public static Boolean insertMessage(final Message message) throws Exception {
-        return insertMessage(message, 0);
     }
 
     public static boolean messageExist(final Message message) throws Exception {
         MessageQuery query = new MessageQuery();
         query.setEntity(message.getEntity());
         query.setType(message.getType());
-        query.setStartDate(message.getDate());
-        query.setEndDate(Util.addOneMS(message.getDate()));
+        if (message.getDate() != null) {
+            query.setStartDate(message.getDate());
+            query.setEndDate(Util.addOneMS(message.getDate()));
+        }
         query.setSeverity(message.getSeverity());
         query.setSource(message.getSource());
 
-        Response response = queryMessage(query);
+        Response response = queryMessageResponse(query);
         if (response.getStatus() != OK.getStatusCode() && response.getStatus() != NOT_FOUND.getStatusCode()) {
-            throw new IllegalStateException("Fail to execute queryMessage request: " + response.readEntity(String.class));
+            throw new IllegalStateException("Fail to execute queryMessageResponse request: " + response.readEntity(String.class));
         }
 
         final String expected = jacksonMapper.writeValueAsString(Collections.singletonList(message));
@@ -90,27 +91,30 @@ public class MessageMethod extends BaseMethod {
     }
 
 
-    public static void insertMessageCheck(final Message message) throws Exception {
+    public static void insertMessageCheck(final Message message, AbstractCheck check) throws Exception {
         Response response = insertMessageReturnResponse(message);
         response.bufferEntity();
         if (OK.getStatusCode() != response.getStatus()) {
             throw new IllegalStateException(response.readEntity(String.class));
         }
-        response.bufferEntity();
-
-        final long startCheckTimeMillis = System.currentTimeMillis();
-        do {
-            if ((messageExist(message))) {
-                return;
-            }
-            Thread.sleep(BaseMethod.REQUEST_INTERVAL);
-        } while (System.currentTimeMillis() <= startCheckTimeMillis + BaseMethod.UPPER_BOUND_FOR_CHECK);
-        if (!messageExist(message)) {
-            throw new Exception("Fail to check inserted messages");
-        }
+        Checker.check(check);
     }
 
-    public static <T> Response queryMessage(T... messageQuery) {
+    public static void insertMessageCheck(final Message message) throws Exception {
+        insertMessageCheck(message, new MessageCheck(message));
+    }
+
+    public static List<Message> queryMessage(List<MessageQuery> queries) {
+        return queryMessageResponse(queries).readEntity(new GenericType<List<Message>>() {
+        });
+    }
+
+    public static List<Message> queryMessage(MessageQuery... queries) {
+        return queryMessageResponse(queries).readEntity(new GenericType<List<Message>>() {
+        });
+    }
+
+    public static <T> Response queryMessageResponse(T... messageQuery) {
         Entity<T[]> json = Entity.json(messageQuery);
         Response response = httpApiResource.path(METHOD_MESSAGE_QUERY).request().post(json);
         response.bufferEntity();

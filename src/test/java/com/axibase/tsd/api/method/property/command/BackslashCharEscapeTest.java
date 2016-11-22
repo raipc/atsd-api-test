@@ -1,14 +1,17 @@
 package com.axibase.tsd.api.method.property.command;
 
-import com.axibase.tsd.api.util.Util;
+import com.axibase.tsd.api.method.extended.CommandMethod;
 import com.axibase.tsd.api.method.property.PropertyMethod;
+import com.axibase.tsd.api.model.command.PlainCommand;
+import com.axibase.tsd.api.model.command.PropertyCommand;
 import com.axibase.tsd.api.model.property.Property;
+import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static com.axibase.tsd.api.method.property.PropertyTest.assertPropertyExisting;
 
 public class BackslashCharEscapeTest extends PropertyMethod {
     private final static Map DEFAULT_PROPERTY_TAGS;
@@ -26,11 +29,9 @@ public class BackslashCharEscapeTest extends PropertyMethod {
         Property property = new Property("property-command-test-t6", "property-command-test\\-e6");
         property.setTags(DEFAULT_PROPERTY_TAGS);
         property.setDate(Util.getCurrentDate());
-
-        String command = buildPropertyCommandFromProperty(property);
-        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
-
-        assertTrue("Inserted property can not be received", PropertyMethod.propertyExist(property));
+        PlainCommand command = new PropertyCommand(property);
+        CommandMethod.send(command);
+        assertPropertyExisting("Inserted property can not be received", property);
     }
 
     /**
@@ -41,10 +42,9 @@ public class BackslashCharEscapeTest extends PropertyMethod {
         Property property = new Property("property-command-test\\-t5", "property-command-test-e5");
         property.setTags(DEFAULT_PROPERTY_TAGS);
         property.setDate(Util.getCurrentDate());
+        PlainCommand command = new PropertyCommand(property);
+        CommandMethod.send(command);
+        assertPropertyExisting("Inserted property can not be received", property);
 
-        String command = buildPropertyCommandFromProperty(property);
-        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
-
-        assertTrue("Inserted property can not be received", PropertyMethod.propertyExist(property));
     }
 }

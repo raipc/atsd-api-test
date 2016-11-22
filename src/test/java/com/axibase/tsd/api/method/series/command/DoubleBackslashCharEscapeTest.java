@@ -1,18 +1,18 @@
 package com.axibase.tsd.api.method.series.command;
 
-import com.axibase.tsd.api.util.Util;
-import com.axibase.tsd.api.method.series.SeriesMethod;
+import com.axibase.tsd.api.method.extended.CommandMethod;
+import com.axibase.tsd.api.method.series.SeriesTest;
+import com.axibase.tsd.api.model.command.SeriesCommand;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
+import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.Test;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.testng.AssertJUnit.assertTrue;
-
-public class DoubleBackslashCharEscapeTest extends SeriesMethod {
+public class DoubleBackslashCharEscapeTest extends SeriesTest {
     private final static Map DEFAULT_PROPERTY_TAGS;
 
     static {
@@ -29,10 +29,13 @@ public class DoubleBackslashCharEscapeTest extends SeriesMethod {
         Sample sample = new Sample(Util.getCurrentDate(), "1");
         series.addData(sample);
 
-        String command = buildSeriesCommandFromSeriesAndSample(series, sample);
-        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
+        SeriesCommand seriesCommand = new SeriesCommand();
+        seriesCommand.setTimeISO(sample.getD());
+        seriesCommand.setEntityName(series.getEntity());
+        seriesCommand.setValues(Collections.singletonMap(series.getMetric(), sample.getV().toString()));
 
-        assertTrue("Inserted series can not be received", SeriesMethod.seriesListIsInserted(Collections.singletonList(series)));
+        CommandMethod.send(seriesCommand);
+        assertSeriesExisting(series);
     }
 
     /**
@@ -44,9 +47,12 @@ public class DoubleBackslashCharEscapeTest extends SeriesMethod {
         Sample sample = new Sample(Util.getCurrentDate(), "1");
         series.addData(sample);
 
-        String command = buildSeriesCommandFromSeriesAndSample(series, sample);
-        tcpSender.send(command, DEFAULT_EXPECTED_PROCESSING_TIME);
+        SeriesCommand seriesCommand = new SeriesCommand();
+        seriesCommand.setTimeISO(sample.getD());
+        seriesCommand.setEntityName(series.getEntity());
+        seriesCommand.setValues(Collections.singletonMap(series.getMetric(), sample.getV().toString()));
 
-        assertTrue("Inserted series can not be received", SeriesMethod.seriesListIsInserted(Collections.singletonList(series)));
+        CommandMethod.send(seriesCommand);
+        assertSeriesExisting(series);
     }
 }

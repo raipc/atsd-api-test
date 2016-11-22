@@ -1,5 +1,6 @@
 package com.axibase.tsd.api.method.entity;
 
+import com.axibase.tsd.api.method.checks.SeriesCheck;
 import com.axibase.tsd.api.method.series.SeriesMethod;
 import com.axibase.tsd.api.model.entity.Entity;
 import com.axibase.tsd.api.model.series.Sample;
@@ -13,10 +14,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import static com.axibase.tsd.api.util.CommonAssertions.assertErrorMessageStart;
 import static com.axibase.tsd.api.util.ErrorTemplate.TAG_VALUE_ARRAY_PREFIX;
 import static com.axibase.tsd.api.util.ErrorTemplate.UNKNOWN_ENTITY_FIELD_PREFIX;
+import static com.axibase.tsd.api.util.Mocks.MIN_STORABLE_DATE;
 import static javax.ws.rs.core.Response.Status.*;
 import static org.testng.Assert.fail;
 import static org.testng.AssertJUnit.assertEquals;
@@ -311,7 +312,7 @@ public class EntityCreateOrReplaceTest extends EntityMethod {
         entity.setName(series.getEntity());
         createOrReplaceEntityCheck(entity);
 
-        assertTrue("Inserted Series should remain", SeriesMethod.seriesListIsInserted(Collections.singletonList(series)));
+        assertTrue("Inserted Series should remain", new SeriesCheck(Collections.singletonList(series)).isChecked());
     }
 
 
