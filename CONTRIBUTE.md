@@ -11,7 +11,8 @@ To contribute to this project you must obey the following rules:
         3. run all tests on clear latest ATSD installation
     2. After your have received a `change request` submit a new single commit corresponding to requested changes 
     with a commit message `code review #number` where `number` is corresponding to a code review commit order.
-    3. After your commit has been approved rebase your remote branch on actual master with a force push. 
+    3. After your commit has been approved rebase your remote branch on actual master with a force push.
+    4. If tests fail because of some unfixed ATSD bugs mark pull request with label `pending`, add message with issue numbers related to bugs and wait until all unfixed bugs will be fixed.
 
 
 #### code style
