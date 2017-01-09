@@ -2,26 +2,30 @@ package com.axibase.tsd.api.method.alert;
 
 import com.axibase.tsd.api.Checker;
 import com.axibase.tsd.api.method.checks.AlertHistorySizeQueryCheck;
+import com.axibase.tsd.api.method.metric.MetricMethod;
 import com.axibase.tsd.api.model.alert.Alert;
 import com.axibase.tsd.api.model.alert.AlertHistoryQuery;
+import com.axibase.tsd.api.model.metric.Metric;
 import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 
 import static com.axibase.tsd.api.util.Mocks.MAX_QUERYABLE_DATE;
 import static com.axibase.tsd.api.util.Mocks.MIN_QUERYABLE_DATE;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
 
-@Test(enabled = false)
+@Test
 public class AlertHistoryQueryTest extends AlertTest {
     private final static String ALERTHISTORY_ENTITY_NAME = "alert-historyquery-entity-1";
 
-    @BeforeClass
+    @BeforeClass(enabled = false)
     public void generateAlertHistory() throws Exception {
         Registry.Entity.register(ALERTHISTORY_ENTITY_NAME);
         generateAlertForEntity(ALERTHISTORY_ENTITY_NAME);
@@ -60,7 +64,7 @@ public class AlertHistoryQueryTest extends AlertTest {
                 "Query response must contain at least one alert. Query %s",
                 query
         );
-        assertTrue(alertList.size() > 0, assertMessage);
+        assertTrue(assertMessage, alertList.size() > 0);
     }
 
     /**
@@ -71,7 +75,46 @@ public class AlertHistoryQueryTest extends AlertTest {
         AlertHistoryQuery qExist = templateQuery().setEntity("alert-historyquery-entity-1");
         AlertHistoryQuery qUnknown = templateQuery().setEntity("UNKNOWN");
         List<Alert> resultList = AlertMethod.queryHistory(qExist, qUnknown);
-        assertEquals(resultList.size(), 2, "Fail to get alert history by queries with unknown entity");
-        assertEquals("ENTITY not found for name: 'unknown'", resultList.get(1).getWarning(), "Unexpected warning message");
+        assertEquals("Fail to get alert history by queries with unknown entity", 2, resultList.size());
+        assertEquals("Unexpected warning message", "ENTITY not found for name: 'unknown'", resultList.get(1).getWarning());
     }
+
+    @DataProvider(name = "rawJsonWithNullsProvider")
+    public Object[][] provideRawJsonWithNulls() {
+
+        return new String[][] {
+            {"[\n" +
+             "  {\n" +
+             "    \"entity\": \"*\",\n" +
+             "    \"entities\": null,\n" +
+             "    \"entityExpression\": null,\n" +
+             "    \"entityGroup\": null,\n" +
+             "    \"rule\": null,\n" +
+             "    \"metric\": \"m-should-be-empty\",\n" +
+             "    \"startDate\": \"1000-01-01T00:00:00.000Z\",\n" +
+             "    \"endDate\": \"9999-12-31T23:59:59.999Z\",\n" +
+             "    \"interval\": null,\n" +
+             "    \"limit\": null\n" +
+             "  }\n" +
+             "]"}
+        };
+    }
+
+    @BeforeClass
+    public void createEmptyMetric() throws Exception {
+        MetricMethod.createOrReplaceMetricCheck(new Metric("m-should-be-empty"));
+    }
+
+    /**
+     * #3640
+     */
+    @Test(dataProvider = "rawJsonWithNullsProvider")
+    public void testQueryWithNullFieldsSuccess(String json) throws Exception {
+        Response resp = AlertMethod.queryHistoryResponseRawJSON(json);
+        assertEquals("Bad request status code\n" + json,
+                Response.Status.Family.SUCCESSFUL, resp.getStatusInfo().getFamily());
+        assertTrue("Responded alert collection should be empty",
+                resp.readEntity(new GenericType<List<Alert>>(){}).isEmpty());
+    }
+
 }
