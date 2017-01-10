@@ -5,12 +5,12 @@ import com.axibase.tsd.api.model.Interval;
 import com.axibase.tsd.api.model.TimeUnit;
 import com.axibase.tsd.api.model.metric.Metric;
 import com.axibase.tsd.api.model.series.*;
+import com.axibase.tsd.api.util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Response;
@@ -27,7 +27,6 @@ import static org.testng.AssertJUnit.*;
 public class SeriesQueryTest extends SeriesMethod {
     private static final String sampleDate = "2016-07-01T14:23:20.000Z";
     private static final Series series;
-    private static final Logger logger = LoggerFactory.getLogger(SeriesQueryTest.class);
 
     static {
         series = new Series("series-query-e-1", "series-query-m-1");
@@ -508,6 +507,50 @@ public class SeriesQueryTest extends SeriesMethod {
 
         assertEquals("Aggregate query without period should fail", BAD_REQUEST.getStatusCode(), response.getStatus());
         assertEquals("Error message mismatch", String.format(AGGREGATE_NON_DETAIL_REQUIRE_PERIOD, query.getAggregate().getType()), extractErrorMessage(response));
+    }
+
+    @DataProvider(name = "dataTextProvider")
+    Object[][] provideDataText() {
+        return new Object[][]{
+                {"hello"},
+                {"HelLo"},
+                {"Hello World"},
+                {"spaces      \t\t\t afeqf everywhere"},
+                {"Кириллица"},
+                {"猫"},
+                {"Multi\nline"},
+                {null},
+                {"null"},
+                {"\"null\""},
+                {"true"},
+                {"\"true\""},
+                {"11"},
+                {"0"},
+                {"0.1"},
+                {"\"0.1\""},
+                {"\"+0.1\""},
+                {""}
+        };
+    }
+
+    /**
+     * #3480
+     **/
+    @Test(dataProvider = "dataTextProvider")
+    public void testXTextField(String text) throws Exception {
+        String entityName = Util.TestNames.entity();
+        String metricName = Util.TestNames.metric();
+
+        String largeNumber = "10.1";
+        Series series = new Series(entityName, metricName);
+        Sample sample = new Sample(MIN_STORABLE_DATE, new BigDecimal(largeNumber), text);
+        series.addData(sample);
+        insertSeriesCheck(Collections.singletonList(series));
+
+        SeriesQuery seriesQuery = new SeriesQuery(series);
+        List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
+
+        assertEquals("Stored series are incorrect", Collections.singletonList(series), seriesList);
     }
 
     private void setRandomTimeDuringNextDay(Calendar calendar) {

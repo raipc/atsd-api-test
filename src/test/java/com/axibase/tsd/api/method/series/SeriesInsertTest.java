@@ -1,6 +1,7 @@
 package com.axibase.tsd.api.method.series;
 
-
+import com.axibase.tsd.api.Checker;
+import com.axibase.tsd.api.method.checks.SeriesCheck;
 import com.axibase.tsd.api.method.compaction.CompactionMethod;
 import com.axibase.tsd.api.method.metric.MetricMethod;
 import com.axibase.tsd.api.model.Interval;
@@ -8,6 +9,7 @@ import com.axibase.tsd.api.model.TimeUnit;
 import com.axibase.tsd.api.model.metric.Metric;
 import com.axibase.tsd.api.model.series.*;
 import com.axibase.tsd.api.util.Mocks;
+import com.axibase.tsd.api.util.Registry;
 import com.axibase.tsd.api.util.Util;
 import com.axibase.tsd.api.util.Util.TestNames;
 import org.testng.annotations.DataProvider;
@@ -663,6 +665,155 @@ public class SeriesInsertTest extends SeriesTest {
         Series series = new Series("nulltag-entity-1", "nulltag-metric-1");
         series.addData(new Sample(1, "1"));
         series.addTag("t1", null);
-        assertEquals("Null in tag value should fail the query", BAD_REQUEST.getStatusCode(), insertSeries(Collections.singletonList(series)).getStatus());
+
+        Response response = insertSeries(Collections.singletonList(series));
+
+        assertEquals("Null in tag value should fail the query", BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @DataProvider(name = "dataTextProvider")
+    public Object[][] provideDataText() {
+        return new Object[][]{
+                {"hello"},
+                {"HelLo"},
+                {"Hello World"},
+                {"spaces      \t\t\t afeqf everywhere"},
+                {"Кириллица"},
+                {"猫"},
+                {"Multi\nline"},
+                {null},
+                {"null"},
+                {"\"null\""},
+                {"true"},
+                {"\"true\""},
+                {"11"},
+                {"0"},
+                {"0.1"},
+                {"\"0.1\""},
+                {"\"+0.1\""},
+                {""}
+        };
+    }
+
+    /**
+     * #3480
+     **/
+    @Test(dataProvider = "dataTextProvider")
+    public void testXTextField(String text) throws Exception {
+        String entityName = Util.TestNames.entity();
+        String metricName = Util.TestNames.metric();
+
+        Series series = new Series(entityName, metricName);
+        Sample sample = new Sample("2016-10-11T13:00:00.000Z", new BigDecimal(1.0), text);
+        series.addData(sample);
+
+        insertSeriesCheck(Collections.singletonList(series));
+        SeriesQuery seriesQuery = new SeriesQuery(series);
+        List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
+
+        assertEquals("Stored series are incorrect", Collections.singletonList(series), seriesList);
+    }
+
+    /**
+     * #3480
+     **/
+    @Test
+    public void testXTextFieldInsertedTwice() throws Exception {
+        String entityName = "e-text-twice-1";
+        String metricName = "m-text-twice-1";
+
+        Series series = new Series(entityName, metricName);
+
+        String[] data = new String[]{"1", "2"};
+        for (String x : data) {
+            Sample sample = new Sample("2016-10-11T13:00:00.000Z", new BigDecimal(1.0), x);
+            series.setData(Collections.singleton(sample));
+            insertSeriesCheck(Collections.singletonList(series));
+        }
+
+        SeriesQuery seriesQuery = new SeriesQuery(series);
+        List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
+
+        Series lastInsertedSeries = series;
+        assertEquals("Stored series are incorrect", Collections.singletonList(lastInsertedSeries), seriesList);
+    }
+
+    /**
+     * #3480
+     **/
+    @Test
+    public void testXTextFieldInsertedTwiceWithVersioning() throws Exception {
+
+        String metricName = "m-text-twice-versioning-1";
+        Metric metric = new Metric(metricName);
+        metric.setVersioned(true);
+        MetricMethod.createOrReplaceMetricCheck(metric);
+
+        Series series = new Series();
+        series.setMetric(metricName);
+        String entityName = "e-text-twice-versioning-1";
+        Registry.Entity.register(entityName);
+        series.setEntity(entityName);
+
+        String[] data = new String[]{"1", "2"};
+        for (String x : data) {
+            Sample sample = new Sample("2016-10-11T13:00:00.000Z", new BigDecimal(1.0), x);
+            series.setData(Collections.singleton(sample));
+            insertSeriesCheck(Collections.singletonList(series));
+        }
+
+        SeriesQuery seriesQuery = new SeriesQuery(series);
+        List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
+
+        Series lastInsertedSeries = series;
+        assertEquals("Stored series are incorrect", Collections.singletonList(lastInsertedSeries), seriesList);
+    }
+
+    /**
+     * #3480
+     **/
+    @Test
+    public void testXTextFieldPreservedFromTagsModifications() throws Exception {
+        String entityName = "e-text-modify-tags-1";
+        String metricName = "m-text-modify-tags-1";
+
+        Series series = new Series(entityName, metricName);
+        String xText = "text";
+        Sample sample = new Sample("2016-10-11T13:00:00.000Z", new BigDecimal(1.0), xText);
+        series.addData(sample);
+        insertSeriesCheck(Collections.singletonList(series));
+
+        series.addTag("foo", "foo");
+        SeriesQuery seriesQuery = new SeriesQuery(series);
+        insertSeriesCheck(Collections.singletonList(series));
+
+        List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
+
+        assertEquals("Stored series are incorrect", Collections.singletonList(series), seriesList);
+        assertEquals("Tag was not modified", "foo", seriesList.get(0).getTags().get("foo"));
+    }
+
+    /**
+     * #3480
+     **/
+    @Test
+    public void testXTextFieldExplicitNull() throws Exception {
+        String entityName = "e-series-insert-text-null-1";
+        String metricName = "m-series-insert-text-null-1";
+        Series series = new Series(entityName, metricName);
+        Sample sample = new Sample("2016-10-11T13:00:00.000Z", new BigDecimal(1.0));
+        series.addData(sample);
+
+        String commandJsonFormat = "[{'entity':'%s','metric':'%s','data':[{'d':'%s','v':%s,'x':null}]}]";
+        commandJsonFormat = commandJsonFormat.replace('\'', '"');
+        String json = String.format(commandJsonFormat, series.getEntity(), series.getMetric(),
+                sample.getD(), sample.getV());
+        Response response = insertSeries(json);
+        assertEquals("Bad insertion request status code", OK.getStatusCode(), response.getStatus());
+        Checker.check(new SeriesCheck(Collections.singletonList(series)));
+
+        SeriesQuery seriesQuery = new SeriesQuery(series);
+        List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
+        assertEquals("Stored series are incorrect", Collections.singletonList(series), seriesList);
     }
 }
