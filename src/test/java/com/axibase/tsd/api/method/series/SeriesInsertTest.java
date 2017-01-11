@@ -17,6 +17,8 @@ import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -718,9 +720,9 @@ public class SeriesInsertTest extends SeriesTest {
      * #3480
      **/
     @Test
-    public void testXTextFieldInsertedTwice() throws Exception {
-        String entityName = "e-text-twice-1";
-        String metricName = "m-text-twice-1";
+    public void testXTextFieldOverwritten() throws Exception {
+        String entityName = "e-text-overwritten-1";
+        String metricName = "m-text-overwritten-1";
 
         Series series = new Series(entityName, metricName);
 
@@ -739,34 +741,38 @@ public class SeriesInsertTest extends SeriesTest {
     }
 
     /**
-     * #3480
+     * #3740
      **/
     @Test
-    public void testXTextFieldInsertedTwiceWithVersioning() throws Exception {
-
-        String metricName = "m-text-twice-versioning-1";
+    public void testXTextFieldVersioned() throws Exception {
+        String metricName = "m-text-versioning-2";
         Metric metric = new Metric(metricName);
         metric.setVersioned(true);
         MetricMethod.createOrReplaceMetricCheck(metric);
 
         Series series = new Series();
         series.setMetric(metricName);
-        String entityName = "e-text-twice-versioning-1";
+        String entityName = "e-text-versioning-2";
         Registry.Entity.register(entityName);
         series.setEntity(entityName);
 
-        String[] data = new String[]{"1", "2"};
+        String[] data = new String[]{"1", "2", "3", "4"};
         for (String x : data) {
             Sample sample = new Sample("2016-10-11T13:00:00.000Z", new BigDecimal(1.0), x);
             series.setData(Collections.singleton(sample));
             insertSeriesCheck(Collections.singletonList(series));
         }
 
-        SeriesQuery seriesQuery = new SeriesQuery(series);
-        List<Series> seriesList = executeQueryReturnSeries(seriesQuery);
+        SeriesQuery seriesQueryVersioned = new SeriesQuery(series);
+        seriesQueryVersioned.setVersioned(true);
+        seriesQueryVersioned.setExactMatch(false);
+        List<Series> seriesListVersioned = executeQueryReturnSeries(seriesQueryVersioned);
+        List<String> textValuesVersioned = new ArrayList<>();
+        for (Sample s: seriesListVersioned.get(0).getData()) {
+            textValuesVersioned.add(s.getText());
+        }
 
-        Series lastInsertedSeries = series;
-        assertEquals("Stored series are incorrect", Collections.singletonList(lastInsertedSeries), seriesList);
+        assertEquals("Text field versioning is corrupted", Arrays.asList(data), textValuesVersioned);
     }
 
     /**
