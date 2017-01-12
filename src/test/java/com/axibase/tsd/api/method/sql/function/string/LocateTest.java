@@ -1,21 +1,39 @@
 package com.axibase.tsd.api.method.sql.function.string;
 
+import com.axibase.tsd.api.method.series.SeriesMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
+import com.axibase.tsd.api.model.series.Sample;
+import com.axibase.tsd.api.model.series.Series;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
+
 import static com.axibase.tsd.api.method.sql.function.string.CommonData.POSSIBLE_FUNCTION_ARGS;
 import static com.axibase.tsd.api.method.sql.function.string.CommonData.prepareApplyTestData;
+import static com.axibase.tsd.api.util.Util.TestNames.entity;
 import static com.axibase.tsd.api.util.Util.TestNames.metric;
 
 
 public class LocateTest extends SqlTest {
-    private static String TEST_METRIC = metric();
+    private static final String TEST_METRIC1_NAME = metric();
+    private static final String TEST_METRIC2_NAME = metric();
+    private static final String TEST_ENTITY_NAME = entity();
 
     @BeforeClass
     public void prepareData() throws Exception {
-        prepareApplyTestData(TEST_METRIC);
+        prepareApplyTestData(TEST_METRIC1_NAME);
+
+        Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC2_NAME);
+
+        series.setData(Collections.singletonList(
+                new Sample("2016-06-03T09:20:00.000Z", "1")
+                )
+        );
+        series.addTag("tag1", "Word word WORD worD");
+
+        SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
     }
 
     @DataProvider(name = "applyTestProvider")
@@ -33,14 +51,97 @@ public class LocateTest extends SqlTest {
         return result;
     }
 
+    @DataProvider(name = "applyFunctionalTestProvider")
+    public Object[][] provideTestsDataForLocateFunctionalTest() {
+        return new Object[][]{
+                {
+                        "Word",
+                        "1"
+                },
+                {
+                        "word",
+                        "6"
+                },
+                {
+                        "WORD",
+                        "11"
+                },
+                {
+                        "worD",
+                        "16"
+                },
+                {
+                        "WorD",
+                        "0"
+                }
+        };
+    }
+
     /**
      * #2920
      */
     @Test(dataProvider = "applyTestProvider")
     public void testApply(String param) throws Exception {
         String sqlQuery = String.format("SELECT LOCATE(%s) FROM '%s'",
-                param, TEST_METRIC
+                param, TEST_METRIC1_NAME
         );
         assertOkRequest(String.format("Can't apply LOCATE function to %s", param), queryResponse(sqlQuery));
+    }
+
+    /**
+     * #3749
+     */
+    @Test(dataProvider = "applyFunctionalTestProvider")
+    public void testLocateInSelect(String word, String position) {
+        String sqlQuery = String.format(
+                "SELECT LOCATE(\"%s\", tags.tag1) FROM '%s' t1",
+                word,
+                TEST_METRIC2_NAME
+        );
+
+        String[][] expectedRows = {
+                {position}
+        };
+
+        assertSqlQueryRows(sqlQuery, expectedRows, "Locate in SELECT gives wrong result");
+    }
+
+    /**
+     * #3749
+     */
+    @Test(dataProvider = "applyFunctionalTestProvider")
+    public void testLocateInWhere(String word, String position) {
+        String sqlQuery = String.format(
+                "SELECT value FROM '%s' t1 WHERE LOCATE(\"%s\", tags.tag1) = %s",
+                TEST_METRIC2_NAME,
+                word,
+                position
+        );
+
+        String[][] expectedRows = {
+                {"1"}
+        };
+
+        assertSqlQueryRows(sqlQuery, expectedRows, "Locate in WHERE gives wrong result");
+    }
+
+    /**
+     * #3749
+     */
+    @Test(dataProvider = "applyFunctionalTestProvider")
+    public void testLocateInHaving(String word, String position) {
+        String sqlQuery = String.format(
+                "SELECT tags.tag1, count(value) FROM '%s' t1 " +
+                        "GROUP BY tags.tag1 " +
+                        "HAVING count(LOCATE(\"%s\", tags.tag1)) > 0",
+                TEST_METRIC2_NAME,
+                word
+        );
+
+        String[][] expectedRows = {
+                {"Word word WORD worD", "1"}
+        };
+
+        assertSqlQueryRows(sqlQuery, expectedRows, "Locate in HAVING gives wrong result");
     }
 }
