@@ -4,7 +4,7 @@
 1. An instance of ATSD `api_test` version. You can install it using [docker image](https://hub.docker.com/r/axibase/atsd).
    ```bash
    docker pull axibase/atsd:api_test
-   docker run --name atsd_api_test_container axibase/atsd:api_test
+   docker run -d -p 8088:8088 -p 8081:8081 --name atsd_api_test_container -e axipass="password" -e timezone="time_zone_id" axibase/atsd:api_test
    ```
 2. A default settings of project are stored in `src/test/resources/client  .properties` file. By default you can redefine the following properties:
    ```properties
