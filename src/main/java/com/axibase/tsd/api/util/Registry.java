@@ -33,7 +33,7 @@ public enum Registry {
         registeredSet.add(value);
     }
 
-    public void registerPrefix(String valuePrefix) {
+    public synchronized void registerPrefix(String valuePrefix) {
         if (registeredPrefixSet.contains(valuePrefix)) {
             throw new IllegalArgumentException(String.format(ERROR_PREFIX_ALREADY_REGISTRED_TPL, registryType, valuePrefix));
         }
