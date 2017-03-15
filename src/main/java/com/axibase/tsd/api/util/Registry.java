@@ -25,7 +25,7 @@ public enum Registry {
         this.registryType = registryType;
     }
 
-    public void register(String value) {
+    public synchronized void register(String value) {
         if (registeredSet.contains(value)) {
             throw new IllegalArgumentException(String.format(ERROR_ALREADY_REGISTRED_TPL, registryType, value));
         }
@@ -45,7 +45,7 @@ public enum Registry {
         registeredPrefixSet.add(valuePrefix);
     }
 
-    private boolean hasRegisteredValueWithPrefix(String prefix) {
+    private synchronized boolean hasRegisteredValueWithPrefix(String prefix) {
         for (String value : registeredSet) {
             if (value.startsWith(prefix)) {
                 logger.debug("value \"{}\" starts with prefix \"{}\"", value, prefix);
@@ -55,7 +55,7 @@ public enum Registry {
         return false;
     }
 
-    private boolean hasRegisteredPrefix(String value) {
+    private synchronized boolean hasRegisteredPrefix(String value) {
         for (String prefix : registeredPrefixSet) {
             if (value.startsWith(prefix)) {
                 logger.debug("value \"{}\" starts with prefix \"{}\"", value, prefix);
