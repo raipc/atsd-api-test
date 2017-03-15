@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public enum Registry {
     Entity("Entity"), Metric("Metric"), Type("Type"), EntityGroup("EntityGroup"), ReplacementTable("ReplacementTable");
@@ -17,7 +19,7 @@ public enum Registry {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private String registryType;
     private Set<String> registeredSet = new HashSet<>();
-    private Set<String> registeredPrefixSet = new HashSet<>();
+    private Set<String> registeredPrefixSet = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
     Registry(String registryType) {
         this.registryType = registryType;
