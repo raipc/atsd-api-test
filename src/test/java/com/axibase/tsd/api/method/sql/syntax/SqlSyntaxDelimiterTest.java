@@ -254,8 +254,8 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
 
         Response response = queryResponse(sqlQuery);
 
-        String expectedMessage = ErrorTemplate.Sql.syntaxError(2, 43,
-                extraneousErrorMessage("AND", "{<EOF>, ORDER, GROUP, LIMIT, WITH, OPTION}")
+        String expectedMessage = ErrorTemplate.Sql.syntaxError(2, 46,
+                "no viable alternative at input '<EOF>'"
         );
         assertBadRequest("Query must return correct table",
                 expectedMessage, response);
