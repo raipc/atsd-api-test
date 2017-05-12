@@ -23,7 +23,7 @@ public class AuthenticationTest extends BaseMethod {
     /**
      * #2870
      */
-    @Test
+    @Test(enabled=false)
     public void seriesQueryTest() throws Exception {
         List<SeriesQuery> seriesQueryList = Collections.singletonList(new SeriesQuery());
         Response response = SeriesMethod.executeQueryRaw(seriesQueryList, UNKNOWN_USER, UNKNOWN_USER_PASSWORD);
@@ -36,7 +36,7 @@ public class AuthenticationTest extends BaseMethod {
     /**
      * #2870
      */
-    @Test
+    @Test(enabled=false)
     public void seriesInsertTest() throws Exception {
         List<Series> seriesQueryList = Collections.singletonList(new Series());
         Response response = SeriesMethod.insertSeries(seriesQueryList, UNKNOWN_USER, UNKNOWN_USER_PASSWORD);
@@ -49,7 +49,7 @@ public class AuthenticationTest extends BaseMethod {
     /**
      * #2870
      */
-    @Test
+    @Test(enabled=false)
     public void seriesCSVInsertTest() throws Exception {
         Response response = CSVInsertMethod.csvInsert("entity", "some csv", new HashMap<String, String>(), UNKNOWN_USER, UNKNOWN_USER_PASSWORD);
 
@@ -61,7 +61,7 @@ public class AuthenticationTest extends BaseMethod {
     /**
      * #2870
      */
-    @Test
+    @Test(enabled=false)
     public void seriesUrlQueryTest() throws Exception {
         Response response = SeriesMethod.urlQuerySeries("entity", "metric", OutputFormat.JSON, new HashMap<String, String>(), UNKNOWN_USER, UNKNOWN_USER_PASSWORD);
 
