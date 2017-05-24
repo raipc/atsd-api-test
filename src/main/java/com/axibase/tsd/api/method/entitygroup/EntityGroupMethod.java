@@ -2,6 +2,7 @@ package com.axibase.tsd.api.method.entitygroup;
 
 import com.axibase.tsd.api.method.BaseMethod;
 import com.axibase.tsd.api.model.entitygroup.EntityGroup;
+import com.axibase.tsd.api.util.NotCheckedException;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -143,6 +144,16 @@ public class EntityGroupMethod extends BaseMethod {
         final String expected = jacksonMapper.writeValueAsString(entityGroup);
         final String given = response.readEntity(String.class);
         return compareJsonString(expected, given, true);
+    }
+
+    public static boolean entityGroupExist(String entityGroup) throws NotCheckedException {
+        final Response response = EntityGroupMethod.getEntityGroup(entityGroup);
+        if (response.getStatus() == OK.getStatusCode()) {
+            return true;
+        } else if (response.getStatus() == NOT_FOUND.getStatusCode()) {
+            return false;
+        }
+        throw new NotCheckedException("Fail to execute entity group query");
     }
 
 
