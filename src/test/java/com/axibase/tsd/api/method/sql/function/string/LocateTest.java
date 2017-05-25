@@ -28,7 +28,7 @@ public class LocateTest extends SqlTest {
 
         Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC2_NAME);
 
-        series.setData(Collections.singletonList(
+        series.setSamples(Collections.singletonList(
                 new Sample("2016-06-03T09:20:00.000Z", "1")
                 )
         );

@@ -10,7 +10,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
@@ -52,7 +51,7 @@ public class OuterJoinMergeTest extends SqlTest {
                 series.setTags(Mocks.TAGS);
 
                 for (int i = 0; i < VALUES_COUNT; i++) {
-                    series.addData(new Sample(String.format("2017-01-0%1sT00:00:00.000Z", i + 1), i + 1));
+                    series.addSamples(new Sample(String.format("2017-01-0%1sT00:00:00.000Z", i + 1), i + 1));
                 }
 
                 seriesList.add(series);

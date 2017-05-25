@@ -27,7 +27,7 @@ public class SqlClauseLimitOffsetTest extends SqlTest {
     @BeforeClass
     public void prepareData() throws Exception {
         Series series = new Series(TESTS_ENTITY_NAME, TEST_METRIC_NAME);
-        series.setData(
+        series.setSamples(
                 Arrays.asList(
                         new Sample("2016-06-03T09:23:00.000Z", "0"),
                         new Sample("2016-06-03T09:23:01.000Z", "1"),

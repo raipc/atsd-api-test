@@ -59,7 +59,7 @@ public class Series {
         Series copy = new Series();
         copy.setEntity(entity);
         copy.setMetric(metric);
-        copy.setData(new ArrayList<>(data));
+        copy.setSamples(new ArrayList<>(data));
         copy.setTags(new HashMap<>(tags));
         return copy;
     }
@@ -101,8 +101,8 @@ public class Series {
         return data;
     }
 
-    public void setData(Collection<Sample> data) {
-        this.data = new ArrayList<>(data);
+    public void setSamples(Collection<Sample> samples) {
+        this.data = new ArrayList<>(samples);
     }
 
     public void addTag(String key, String value) {
@@ -113,7 +113,7 @@ public class Series {
         tags.put(key, value);
     }
 
-    public void addData(Sample... samples) {
+    public void addSamples(Sample... samples) {
         if (data == null) {
             data = new ArrayList<>();
         }

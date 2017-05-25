@@ -33,14 +33,14 @@ public class SqlTableAliasTest extends SqlTest {
                         new Series() {{
                             setMetric(TEST_METRIC1_NAME);
                             setEntity(TEST_ENTITY_NAME);
-                            addData(new Sample("2016-06-03T09:24:00.000Z", 0));
+                            addSamples(new Sample("2016-06-03T09:24:00.000Z", 0));
                             setTags(tags);
                         }},
                         new Series() {{
                             setMetric(TEST_METRIC2_NAME);
                             setEntity(TEST_ENTITY_NAME);
                             setTags(tags);
-                            addData(new Sample("2016-06-03T09:24:00.000Z", 1));
+                            addSamples(new Sample("2016-06-03T09:24:00.000Z", 1));
                         }}
                 )
         );

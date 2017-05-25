@@ -52,7 +52,7 @@ public class IsNullTest extends SqlTest {
     @BeforeClass
     public void beforeTestTypePreserved() throws Exception {
         Series series = new Series("e-test-type-preserve-1", "m-test-type-preserve-1");
-        series.addData(Mocks.SAMPLE);
+        series.addSamples(Mocks.SAMPLE);
         SeriesMethod.insertSeriesCheck(series);
     }
 

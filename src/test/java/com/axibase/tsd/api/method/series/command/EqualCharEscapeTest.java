@@ -27,7 +27,7 @@ public class EqualCharEscapeTest extends SeriesTest {
     public void testEntity() throws Exception {
         Series series = new Series("series-command-test=-e3", "series-command-test-m3");
         Sample sample = new Sample(TestUtil.getCurrentDate(), "1");
-        series.addData(sample);
+        series.addSamples(sample);
 
         SeriesCommand seriesCommand = new SeriesCommand();
         seriesCommand.setTimeISO(sample.getD());
@@ -45,7 +45,7 @@ public class EqualCharEscapeTest extends SeriesTest {
     public void testMetric() throws Exception {
         Series series = new Series("series-command-test-e4", "series-command-test=-m4");
         Sample sample = new Sample(TestUtil.getCurrentDate(), "1");
-        series.addData(sample);
+        series.addSamples(sample);
 
         SeriesCommand seriesCommand = new SeriesCommand();
         seriesCommand.setTimeISO(sample.getD());

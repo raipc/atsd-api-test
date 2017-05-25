@@ -45,7 +45,7 @@ public class CastTest extends SqlTest {
             series.setEntity(TEST_ENTITY_NAME);
             series.setMetric(metricName);
 
-            series.setData(Collections.singletonList(
+            series.setSamples(Collections.singletonList(
                     new Sample("2016-06-03T09:20:00.000Z", "1")));
 
             String tag = tags[i];
@@ -216,7 +216,7 @@ public class CastTest extends SqlTest {
     @BeforeClass
     public void createCastNumberAsStringTestData() throws Exception {
         castNumberAsStringSeries = Mocks.series();
-        castNumberAsStringSeries.setData(Collections.singleton(new Sample(Mocks.ISO_TIME, "12345.6789")));
+        castNumberAsStringSeries.setSamples(Collections.singleton(new Sample(Mocks.ISO_TIME, "12345.6789")));
         SeriesMethod.insertSeriesCheck(castNumberAsStringSeries);
     }
 
@@ -469,7 +469,7 @@ public class CastTest extends SqlTest {
     @Test
     public void testImplicitCastOfStringFunctionResult() throws Exception {
         Series series = Mocks.series();
-        series.setData(Arrays.asList(new Sample(Mocks.ISO_TIME, 10)));
+        series.setSamples(Arrays.asList(new Sample(Mocks.ISO_TIME, 10)));
         SeriesMethod.insertSeriesCheck(series);
 
         String sql = String.format(

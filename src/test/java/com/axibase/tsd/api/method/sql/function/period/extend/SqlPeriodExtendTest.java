@@ -36,7 +36,7 @@ public class SqlPeriodExtendTest extends SqlTest {
                     addTag("b", "c");
                     setMetric(TEST_METRIC_NAME);
                     setEntity(TEST_ENTITY1_NAME);
-                    setData(Arrays.asList(
+                    setSamples(Arrays.asList(
                             new Sample("2016-07-14T15:00:06.001Z", "1"),
                             new Sample("2016-07-14T15:00:08.001Z", "2")
                     ));
@@ -49,7 +49,7 @@ public class SqlPeriodExtendTest extends SqlTest {
                     addTag("b", "c");
                     setMetric(TEST_METRIC_NAME);
                     setEntity(TEST_ENTITY2_NAME);
-                    setData(Arrays.asList(
+                    setSamples(Arrays.asList(
                             new Sample("2016-07-14T15:00:06.001Z", "3")
                     ));
                 }}

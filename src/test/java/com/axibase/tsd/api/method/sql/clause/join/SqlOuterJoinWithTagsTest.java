@@ -41,7 +41,7 @@ public class SqlOuterJoinWithTagsTest extends SqlTest {
                 Map<String, String> tags = new HashMap<>();
                 tags.put(tagName, tagName);
                 series.setTags(tags);
-                series.addData(Mocks.SAMPLE);
+                series.addSamples(Mocks.SAMPLE);
 
                 seriesList.add(series);
             }

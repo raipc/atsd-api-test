@@ -30,7 +30,7 @@ public class SqlSelectAllWithJoinTest extends SqlTest {
         seriesList.add(new Series() {{
             setMetric(TEST_METRIC1_NAME);
             setEntity(TEST_ENTITY_NAME);
-            setData(Arrays.asList(
+            setSamples(Arrays.asList(
                     new Sample("2016-06-03T09:23:00.000Z", "7"),
                     new Sample("2016-06-03T09:24:00.000Z", "0"),
                     new Sample("2016-06-03T09:25:00.000Z", "12"),
@@ -44,7 +44,7 @@ public class SqlSelectAllWithJoinTest extends SqlTest {
         seriesList.add(new Series() {{
             setMetric(TEST_METRIC2_NAME);
             setEntity(TEST_ENTITY_NAME);
-            setData(Arrays.asList(
+            setSamples(Arrays.asList(
                     new Sample("2016-06-03T09:23:00.000Z", "5"),
                     new Sample("2016-06-03T09:24:00.000Z", "7"),
                     new Sample("2016-06-03T09:25:00.000Z", "-2"),

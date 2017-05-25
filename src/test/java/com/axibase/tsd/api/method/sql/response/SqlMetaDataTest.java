@@ -28,7 +28,7 @@ public class SqlMetaDataTest extends SqlMethod {
                         "WHERE entity = '%s'",
                 TEST_METRIC_NAME, TEST_ENTITY_NAME
         );
-        testSeries.addData(
+        testSeries.addSamples(
                 new Sample("2016-06-29T08:00:00.000Z", "0.05")
         );
         SeriesMethod.insertSeriesCheck(Collections.singletonList(testSeries));

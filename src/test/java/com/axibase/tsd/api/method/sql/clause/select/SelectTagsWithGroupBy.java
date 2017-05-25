@@ -21,7 +21,7 @@ public class SelectTagsWithGroupBy extends SqlTest {
     public void prepareData() throws Exception {
         Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME);
 
-        series.setData(Collections.singletonList(
+        series.setSamples(Collections.singletonList(
                 new Sample(Mocks.ISO_TIME, Mocks.DECIMAL_VALUE)
                 )
         );

@@ -27,7 +27,7 @@ public class WhereInMetricsTest extends SqlTest {
         for (int i = 0; i < METRIC_COUNT; i++) {
             METRIC_NAMES[i] = metric();
             Series series = new Series(ENTITY_NAME, METRIC_NAMES[i]);
-            series.addData(Mocks.SAMPLE);
+            series.addSamples(Mocks.SAMPLE);
 
             seriesList.add(series);
         }

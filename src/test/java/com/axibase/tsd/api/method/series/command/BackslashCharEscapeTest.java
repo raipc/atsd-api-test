@@ -27,7 +27,7 @@ public class BackslashCharEscapeTest extends SeriesTest {
     public void testEntity() throws Exception {
         Series series = new Series("series-command-test\\-e5", "series-command-test-m5");
         Sample sample = new Sample(Mocks.ISO_TIME, "1");
-        series.addData(sample);
+        series.addSamples(sample);
 
         SeriesCommand seriesCommand = new SeriesCommand();
         seriesCommand.setTimeISO(sample.getD());
@@ -45,7 +45,7 @@ public class BackslashCharEscapeTest extends SeriesTest {
     public void testMetric() throws Exception {
         Series series = new Series("series-command-test-e6", "series-command-test\\-m6");
         Sample sample = new Sample(Mocks.ISO_TIME, "1");
-        series.addData(sample);
+        series.addSamples(sample);
 
         SeriesCommand seriesCommand = new SeriesCommand();
         seriesCommand.setTimeISO(sample.getD());

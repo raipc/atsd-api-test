@@ -23,7 +23,7 @@ public class SqlPeriodInterpolationTest extends SqlMethod {
     @BeforeClass
     public static void prepareDataSet() throws Exception {
         Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME) {{
-            setData(Arrays.asList(
+            setSamples(Arrays.asList(
                     new Sample("2016-06-03T09:26:00.000Z", "8.1"),
                     new Sample("2016-06-03T09:36:00.000Z", "6.0"),
                     new Sample("2016-06-03T09:41:00.000Z", "19.0")

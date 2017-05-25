@@ -45,7 +45,7 @@ public class MultiJoinTest extends SqlTest {
                 series.setEntity(TEST_ENTITY_NAME);
                 series.setMetric(metric);
                 series.addTag("tag", String.valueOf(i));
-                series.addData(new Sample("2010-01-01T00:00:00.000Z", 1));
+                series.addSamples(new Sample("2010-01-01T00:00:00.000Z", 1));
 
                 seriesList.add(series);
             }

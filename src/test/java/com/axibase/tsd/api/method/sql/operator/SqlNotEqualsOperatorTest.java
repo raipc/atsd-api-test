@@ -29,7 +29,7 @@ public class SqlNotEqualsOperatorTest extends SqlMethod {
             setTags(Collections.unmodifiableMap(new HashMap<String, String>() {{
                 put("a", "b");
             }}));
-            addData(new Sample("2016-06-03T09:23:00.000Z", "1.01"));
+            addSamples(new Sample("2016-06-03T09:23:00.000Z", "1.01"));
         }};
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
     }

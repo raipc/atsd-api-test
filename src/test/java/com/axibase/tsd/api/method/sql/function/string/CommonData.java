@@ -40,7 +40,7 @@ public class CommonData {
     static void insertSeriesWithMetric(String testMetric) throws Exception {
         String entityName = TestNames.entity();
         Series series = new Series(entityName, testMetric);
-        series.addData(Mocks.SAMPLE);
+        series.addSamples(Mocks.SAMPLE);
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
     }
 }

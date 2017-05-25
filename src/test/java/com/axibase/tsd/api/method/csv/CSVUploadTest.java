@@ -298,7 +298,7 @@ public class CSVUploadTest extends CSVUploadMethod {
         Series expectedSeries = new Series();
         expectedSeries.setEntity(entity);
         expectedSeries.setMetric(metric);
-        expectedSeries.addData(new Sample("2016-06-19T00:00:00.000Z", "123.45"));
+        expectedSeries.addSamples(new Sample("2016-06-19T00:00:00.000Z", "123.45"));
         List<Series> expectedSeriesList = Collections.singletonList(expectedSeries);
         assertEquals(expectedSeriesList, actualSeriesList);
     }

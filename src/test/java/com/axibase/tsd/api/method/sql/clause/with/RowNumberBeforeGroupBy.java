@@ -33,7 +33,7 @@ public class RowNumberBeforeGroupBy extends SqlTest {
             series.setEntity(TEST_ENTITY_NAME);
             series.setMetric(TEST_METRIC_NAME);
 
-            series.setData(Collections.singletonList(
+            series.setSamples(Collections.singletonList(
                     new Sample(Util.ISOFormat(MILLS_TIME + i), i)));
 
             series.addTag("tag", Integer.toString(i));

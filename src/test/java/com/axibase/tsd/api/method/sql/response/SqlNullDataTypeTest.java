@@ -35,13 +35,13 @@ public class SqlNullDataTypeTest extends SqlTest {
         seriesList.add(new Series() {{
             setEntity(TEST_ENTITY_NAME);
             setMetric(TEST_METRIC1_NAME);
-            addData(new Sample("2016-06-29T08:00:00.000Z", "0.00"));
+            addSamples(new Sample("2016-06-29T08:00:00.000Z", "0.00"));
         }});
 
         seriesList.add(new Series() {{
             setEntity(TEST_ENTITY_NAME);
             setMetric(TEST_METRIC2_NAME);
-            addData(new Sample("2016-06-29T08:00:01.000Z", "0.00"));
+            addSamples(new Sample("2016-06-29T08:00:01.000Z", "0.00"));
         }});
 
         SeriesMethod.insertSeriesCheck(seriesList);

@@ -20,7 +20,7 @@ public class GroupByText extends SqlTest {
     @BeforeClass
     public void insertTextSampleToDefaultSeries() throws Exception {
         Series series = DEFAULT_SERIES;
-        series.setData(new ArrayList<>(Arrays.asList(
+        series.setSamples(new ArrayList<>(Arrays.asList(
                 new TextSample("2016-06-03T09:00:00.000Z", "sample text"),
                 new TextSample("2016-06-03T09:05:00.000Z", "text"),
                 new TextSample("2016-06-03T09:10:00.000Z", "TEXT"),

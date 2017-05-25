@@ -34,7 +34,7 @@ public class SqlExampleComputedColumnsTest extends SqlTest {
 
         series1.setMetric(TEST_METRIC1_NAME);
         series1.setEntity(TEST_ENTITY_NAME);
-        series1.setData(Arrays.asList(
+        series1.setSamples(Arrays.asList(
                 new Sample("2016-08-15T07:24:02.000Z", "4.3"),
                 new Sample("2016-08-15T07:24:46.000Z", "4.3"),
                 new Sample("2016-08-15T07:25:02.000Z", "5.4")
@@ -43,7 +43,7 @@ public class SqlExampleComputedColumnsTest extends SqlTest {
 
         series2.setMetric(TEST_METRIC2_NAME);
         series2.setEntity(TEST_ENTITY_NAME);
-        series2.setData(Arrays.asList(
+        series2.setSamples(Arrays.asList(
                 new Sample("2016-08-15T07:24:46.000Z", "10.1"),
                 new Sample("2016-08-15T07:25:02.000Z", "12.2"),
                 new Sample("2016-08-15T07:25:46.000Z", "10.1")

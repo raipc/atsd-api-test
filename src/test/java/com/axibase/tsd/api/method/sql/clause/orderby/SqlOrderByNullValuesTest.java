@@ -23,7 +23,7 @@ public class SqlOrderByNullValuesTest extends SqlTest {
         Series testSeries = new Series();
         testSeries.setEntity(TEST_ENTITY);
         testSeries.setMetric(TEST_METRIC);
-        testSeries.setData(Collections.singletonList(Mocks.SAMPLE));
+        testSeries.setSamples(Collections.singletonList(Mocks.SAMPLE));
         HashMap<String, String> tags = new HashMap<>();
         tags.put("tag1", "null");
         testSeries.setTags(tags);

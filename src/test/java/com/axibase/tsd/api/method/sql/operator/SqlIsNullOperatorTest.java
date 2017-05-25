@@ -38,7 +38,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
         seriesList.add(new Series() {{
             setMetric(TEST_METRIC_NAME);
             setEntity(TEST_ENTITY1_NAME);
-            addData(new Sample("2016-06-19T11:00:00.000Z", 1));
+            addSamples(new Sample("2016-06-19T11:00:00.000Z", 1));
             setTags(Collections.unmodifiableMap(new HashMap<String, String>() {{
                 put("tag1", "val1");
             }}));
@@ -48,7 +48,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
         seriesList.add(new Series() {{
             setMetric(TEST_METRIC_NAME);
             setEntity(TEST_ENTITY2_NAME);
-            addData(new Sample("2016-06-19T11:05:00.000Z", 2));
+            addSamples(new Sample("2016-06-19T11:05:00.000Z", 2));
             setTags(Collections.unmodifiableMap(new HashMap<String, String>() {{
                 put("tag1", "val2");
                 put("tag2", "val2");
@@ -58,7 +58,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
         seriesList.add(new Series() {{
             setMetric(TEST_METRIC_NAME);
             setEntity(TEST_ENTITY3_NAME);
-            addData(new Sample("2016-06-19T11:10:00.000Z", 3));
+            addSamples(new Sample("2016-06-19T11:10:00.000Z", 3));
             setTags(Collections.unmodifiableMap(new HashMap<String, String>() {{
                 put("tag2", "val3");
             }}));
@@ -67,7 +67,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
         seriesList.add(new Series() {{
             setMetric(TEST_METRIC_NAME);
             setEntity(TEST_ENTITY4_NAME);
-            addData(new Sample("2016-06-19T11:15:00.000Z", 4));
+            addSamples(new Sample("2016-06-19T11:15:00.000Z", 4));
             setTags(Collections.unmodifiableMap(new HashMap<String, String>() {{
                 put("tag4", "val4");
             }}));
@@ -76,7 +76,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
         seriesList.add(new Series() {{
             setMetric(TEST_METRIC_NAME);
             setEntity(TEST_ENTITY5_NAME);
-            addData(new Sample("2016-06-19T11:20:00.000Z", 5));
+            addSamples(new Sample("2016-06-19T11:20:00.000Z", 5));
         }});
 
         SeriesMethod.insertSeriesCheck(seriesList);
@@ -367,7 +367,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
         Series series = new Series();
         series.setMetric(metric.getName());
         series.setEntity(entityName);
-        series.addData(new Sample("2016-06-19T00:00:00.000Z", 1));
+        series.addSamples(new Sample("2016-06-19T00:00:00.000Z", 1));
         SeriesMethod.insertSeriesCheck(series);
 
         String sqlQuery = String.format(
@@ -398,7 +398,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
         Series series = new Series();
         series.setMetric(metric.getName());
         series.setEntity(entityName);
-        series.addData(new Sample("2016-06-19T00:00:00.000Z", 2));
+        series.addSamples(new Sample("2016-06-19T00:00:00.000Z", 2));
         SeriesMethod.insertSeriesCheck(series);
 
         String sqlQuery = String.format(

@@ -29,18 +29,18 @@ public class OuterJoinTagsExternalTest extends SqlTest {
         Series series1 = new Series();
         series1.setEntity(entityName);
         series1.setMetric(METRIC_NO_TAGS_1);
-        series1.addData(Mocks.SAMPLE);
+        series1.addSamples(Mocks.SAMPLE);
 
         Series series2 = new Series();
         series2.setEntity(entityName);
         series2.setMetric(METRIC_NO_TAGS_2);
-        series2.addData(Mocks.SAMPLE);
+        series2.addSamples(Mocks.SAMPLE);
 
         Series series3 = new Series();
         series3.setEntity(entityName);
         series3.setMetric(METRIC_WITH_TAGS);
         series3.addTag("tag1", "abc");
-        series3.addData(Mocks.SAMPLE);
+        series3.addSamples(Mocks.SAMPLE);
 
         SeriesMethod.insertSeriesCheck(series1, series2, series3);
     }

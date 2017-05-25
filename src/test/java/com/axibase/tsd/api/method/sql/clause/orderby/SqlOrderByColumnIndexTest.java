@@ -31,7 +31,7 @@ public class SqlOrderByColumnIndexTest extends SqlTest {
 
         series1.setMetric(TEST_METRIC_NAME);
         series1.setEntity(TEST_ENTITY1_NAME);
-        series1.setData(Arrays.asList(
+        series1.setSamples(Arrays.asList(
                 new Sample("2016-06-19T11:00:00.000Z", "6"),
                 new Sample("2016-06-19T11:00:01.000Z", "2"),
                 new Sample("2016-06-19T11:00:02.000Z", "4")
@@ -39,7 +39,7 @@ public class SqlOrderByColumnIndexTest extends SqlTest {
 
         series2.setMetric(TEST_METRIC_NAME);
         series2.setEntity(TEST_ENTITY2_NAME);
-        series2.setData(Arrays.asList(
+        series2.setSamples(Arrays.asList(
                 new Sample("2016-06-19T11:00:04.000Z", "3"),
                 new Sample("2016-06-19T11:00:05.000Z", "1"),
                 new Sample("2016-06-19T11:00:06.000Z", "5")

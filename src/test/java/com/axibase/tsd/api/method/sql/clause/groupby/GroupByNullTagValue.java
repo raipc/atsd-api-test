@@ -21,7 +21,7 @@ public class GroupByNullTagValue extends SqlTest {
     public void prepareData() throws Exception {
         Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME);
 
-        series.setData(Arrays.asList(
+        series.setSamples(Arrays.asList(
                 new Sample("2017-02-09T12:00:00.000Z", DECIMAL_VALUE),
                 new Sample("2017-02-10T12:00:00.000Z", DECIMAL_VALUE)
                 )
@@ -31,7 +31,7 @@ public class GroupByNullTagValue extends SqlTest {
         Series seriesWithoutTag = new Series();
         seriesWithoutTag.setEntity(TEST_ENTITY_NAME);
         seriesWithoutTag.setMetric(TEST_METRIC_NAME);
-        seriesWithoutTag.setData(Arrays.asList(
+        seriesWithoutTag.setSamples(Arrays.asList(
                 new Sample("2017-02-11T12:00:00.000Z", DECIMAL_VALUE),
                 new Sample("2017-02-12T12:00:00.000Z", DECIMAL_VALUE)
                 )

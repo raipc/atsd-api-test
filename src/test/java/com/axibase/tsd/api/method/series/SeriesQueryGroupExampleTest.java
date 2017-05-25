@@ -36,17 +36,17 @@ public class SeriesQueryGroupExampleTest extends SeriesMethod {
         Registry.Entity.register(SECOND_ENTITY);
         secondSeries.setMetric(GROUPED_METRIC);
 
-        firstSeries.addData( new Sample("2016-06-25T08:00:00.000Z", 1));
-        secondSeries.addData(new Sample("2016-06-25T08:00:00.000Z", 11));
-        firstSeries.addData( new Sample("2016-06-25T08:00:05.000Z", 3));
-        firstSeries.addData( new Sample("2016-06-25T08:00:10.000Z", 5));
-        firstSeries.addData( new Sample("2016-06-25T08:00:15.000Z", 8));
-        secondSeries.addData(new Sample("2016-06-25T08:00:15.000Z", 8));
-        firstSeries.addData( new Sample("2016-06-25T08:00:30.000Z", 3));
-        secondSeries.addData(new Sample("2016-06-25T08:00:30.000Z", 13));
-        firstSeries.addData( new Sample("2016-06-25T08:00:45.000Z", 5));
-        secondSeries.addData(new Sample("2016-06-25T08:00:45.000Z", 15));
-        secondSeries.addData(new Sample("2016-06-25T08:00:59.000Z", 19));
+        firstSeries.addSamples( new Sample("2016-06-25T08:00:00.000Z", 1));
+        secondSeries.addSamples(new Sample("2016-06-25T08:00:00.000Z", 11));
+        firstSeries.addSamples( new Sample("2016-06-25T08:00:05.000Z", 3));
+        firstSeries.addSamples( new Sample("2016-06-25T08:00:10.000Z", 5));
+        firstSeries.addSamples( new Sample("2016-06-25T08:00:15.000Z", 8));
+        secondSeries.addSamples(new Sample("2016-06-25T08:00:15.000Z", 8));
+        firstSeries.addSamples( new Sample("2016-06-25T08:00:30.000Z", 3));
+        secondSeries.addSamples(new Sample("2016-06-25T08:00:30.000Z", 13));
+        firstSeries.addSamples( new Sample("2016-06-25T08:00:45.000Z", 5));
+        secondSeries.addSamples(new Sample("2016-06-25T08:00:45.000Z", 15));
+        secondSeries.addSamples(new Sample("2016-06-25T08:00:59.000Z", 19));
         insertSeriesCheck(Arrays.asList(firstSeries, secondSeries));
     }
 

@@ -34,11 +34,11 @@ public class ConcatTest extends SqlTest {
         List<Series> seriesList = new ArrayList<>();
         {
             Series series = new Series(TEST_ENTITY, TEST_METRIC1);
-            series.addData(new TextSample("2016-06-03T09:19:18.000Z", "")); // NaN value
-            series.addData(new Sample("2016-06-03T09:20:18.000Z", "3.0"));
-            series.addData(new Sample("2016-06-03T09:21:18.000Z", "3.10"));
-            series.addData(new Sample("2016-06-03T09:22:18.000Z", "3.14"));
-            series.addData(new Sample("2016-06-03T09:23:18.000Z", "3.1415"));
+            series.addSamples(new TextSample("2016-06-03T09:19:18.000Z", "")); // NaN value
+            series.addSamples(new Sample("2016-06-03T09:20:18.000Z", "3.0"));
+            series.addSamples(new Sample("2016-06-03T09:21:18.000Z", "3.10"));
+            series.addSamples(new Sample("2016-06-03T09:22:18.000Z", "3.14"));
+            series.addSamples(new Sample("2016-06-03T09:23:18.000Z", "3.1415"));
             seriesList.add(series);
         }
         {
@@ -46,7 +46,7 @@ public class ConcatTest extends SqlTest {
             Registry.Metric.register(TEST_METRIC2);
             series.setEntity(TEST_ENTITY);
             series.setMetric(TEST_METRIC2);
-            series.addData(new Sample("2016-06-03T09:23:18.000Z", "5.555"));
+            series.addSamples(new Sample("2016-06-03T09:23:18.000Z", "5.555"));
             seriesList.add(series);
         }
         {
@@ -54,7 +54,7 @@ public class ConcatTest extends SqlTest {
             Registry.Metric.register(TEST_METRIC3);
             series.setEntity(TEST_ENTITY);
             series.setMetric(TEST_METRIC3);
-            series.addData(new Sample("2016-06-03T09:23:18.000Z", "5.0"));
+            series.addSamples(new Sample("2016-06-03T09:23:18.000Z", "5.0"));
             seriesList.add(series);
         }
 

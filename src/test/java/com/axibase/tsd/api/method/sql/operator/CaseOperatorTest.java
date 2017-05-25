@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class CaseOperatorTest extends SqlTest {
     private final Series DEFAULT_SERIES = Mocks.series();
     {
-        DEFAULT_SERIES.setData(new ArrayList<Sample>());
+        DEFAULT_SERIES.setSamples(new ArrayList<Sample>());
     }
     private final String[] SERIES_VALUES = { "10", "0", "-5" };
 
@@ -26,7 +26,7 @@ public class CaseOperatorTest extends SqlTest {
         for (int i = 0; i < SERIES_VALUES.length; i++) {
             String time = String.format(ISO_MINUTES_FORMAT, minutes);
             Sample sample = new Sample(time, new BigDecimal(SERIES_VALUES[i]));
-            DEFAULT_SERIES.addData(sample);
+            DEFAULT_SERIES.addSamples(sample);
             minutes +=5;
         }
 

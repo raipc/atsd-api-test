@@ -26,7 +26,7 @@ public class SqlClauseJoinUsingEntity extends SqlTest {
             testMetricNames[i] = metric();
             arraySeries[i].setMetric(testMetricNames[i]);
             arraySeries[i].setEntity(TEST_ENTITY_NAME);
-            arraySeries[i].setData(Collections.singletonList(
+            arraySeries[i].setSamples(Collections.singletonList(
                     new Sample("2016-06-03T09:20:00.000Z", i + 1)
                     )
             );

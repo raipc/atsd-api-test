@@ -40,7 +40,7 @@ public class TextInterpolationTest extends SqlTest {
             series.setEntity(entityName);
             series.setMetric(metricName);
 
-            series.addData(sample);
+            series.addSamples(sample);
             seriesList.add(series);
         }
         return seriesList;
@@ -53,7 +53,7 @@ public class TextInterpolationTest extends SqlTest {
     @Test
     public void testOnlyNullInterpolation() throws Exception {
         Series series = Mocks.series();
-        series.setData(Arrays.asList(
+        series.setSamples(Arrays.asList(
                 new Sample("2016-06-03T09:23:01.000Z", 1),
                 new Sample("2016-06-03T09:23:02.000Z", 2),
                 new Sample("2016-06-03T09:23:03.000Z", 3),
@@ -195,7 +195,7 @@ public class TextInterpolationTest extends SqlTest {
                                   InterpolationParams interpolationParams,
                                   List<Sample> resultPoints) throws Exception {
         Series series = new Series(TestNames.entity(), TestNames.metric());
-        series.setData(sourcePoints);
+        series.setSamples(sourcePoints);
         SeriesMethod.insertSeriesCheck(series);
 
         String sqlQuery = String.format(

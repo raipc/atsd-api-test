@@ -28,12 +28,12 @@ public class EntityRecreateTest extends SqlTest {
         Series series1 = new Series();
         series1.setEntity(entityName1);
         series1.setMetric(metricName);
-        series1.addData(Mocks.SAMPLE);
+        series1.addSamples(Mocks.SAMPLE);
 
         Series series2 = new Series();
         series2.setEntity(entityName2);
         series2.setMetric(metricName);
-        series2.addData(Mocks.SAMPLE);
+        series2.addSamples(Mocks.SAMPLE);
 
         /* Insert first entity*/
         SeriesMethod.insertSeriesCheck(series1);

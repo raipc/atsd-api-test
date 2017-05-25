@@ -51,7 +51,7 @@ public class GroupByCaseExpression extends SqlTest {
         series1.setEntity(TEST_ENTITY1_NAME);
         series1.setMetric(TEST_METRIC_NAME);
 
-        series1.setData(Arrays.asList(
+        series1.setSamples(Arrays.asList(
                 new Sample("2017-02-09T12:00:00.000Z", new BigDecimal(DECIMAL_VALUE), TEXT_VALUE_1),
                 new Sample("2017-02-10T12:00:00.000Z", new BigDecimal(DECIMAL_VALUE), TEXT_VALUE_1)
                 )
@@ -61,7 +61,7 @@ public class GroupByCaseExpression extends SqlTest {
         series2.setEntity(TEST_ENTITY2_NAME);
         series2.setMetric(TEST_METRIC_NAME);
 
-        series2.setData(Arrays.asList(
+        series2.setSamples(Arrays.asList(
                 new Sample("2017-02-11T12:00:00.000Z", new BigDecimal(DECIMAL_VALUE), TEXT_VALUE_2),
                 new Sample("2017-02-12T12:00:00.000Z", new BigDecimal(DECIMAL_VALUE), TEXT_VALUE_2)
                 )

@@ -29,7 +29,7 @@ public class SqlClauseOrderByAggregatedColumnAliasTest extends SqlTest {
                 series2 = new Series();
         series1.setMetric(TEST_METRIC_NAME);
         series1.setEntity(TEST_ENTITY1_NAME);
-        series1.setData(Arrays.asList(
+        series1.setSamples(Arrays.asList(
                 new Sample("2016-06-17T19:16:01.000Z", "1"),
                 new Sample("2016-06-17T19:16:03.000Z", "3")
                 )
@@ -38,7 +38,7 @@ public class SqlClauseOrderByAggregatedColumnAliasTest extends SqlTest {
 
         series2.setMetric(TEST_METRIC_NAME);
         series2.setEntity(TEST_ENTITY2_NAME);
-        series2.setData(Arrays.asList(
+        series2.setSamples(Arrays.asList(
                 new Sample("2016-06-17T19:16:02.000Z", "2"),
                 new Sample("2016-06-17T19:16:04.000Z", "4")
         ));

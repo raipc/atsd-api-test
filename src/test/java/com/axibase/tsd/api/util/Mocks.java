@@ -58,7 +58,7 @@ public class Mocks {
     public static Series series() {
         Series resultSeries = new Series(TestUtil.TestNames.entity(), TestUtil.TestNames.metric());
         resultSeries.setTags(TAGS);
-        resultSeries.addData(SAMPLE);
+        resultSeries.addSamples(SAMPLE);
         return resultSeries;
     }
 }

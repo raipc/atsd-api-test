@@ -43,7 +43,7 @@ public class CSVInsertTest extends CSVInsertMethod {
     @Test(dataProvider = "formatPatternProvider")
     public void testFormattedDate(String template) {
         Series expectedSeries = series();
-        expectedSeries.setData(singletonList(SAMPLE));
+        expectedSeries.setSamples(singletonList(SAMPLE));
         String csvPayload = String.format(
                 "date, %s%n%s, %s%n",
                 expectedSeries.getMetric(),
@@ -59,7 +59,7 @@ public class CSVInsertTest extends CSVInsertMethod {
     @Test
     public void testMultipleISOFormat() throws Exception {
         Series series = Mocks.series();
-        series.setData(new ArrayList<Sample>());
+        series.setSamples(new ArrayList<Sample>());
         String header = String.format("date, %s%n", series.getMetric());
         StringBuilder payloadBuilder = new StringBuilder(header);
         String[][] dateTemplatePairs = new String[][]{
@@ -76,7 +76,7 @@ public class CSVInsertTest extends CSVInsertMethod {
                     formatISODate(date, pattern), Mocks.DECIMAL_VALUE
             );
             payloadBuilder.append(csvRow);
-            series.addData(new Sample(dateTemplatePairs[i][0], Mocks.DECIMAL_VALUE));
+            series.addSamples(new Sample(dateTemplatePairs[i][0], Mocks.DECIMAL_VALUE));
         }
         String csvPayload = payloadBuilder.toString();
         csvInsertCheck(
@@ -93,9 +93,9 @@ public class CSVInsertTest extends CSVInsertMethod {
     @Test
     public void testTimeRangeInISO() throws Exception {
         Series series = Mocks.series();
-        series.setData(new ArrayList<Sample>());
-        series.addData(new Sample(MIN_STORABLE_DATE, Mocks.DECIMAL_VALUE));
-        series.addData(new Sample(MAX_STORABLE_DATE, Mocks.DECIMAL_VALUE));
+        series.setSamples(new ArrayList<Sample>());
+        series.addSamples(new Sample(MIN_STORABLE_DATE, Mocks.DECIMAL_VALUE));
+        series.addSamples(new Sample(MAX_STORABLE_DATE, Mocks.DECIMAL_VALUE));
 
         String csvPayload = String.format(
                 "date, %s%n%s, %s%n%s, %s%n",
@@ -118,9 +118,9 @@ public class CSVInsertTest extends CSVInsertMethod {
     @Test
     public void testTimeRangeInMS() {
         Series series = Mocks.series();
-        series.setData(new ArrayList<Sample>());
-        series.addData(new Sample(MIN_STORABLE_DATE, Mocks.DECIMAL_VALUE));
-        series.addData(new Sample(MAX_STORABLE_DATE, Mocks.DECIMAL_VALUE));
+        series.setSamples(new ArrayList<Sample>());
+        series.addSamples(new Sample(MIN_STORABLE_DATE, Mocks.DECIMAL_VALUE));
+        series.addSamples(new Sample(MAX_STORABLE_DATE, Mocks.DECIMAL_VALUE));
 
         String csvPayload = String.format(
                 "time, %s%n%s, %s%n%s, %s%n",

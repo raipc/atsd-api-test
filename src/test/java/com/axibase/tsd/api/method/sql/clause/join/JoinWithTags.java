@@ -41,7 +41,7 @@ public class JoinWithTags extends SqlTest {
             series.setEntity(TEST_ENTITY_NAME);
             series.setMetric(metricName);
 
-            series.addData(new Sample("2016-06-03T09:20:00.000Z", i + 1));
+            series.addSamples(new Sample("2016-06-03T09:20:00.000Z", i + 1));
 
             String tag = tags[i];
             series.addTag("tag", tag);
@@ -333,7 +333,7 @@ public class JoinWithTags extends SqlTest {
             series.setEntity(entity);
             series.setMetric(metric);
             series.addTag("tag", "value");
-            series.addData(Mocks.SAMPLE);
+            series.addSamples(Mocks.SAMPLE);
 
             initialSeries.add(series);
         }
@@ -364,7 +364,7 @@ public class JoinWithTags extends SqlTest {
             series.setEntity(entity);
             series.setMetric(metric);
             series.addTag("tag1", "value");
-            series.addData(Mocks.SAMPLE);
+            series.addSamples(Mocks.SAMPLE);
 
             changedSeries.add(series);
         }

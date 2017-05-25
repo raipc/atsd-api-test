@@ -27,7 +27,7 @@ public class SqlPeriodSyntaxTest extends SqlTest {
                 new Sample("2016-06-19T11:00:05.001Z", "1"),
                 new Sample("2016-06-19T11:00:10.001Z", "2")
         );
-        series.setData(data);
+        series.setSamples(data);
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
     }
 

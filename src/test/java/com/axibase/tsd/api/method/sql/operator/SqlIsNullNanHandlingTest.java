@@ -35,7 +35,7 @@ public class SqlIsNullNanHandlingTest extends SqlTest {
                 new Series() {{
                     setEntity(TEST_ENTITY_NAME);
                     setMetric(TEST_METRIC1_NAME);
-                    setData(Arrays.asList(
+                    setSamples(Arrays.asList(
                             new Sample("2016-06-29T08:00:00.000Z", (BigDecimal) null),
                             new Sample("2016-06-29T08:00:01.000Z", 3)
                     ));
@@ -46,7 +46,7 @@ public class SqlIsNullNanHandlingTest extends SqlTest {
                 new Series() {{
                     setMetric(TEST_METRIC2_NAME);
                     setEntity(TEST_ENTITY_NAME);
-                    setData(Arrays.asList(
+                    setSamples(Arrays.asList(
                             new Sample("2016-06-29T08:00:00.000Z", 0),
                             new Sample("2016-06-29T08:00:01.000Z", 1)
                     ));

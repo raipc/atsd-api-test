@@ -30,7 +30,7 @@ public class ApplyTest extends SqlTest {
     @BeforeClass
     public static void prepareApplyData() throws Exception {
         Series series = new Series(entity(), APPLY_METRIC);
-        series.addData(DEFAULT_SAMPLE);
+        series.addSamples(DEFAULT_SAMPLE);
         SeriesMethod.insertSeriesCheck(singletonList(series));
     }
 
@@ -122,7 +122,7 @@ public class ApplyTest extends SqlTest {
         Long endTime = TestUtil.parseDate("2016-06-29T10:00:00.000Z").getTime();
         Series series = new Series(entity(), metric());
         for (long i = startTime; i < endTime; i += 60000) {
-            series.addData(new Sample(TestUtil.ISOFormat(i), (BigDecimal) null));
+            series.addSamples(new Sample(TestUtil.ISOFormat(i), (BigDecimal) null));
         }
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
         String sqlQuery = String.format("SELECT * FROM '%s'%nWHERE time >= %d AND time < %d%nWITH INTERPOLATE(1 MINUTE, LINEAR)",

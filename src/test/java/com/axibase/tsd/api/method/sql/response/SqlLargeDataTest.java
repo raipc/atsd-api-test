@@ -37,7 +37,7 @@ public class SqlLargeDataTest extends SqlTest {
             series.setEntity(ENTITY_NAME);
             series.setMetric(METRIC_NAME);
             series.addTag("tag", String.valueOf(i));
-            series.addData(createTestSample(i));
+            series.addSamples(createTestSample(i));
 
             seriesRequests.addAll(series.toCommands());
         }

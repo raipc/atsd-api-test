@@ -41,7 +41,7 @@ public class SqlDataTypeInferenceTest extends SqlMethod {
             Series s = new Series();
             s.setMetric(metric.getName());
             s.setEntity(entityName);
-            s.addData(Mocks.SAMPLE);
+            s.addSamples(Mocks.SAMPLE);
             seriesList.add(s);
         }
 

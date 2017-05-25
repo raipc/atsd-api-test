@@ -36,7 +36,7 @@ public class AutoTimeZoneTest extends SqlTest {
         Series series = new Series();
         series.setMetric(metric.getName());
         series.setEntity(entity());
-        series.addData(DEFAULT_SAMPLE);
+        series.addSamples(DEFAULT_SAMPLE);
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
 
 
@@ -61,7 +61,7 @@ public class AutoTimeZoneTest extends SqlTest {
         Series series = new Series();
         series.setMetric(metric());
         series.setEntity(entity.getName());
-        series.addData(DEFAULT_SAMPLE);
+        series.addSamples(DEFAULT_SAMPLE);
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
 
         String sqlQuery = String.format(
@@ -92,7 +92,7 @@ public class AutoTimeZoneTest extends SqlTest {
         Series series = new Series();
         series.setMetric(metric.getName());
         series.setEntity(entity.getName());
-        series.addData(DEFAULT_SAMPLE);
+        series.addSamples(DEFAULT_SAMPLE);
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
 
 
@@ -112,7 +112,7 @@ public class AutoTimeZoneTest extends SqlTest {
     @Test
     public void testDefaultTimeZone() throws Exception {
         Series series = new Series(entity(), metric());
-        series.addData(DEFAULT_SAMPLE);
+        series.addSamples(DEFAULT_SAMPLE);
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
 
         String sqlQuery = String.format(

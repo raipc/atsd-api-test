@@ -24,7 +24,7 @@ public class AggregationChangedDatatypeTest extends SqlTest {
         Series series = new Series();
         series.setEntity(entity.getName());
         series.setMetric(metric.getName());
-        series.addData(SAMPLE);
+        series.addSamples(SAMPLE);
         series.addTag("tag1", "1");
 
         SeriesMethod.insertSeriesCheck(series);

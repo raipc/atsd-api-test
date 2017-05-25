@@ -29,11 +29,11 @@ public class LastAndFirstFunctionTagsTest extends SqlTest {
         Series series = new Series();
         series.setEntity(testEntity);
         series.setMetric(TEST_METRIC);
-        series.addData(new Sample("2017-01-01T09:30:00.000Z", 1));
-        series.addData(new Sample("2017-01-01T10:30:00.000Z", 1));
-        series.addData(new Sample("2017-01-01T11:30:00.000Z", 2));
-        series.addData(new Sample("2017-01-01T12:30:00.000Z", 2));
-        series.addData(new Sample("2017-01-01T13:30:00.000Z", 2));
+        series.addSamples(new Sample("2017-01-01T09:30:00.000Z", 1));
+        series.addSamples(new Sample("2017-01-01T10:30:00.000Z", 1));
+        series.addSamples(new Sample("2017-01-01T11:30:00.000Z", 2));
+        series.addSamples(new Sample("2017-01-01T12:30:00.000Z", 2));
+        series.addSamples(new Sample("2017-01-01T13:30:00.000Z", 2));
         SeriesMethod.insertSeriesCheck(series);
     }
 

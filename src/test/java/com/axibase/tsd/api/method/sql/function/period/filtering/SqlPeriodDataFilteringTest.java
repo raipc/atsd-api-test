@@ -25,7 +25,7 @@ public class SqlPeriodDataFilteringTest extends SqlMethod {
     @BeforeClass
     public static void prepareDataSet() throws Exception {
         Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME) {{
-            setData(Arrays.asList(
+            setSamples(Arrays.asList(
                     new Sample("2016-06-27T14:20:00.000Z", "4.0"),
                     new Sample("2016-06-27T14:22:00.000Z", "4.0"),
                     new Sample("2016-06-27T14:22:01.000Z", "4.0")

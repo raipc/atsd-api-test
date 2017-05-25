@@ -21,7 +21,7 @@ public class SqlExamplePercentilesTest extends SqlTest {
     @BeforeClass
     public static void prepareData() throws Exception {
         Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME);
-        series.setData(Arrays.asList(
+        series.setSamples(Arrays.asList(
                 new Sample("2016-06-19T11:00:00.000Z", "11.1212"),
                 new Sample("2016-06-19T11:01:00.000Z", "11.3232"),
                 new Sample("2016-06-19T11:02:00.000Z", "11.123"),

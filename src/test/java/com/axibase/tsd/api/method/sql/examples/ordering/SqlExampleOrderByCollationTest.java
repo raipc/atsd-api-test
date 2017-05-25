@@ -32,7 +32,7 @@ public class SqlExampleOrderByCollationTest extends SqlTest {
         Series nullSeries = new Series();
         nullSeries.setEntity(TEST_ENTITY_NAME);
         nullSeries.setMetric(TEST_METRIC_NAME);
-        nullSeries.addData(new Sample("2016-06-03T09:24:00.000Z", "0"));
+        nullSeries.addSamples(new Sample("2016-06-03T09:24:00.000Z", "0"));
         seriesList.add(nullSeries);
 
         Series series;
@@ -43,7 +43,7 @@ public class SqlExampleOrderByCollationTest extends SqlTest {
                 series = new Series();
                 series.setMetric(TEST_METRIC_NAME);
                 series.setEntity(TEST_ENTITY_NAME);
-                series.addData(new Sample("2016-06-03T09:24:00.000Z", value));
+                series.addSamples(new Sample("2016-06-03T09:24:00.000Z", value));
                 series.addTag("tag", name);
                 seriesList.add(series);
                 i++;

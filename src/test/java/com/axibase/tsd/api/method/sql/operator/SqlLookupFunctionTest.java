@@ -55,17 +55,17 @@ public class SqlLookupFunctionTest extends SqlTest {
         {
             Series series = new Series(entity(), TEST_METRIC_NAME_BASE_LOOKUP_CASE);
 
-            series.addData(new TextSample("2016-06-03T09:20:00.000Z", "word"));
-            series.addData(new TextSample("2016-06-03T09:21:00.000Z", "-1"));
-            series.addData(new TextSample("2016-06-03T09:22:00.000Z", "1"));
-            series.addData(new TextSample("2016-06-03T09:23:00.000Z", "2"));
-            series.addData(new TextSample("2016-06-03T09:24:00.000Z", "word"));
-            series.addData(new TextSample("2016-06-03T09:25:00.000Z", "words"));
-            series.addData(new TextSample("2016-06-03T09:26:00.000Z", "3"));
-            series.addData(new TextSample("2016-06-03T09:27:00.000Z", "4"));
-            series.addData(new TextSample("2016-06-03T09:28:00.000Z", "PI"));
-            series.addData(new TextSample("2016-06-03T09:29:00.000Z", "3.14"));
-            series.addData(new TextSample("2016-06-03T09:30:00.000Z", "nothing"));
+            series.addSamples(new TextSample("2016-06-03T09:20:00.000Z", "word"));
+            series.addSamples(new TextSample("2016-06-03T09:21:00.000Z", "-1"));
+            series.addSamples(new TextSample("2016-06-03T09:22:00.000Z", "1"));
+            series.addSamples(new TextSample("2016-06-03T09:23:00.000Z", "2"));
+            series.addSamples(new TextSample("2016-06-03T09:24:00.000Z", "word"));
+            series.addSamples(new TextSample("2016-06-03T09:25:00.000Z", "words"));
+            series.addSamples(new TextSample("2016-06-03T09:26:00.000Z", "3"));
+            series.addSamples(new TextSample("2016-06-03T09:27:00.000Z", "4"));
+            series.addSamples(new TextSample("2016-06-03T09:28:00.000Z", "PI"));
+            series.addSamples(new TextSample("2016-06-03T09:29:00.000Z", "3.14"));
+            series.addSamples(new TextSample("2016-06-03T09:30:00.000Z", "nothing"));
             seriesList.add(series);
         }
 
@@ -92,7 +92,7 @@ public class SqlLookupFunctionTest extends SqlTest {
             series.setEntity(testEntityNameTagsCase);
             series.setMetric(TEST_METRIC_NAME_TAGS_CASE);
             series.setTags(tags);
-            series.addData(new Sample("2016-06-03T09:20:00.000Z", "1"));
+            series.addSamples(new Sample("2016-06-03T09:20:00.000Z", "1"));
             seriesList.add(series);
         }
 

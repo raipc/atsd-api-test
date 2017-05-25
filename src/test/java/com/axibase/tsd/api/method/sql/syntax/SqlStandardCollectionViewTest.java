@@ -48,13 +48,13 @@ public class SqlStandardCollectionViewTest extends SqlTest {
             setTags(TAGS);
             setMetric(TEST_METRIC1_NAME);
             setEntity(TEST_ENTITY1_NAME);
-            addData(new Sample("2016-06-29T08:00:00.000Z", 0));
+            addSamples(new Sample("2016-06-29T08:00:00.000Z", 0));
         }});
         seriesList.add(new Series() {{
             setEntity(TEST_ENTITY2_NAME);
             setMetric(TEST_METRIC2_NAME);
             setTags(Collections.<String, String>emptyMap());
-            addData(new Sample("2016-06-29T08:00:00.000Z", 1));
+            addSamples(new Sample("2016-06-29T08:00:00.000Z", 1));
         }});
         SeriesMethod.insertSeriesCheck(seriesList);
         //Entity data

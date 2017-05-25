@@ -1,7 +1,6 @@
 package com.axibase.tsd.api.method.sql.keyword;
 
 import com.axibase.tsd.api.method.series.SeriesMethod;
-import com.axibase.tsd.api.method.sql.SqlMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
@@ -26,14 +25,14 @@ public class KeywordCaseSensitivityTest extends SqlTest {
 
         {
             Series series = new Series(ENTITY_NAME, METRIC1_NAME);
-            series.addData(new Sample("2016-06-03T09:20:18.000Z", "1"));
+            series.addSamples(new Sample("2016-06-03T09:20:18.000Z", "1"));
             seriesList.add(series);
         }
         {
             Series series = new Series();
             series.setEntity(ENTITY_NAME);
             series.setMetric(METRIC2_NAME);
-            series.addData(new Sample("2016-06-03T09:20:18.000Z", "2"));
+            series.addSamples(new Sample("2016-06-03T09:20:18.000Z", "2"));
             seriesList.add(series);
         }
 

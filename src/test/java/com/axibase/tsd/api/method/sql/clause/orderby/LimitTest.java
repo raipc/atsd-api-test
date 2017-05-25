@@ -56,7 +56,7 @@ public class LimitTest extends SqlTest {
             series.setEntity(entityName);
             for (int j = 0; j < 10 - i; j++) {
                 Sample sample = new Sample(TestUtil.ISOFormat(date + j * TimeUnit.HOURS.toMillis(1)), j);
-                series.addData(sample);
+                series.addSamples(sample);
 
             }
             seriesList.add(series);
@@ -106,7 +106,7 @@ public class LimitTest extends SqlTest {
                     TestUtil.ISOFormat(date + i * TimeUnit.HOURS.toMillis(1)),
                     new BigDecimal(values[i])
             );
-            series.addData(sample);
+            series.addSamples(sample);
 
         }
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
@@ -143,7 +143,7 @@ public class LimitTest extends SqlTest {
     @BeforeGroups(groups = {DATETIME_ORDER_TEST_GROUP})
     public void prepareDateTimeOrderData() throws Exception {
         Series series = new Series(entity(), DATETIME_ORDER_METRIC);
-        series.setData(Arrays.asList(
+        series.setSamples(Arrays.asList(
                 new Sample("2016-06-19T11:00:00.000Z", 1),
                 new Sample("2016-06-19T11:03:00.000Z", 2),
                 new Sample("2016-06-19T11:02:00.000Z", 3),
@@ -182,7 +182,7 @@ public class LimitTest extends SqlTest {
             Series series = new Series();
             series.setMetric(TAGS_ORDER_METRIC);
             series.setEntity(entityName);
-            series.addData(new Sample(TestUtil.ISOFormat(startTime + i * TimeUnit.HOURS.toMillis(1)), values[i]));
+            series.addSamples(new Sample(TestUtil.ISOFormat(startTime + i * TimeUnit.HOURS.toMillis(1)), values[i]));
             seriesList.add(series);
         }
         SeriesMethod.insertSeriesCheck(seriesList);

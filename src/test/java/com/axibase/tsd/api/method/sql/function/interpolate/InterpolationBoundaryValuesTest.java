@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Response;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
 import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
+import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
 
 public class InterpolationBoundaryValuesTest extends SqlTest {
     private static final String TEST_METRIC = metric();
@@ -37,14 +37,14 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
 
         Series series = new Series(entity, TEST_METRIC);
 
-        series.addData(new Sample(replaceTimezone("2017-01-01T07:30:00.000Z"), 0));
-        series.addData(new Sample(replaceTimezone("2017-01-01T10:30:00.000Z"), 1));
-        series.addData(new Sample(replaceTimezone("2017-01-01T11:30:00.000Z"), 2));
-        series.addData(new Sample(replaceTimezone("2017-01-01T12:30:00.000Z"), 3));
+        series.addSamples(new Sample(replaceTimezone("2017-01-01T07:30:00.000Z"), 0));
+        series.addSamples(new Sample(replaceTimezone("2017-01-01T10:30:00.000Z"), 1));
+        series.addSamples(new Sample(replaceTimezone("2017-01-01T11:30:00.000Z"), 2));
+        series.addSamples(new Sample(replaceTimezone("2017-01-01T12:30:00.000Z"), 3));
 
-        series.addData(new Sample(replaceTimezone("2017-01-01T17:30:00.000Z"), 7));
-        series.addData(new Sample(replaceTimezone("2017-01-01T18:30:00.000Z"), 8));
-        series.addData(new Sample(replaceTimezone("2017-01-01T19:30:00.000Z"), 9));
+        series.addSamples(new Sample(replaceTimezone("2017-01-01T17:30:00.000Z"), 7));
+        series.addSamples(new Sample(replaceTimezone("2017-01-01T18:30:00.000Z"), 8));
+        series.addSamples(new Sample(replaceTimezone("2017-01-01T19:30:00.000Z"), 9));
 
         SeriesMethod.insertSeriesCheck(series);
     }

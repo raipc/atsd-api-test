@@ -61,7 +61,7 @@ public class LikeOperatorTest extends SqlTest {
             Series series = new Series();
             series.setEntity(entity);
             series.setMetric(metrics[i]);
-            series.addData(Mocks.SAMPLE);
+            series.addSamples(Mocks.SAMPLE);
 
             seriesArray[i] = series;
         }
