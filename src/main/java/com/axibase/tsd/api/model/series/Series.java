@@ -35,6 +35,26 @@ public class Series {
         this.tags = new HashMap<>();
     }
 
+    public Series(String entity, String metric, String... tags) {
+        this(entity, metric);
+
+        /* Tag name-value pairs */
+        if (tags.length % 2 != 0) {
+            throw new IllegalArgumentException("Tag name without value in arguments");
+        }
+
+        for (int i = 0; i < tags.length; i += 2) {
+            String key = tags[i];
+            String value = tags[i + 1];
+
+            if (key == null || value == null || key.isEmpty() || value.isEmpty()) {
+                throw new IllegalArgumentException("Series tag name or value is null or empty");
+            }
+
+            addTag(key, value);
+        }
+    }
+
     public Series copy() {
         Series copy = new Series();
         copy.setEntity(entity);
@@ -89,14 +109,15 @@ public class Series {
         if (tags == null) {
             tags = new HashMap<>();
         }
+
         tags.put(key, value);
     }
 
-    public void addData(Sample sample) {
+    public void addData(Sample... samples) {
         if (data == null) {
             data = new ArrayList<>();
         }
-        data.add(sample);
+        Collections.addAll(data, samples);
     }
 
     @Override
@@ -110,13 +131,8 @@ public class Series {
 
         Series series = (Series) o;
 
-        if (!entity.equals(series.entity))
-            return false;
-        if (!metric.equals(series.metric))
-            return false;
-        if (!data.equals(series.data))
-            return false;
-        return tags.equals(series.tags);
+        return entity.equals(series.entity) && metric.equals(series.metric) &&
+                data.equals(series.data) && tags.equals(series.tags);
     }
 
     @Override
