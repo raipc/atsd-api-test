@@ -27,6 +27,12 @@ public class Sample {
     public Sample() {
     }
 
+    public Sample(String d, int v, String text) {
+        this.d = convertDateToISO(d);
+        this.v = new BigDecimal(v);
+        this.text = text;
+    }
+
     public Sample(String d, BigDecimal v, String text) {
         this.d = convertDateToISO(d);
         this.v = v;
@@ -45,7 +51,7 @@ public class Sample {
 
     public Sample(String d, int v) {
         this.d = convertDateToISO(d);
-        this.v = new BigDecimal(String.valueOf(v));
+        this.v = new BigDecimal(v);
     }
 
     public Sample(Date d, String v) {
