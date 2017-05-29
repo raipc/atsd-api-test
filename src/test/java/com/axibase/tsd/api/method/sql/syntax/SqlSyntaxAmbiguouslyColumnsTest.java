@@ -80,39 +80,6 @@ public class SqlSyntaxAmbiguouslyColumnsTest extends SqlTest {
      * #3157
      */
     @Test
-    public void testAmbiguouslyTimeColumn() {
-        String sqlQuery = String.format(
-                "SELECT time FROM '%s' %nJOIN '%s'",
-                TEST_METRIC1_NAME, TEST_METRIC2_NAME
-        );
-
-        Response response = queryResponse(sqlQuery);
-
-        assertBadRequest(String.format(BAD_REQUEST_ASSERT_MESSAGE_TEMPLATE, "column time"),
-                String.format(SQL_SYNTAX_AMBIGUOUS_COLUMN_TPL, "time"), response);
-    }
-
-
-    /**
-     * #3157
-     */
-    @Test
-    public void testAmbiguouslyDateTimeColumn() {
-        String sqlQuery = String.format(
-                "SELECT datetime FROM '%s' %nJOIN '%s'",
-                TEST_METRIC1_NAME, TEST_METRIC2_NAME
-        );
-
-        Response response = queryResponse(sqlQuery);
-
-        assertBadRequest(String.format(BAD_REQUEST_ASSERT_MESSAGE_TEMPLATE, "where clause"),
-                String.format(SQL_SYNTAX_AMBIGUOUS_COLUMN_TPL, "datetime"), response);
-    }
-
-    /**
-     * #3157
-     */
-    @Test
     public void testAmbiguouslyTagsColumn() {
         String sqlQuery = String.format(
                 "SELECT tags FROM '%s' %nJOIN '%s'",
