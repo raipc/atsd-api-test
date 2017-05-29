@@ -2,13 +2,20 @@ package com.axibase.tsd.api.method.sql.function.period.align;
 
 import com.axibase.tsd.api.method.series.SeriesMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
+import com.axibase.tsd.api.method.version.VersionMethod;
+import com.axibase.tsd.api.model.TimeUnit;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
+import com.axibase.tsd.api.model.version.Version;
 import com.axibase.tsd.api.util.Registry;
+import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,10 +27,15 @@ public class SqlPeriodAlignTest extends SqlTest {
     private static final String TEST_METRIC_NAME = TEST_PREFIX + "metric";
     private static final String TEST_ENTITY_NAME = TEST_PREFIX + "entity";
 
+    private ZoneId serverTimezone;
+
     @BeforeClass
     public void prepareDataSet() throws Exception {
         Registry.Entity.register(TEST_ENTITY_NAME);
         Registry.Metric.register(TEST_METRIC_NAME);
+
+        Version version = VersionMethod.queryVersion().readEntity(Version.class);
+        serverTimezone = ZoneId.of(version.getDate().getTimeZone().getName());
 
         insertSamples(
                 new Sample("2016-06-03T09:20:00.124Z", 16.0),
@@ -790,25 +802,25 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testGroupByPeriodMonthStartTime() throws Exception {
         insertSamples(
-                new Sample("2005-12-31T00:00:00.005Z", 0),
-                new Sample("2006-01-01T00:00:00.005Z", 1),
-                new Sample("2006-02-01T00:00:00.005Z", 2),
-                new Sample("2006-03-01T00:00:00.005Z", 3),
-                new Sample("2006-04-01T00:00:00.005Z", 4)
+                new Sample("2006-01-02T00:00:00.005Z", 0),
+                new Sample("2006-02-02T00:00:00.005Z", 1),
+                new Sample("2006-03-02T00:00:00.005Z", 2),
+                new Sample("2006-04-02T00:00:00.005Z", 3),
+                new Sample("2006-05-02T00:00:00.005Z", 4)
         );
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
                         "FROM '%s' " +
-                        "WHERE datetime >= '2006-01-01T00:00:00.000Z' AND datetime < '2006-03-01T00:00:00.007Z' " +
+                        "WHERE datetime >= '2006-02-02T00:00:00.000Z' AND datetime < '2006-04-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 MONTH, START_TIME)",
                 TEST_METRIC_NAME
         );
 
         String[][] expectedRows = new String[][]{
-                {"2006-01-01T00:00:00.000Z", "1"},
-                {"2006-02-01T00:00:00.000Z", "2"},
-                {"2006-03-01T00:00:00.000Z", "3"}
+                {"2006-02-02T00:00:00.000Z", "1"},
+                {"2006-03-02T00:00:00.000Z", "2"},
+                {"2006-04-02T00:00:00.000Z", "3"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
@@ -820,24 +832,24 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testGroupByPeriodMonthEndTime() throws Exception {
         insertSamples(
-                new Sample("2005-12-31T00:00:00.005Z", 0),
-                new Sample("2006-01-01T00:00:00.005Z", 1),
-                new Sample("2006-02-01T00:00:00.005Z", 2),
-                new Sample("2006-03-01T00:00:00.005Z", 3),
-                new Sample("2006-04-01T00:00:00.005Z", 4)
+                new Sample("2006-01-02T00:00:00.005Z", 0),
+                new Sample("2006-02-02T00:00:00.005Z", 1),
+                new Sample("2006-03-02T00:00:00.005Z", 2),
+                new Sample("2006-04-02T00:00:00.005Z", 3),
+                new Sample("2006-05-02T00:00:00.005Z", 4)
         );
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
                         "FROM '%s' " +
-                        "WHERE datetime >= '2006-01-01T00:00:00.000Z' AND datetime < '2006-03-01T00:00:00.007Z' " +
+                        "WHERE datetime >= '2006-02-02T00:00:00.000Z' AND datetime < '2006-04-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 MONTH, END_TIME)",
                 TEST_METRIC_NAME
         );
 
         String[][] expectedRows = new String[][]{
-                {"2006-01-01T00:00:00.007Z", "2"},
-                {"2006-02-01T00:00:00.007Z", "3"}
+                {"2006-02-02T00:00:00.007Z", "2"},
+                {"2006-03-02T00:00:00.007Z", "3"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
@@ -849,25 +861,25 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testGroupByPeriodMonthFirstValueTime() throws Exception {
         insertSamples(
-                new Sample("2005-12-31T00:00:00.005Z", 0),
-                new Sample("2006-01-01T00:00:00.005Z", 1),
-                new Sample("2006-02-01T00:00:00.005Z", 2),
-                new Sample("2006-03-01T00:00:00.005Z", 3),
-                new Sample("2006-04-01T00:00:00.005Z", 4)
+                new Sample("2006-01-02T00:00:00.005Z", 0),
+                new Sample("2006-02-02T00:00:00.005Z", 1),
+                new Sample("2006-03-02T00:00:00.005Z", 2),
+                new Sample("2006-04-02T00:00:00.005Z", 3),
+                new Sample("2006-05-02T00:00:00.005Z", 4)
         );
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
                         "FROM '%s' " +
-                        "WHERE datetime >= '2006-01-01T00:00:00.000Z' AND datetime < '2006-03-01T00:00:00.007Z' " +
+                        "WHERE datetime >= '2006-02-02T00:00:00.000Z' AND datetime < '2006-04-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 MONTH, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
         );
 
         String[][] expectedRows = new String[][]{
-                {"2006-01-01T00:00:00.005Z", "1"},
-                {"2006-02-01T00:00:00.005Z", "2"},
-                {"2006-03-01T00:00:00.005Z", "3"}
+                {"2006-02-02T00:00:00.005Z", "1"},
+                {"2006-03-02T00:00:00.005Z", "2"},
+                {"2006-04-02T00:00:00.005Z", "3"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
@@ -879,25 +891,29 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testGroupByPeriodQuarterStartTime() throws Exception {
         insertSamples(
-                new Sample("2006-12-31T00:00:00.005Z", 0),
-                new Sample("2007-01-01T00:00:00.005Z", 1),
-                new Sample("2007-04-01T00:00:00.005Z", 2),
-                new Sample("2007-07-01T00:00:00.005Z", 3),
-                new Sample("2007-08-01T00:00:00.005Z", 4)
+                new Sample("2006-12-30T00:00:00.005Z", 0),
+                new Sample("2007-01-02T00:00:00.005Z", 1),
+                new Sample("2007-04-02T00:00:00.005Z", 2),
+                new Sample("2007-07-02T00:00:00.005Z", 3),
+                new Sample("2007-08-02T00:00:00.005Z", 4)
         );
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
                         "FROM '%s' " +
-                        "WHERE datetime >= '2007-01-01T00:00:00.000Z' AND datetime < '2007-07-01T00:00:00.007Z' " +
+                        "WHERE datetime >= '2007-01-02T00:00:00.000Z' AND datetime < '2007-07-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 QUARTER, START_TIME)",
                 TEST_METRIC_NAME
         );
 
+        String resultUtcDate1 = "2007-01-02T00:00:00.000Z";
+        String resultUtcDate2 = Util.addTimeUnitsInTimezone(resultUtcDate1, serverTimezone, TimeUnit.MONTH, 3);
+        String resultUtcDate3 = Util.addTimeUnitsInTimezone(resultUtcDate1, serverTimezone, TimeUnit.MONTH, 6);
+
         String[][] expectedRows = new String[][]{
-                {"2007-01-01T00:00:00.000Z", "1"},
-                {"2007-04-01T00:00:00.000Z", "2"},
-                {"2007-07-01T00:00:00.000Z", "3"}
+                {resultUtcDate1, "1"},
+                {resultUtcDate2, "2"},
+                {resultUtcDate3, "3"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
@@ -909,24 +925,27 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testGroupByPeriodQuarterEndTime() throws Exception {
         insertSamples(
-                new Sample("2006-12-31T00:00:00.005Z", 0),
-                new Sample("2007-01-01T00:00:00.005Z", 1),
-                new Sample("2007-04-01T00:00:00.005Z", 2),
-                new Sample("2007-07-01T00:00:00.005Z", 3),
-                new Sample("2007-08-01T00:00:00.005Z", 4)
+                new Sample("2006-12-30T00:00:00.005Z", 0),
+                new Sample("2007-01-02T00:00:00.005Z", 1),
+                new Sample("2007-04-02T00:00:00.005Z", 2),
+                new Sample("2007-07-02T00:00:00.005Z", 3),
+                new Sample("2007-08-02T00:00:00.005Z", 4)
         );
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
                         "FROM '%s' " +
-                        "WHERE datetime >= '2007-01-01T00:00:00.000Z' AND datetime < '2007-07-01T00:00:00.007Z' " +
+                        "WHERE datetime >= '2007-01-02T00:00:00.000Z' AND datetime < '2007-07-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 QUARTER, END_TIME)",
                 TEST_METRIC_NAME
         );
 
+        String resultUtcDate1 = "2007-04-02T00:00:00.007Z";
+        String resultUtcDate2 = Util.addTimeUnitsInTimezone(resultUtcDate1, serverTimezone, TimeUnit.MONTH, -3);
+
         String[][] expectedRows = new String[][]{
-                {"2007-01-01T00:00:00.007Z", "2"},
-                {"2007-04-01T00:00:00.007Z", "3"}
+                {resultUtcDate2, "2"},
+                {resultUtcDate1, "3"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
@@ -938,25 +957,29 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testGroupByPeriodQuarterFirstValueTime() throws Exception {
         insertSamples(
-                new Sample("2006-12-31T00:00:00.005Z", 0),
-                new Sample("2007-01-01T00:00:00.005Z", 1),
-                new Sample("2007-04-01T00:00:00.005Z", 2),
-                new Sample("2007-07-01T00:00:00.005Z", 3),
-                new Sample("2007-08-01T00:00:00.005Z", 4)
+                new Sample("2006-12-30T00:00:00.005Z", 0),
+                new Sample("2007-01-02T00:00:00.005Z", 1),
+                new Sample("2007-04-02T00:00:00.005Z", 2),
+                new Sample("2007-07-02T00:00:00.005Z", 3),
+                new Sample("2007-08-02T00:00:00.005Z", 4)
         );
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
                         "FROM '%s' " +
-                        "WHERE datetime >= '2007-01-01T00:00:00.000Z' AND datetime < '2007-07-01T00:00:00.007Z' " +
+                        "WHERE datetime >= '2007-01-02T00:00:00.000Z' AND datetime < '2007-07-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 QUARTER, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
         );
 
+        String resultUtcDate1 = "2007-01-02T00:00:00.005Z";
+        String resultUtcDate2 = Util.addTimeUnitsInTimezone(resultUtcDate1, serverTimezone, TimeUnit.MONTH, 3);
+        String resultUtcDate3 = Util.addTimeUnitsInTimezone(resultUtcDate1, serverTimezone, TimeUnit.MONTH, 6);
+
         String[][] expectedRows = new String[][]{
-                {"2007-01-01T00:00:00.005Z", "1"},
-                {"2007-04-01T00:00:00.005Z", "2"},
-                {"2007-07-01T00:00:00.005Z", "3"}
+                {resultUtcDate1, "1"},
+                {resultUtcDate2, "2"},
+                {resultUtcDate3, "3"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
