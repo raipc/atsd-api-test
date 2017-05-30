@@ -10,9 +10,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-/**
- * @author Dmitry Korchagin.
- */
 public class Config {
     private static final Logger logger = LoggerFactory.getLogger(Config.class);
     private static final String DEFAULT_CONFIG_FILE = "client.properties";

@@ -13,8 +13,6 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -22,7 +20,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.io.FileNotFoundException;
-import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +31,6 @@ public class SeriesMethod extends BaseMethod {
     private static final String METHOD_SERIES_INSERT = "/series/insert";
     private static final String METHOD_SERIES_QUERY = "/series/query";
     private static final String METHOD_SERIES_URL_QUERY = "/series/{format}/{entity}/{metric}";
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static <T> Response insertSeries(final T seriesList, String user, String password, boolean sleepEnabled) {
         Invocation.Builder builder = httpApiResource.path(METHOD_SERIES_INSERT).request();
