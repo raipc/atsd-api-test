@@ -174,7 +174,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testInnerInterpolation() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -196,7 +196,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testInnerInterpolationWithPeriodIntersection() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -219,7 +219,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testInnerInterpolationWithSingleValueInPeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -244,7 +244,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testInnerInterpolationWithNoValueInPeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -268,7 +268,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testOuterInterpolationEntirePeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -290,7 +290,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testOuterInterpolationWithPeriodIntersection() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -313,7 +313,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testOuterInterpolationWithSingleValueInPeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -338,7 +338,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testOuterInterpolationWithNoValueInPeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -362,7 +362,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test(enabled = false)
+    @Test
     public void testOuterInterpolationWithOuterBoundValue() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
