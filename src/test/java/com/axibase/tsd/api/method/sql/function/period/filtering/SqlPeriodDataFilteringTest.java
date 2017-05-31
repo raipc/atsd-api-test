@@ -4,7 +4,7 @@ import com.axibase.tsd.api.method.series.SeriesMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
-import com.axibase.tsd.api.util.TestUtil.*;
+import com.axibase.tsd.api.util.TestUtil.TestNames;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -104,7 +104,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterMilliseconds() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -125,7 +125,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterSeconds() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -148,7 +148,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterFewSeconds() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -169,7 +169,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterMinutes() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -192,7 +192,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterFewMinutes() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -211,7 +211,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterDays() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -233,7 +233,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterFewDays() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -254,7 +254,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterWeeks() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -275,7 +275,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterFewWeeks() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -295,7 +295,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterMonths() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -317,7 +317,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterFewMonths() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -337,7 +337,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterQuarters() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -357,7 +357,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterYears() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -378,7 +378,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterLeftBound() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +
@@ -420,7 +420,7 @@ public class SqlPeriodDataFilteringTest extends SqlTest {
     /**
      * #2967, #4146
      */
-    @Test
+    @Test(enabled = false)
     public void testPeriodFilterBothBounds() {
         final String sqlQuery = String.format(
                 "SELECT datetime, sum(value), count(value) FROM '%s' " +

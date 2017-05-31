@@ -7,20 +7,19 @@ import com.axibase.tsd.api.model.DateRange;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.function.interpolate.Boundary;
-import com.axibase.tsd.api.model.version.*;
+import com.axibase.tsd.api.model.version.Version;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Response;
-
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
 import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
+import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
 
 public class InterpolationBoundaryValuesTest extends SqlTest {
     private static final String TEST_METRIC_1 = metric();
@@ -175,7 +174,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testInnerInterpolation() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -197,7 +196,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testInnerInterpolationWithPeriodIntersection() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -220,7 +219,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testInnerInterpolationWithSingleValueInPeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -245,7 +244,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testInnerInterpolationWithNoValueInPeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -269,7 +268,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testOuterInterpolationEntirePeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -291,7 +290,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testOuterInterpolationWithPeriodIntersection() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -314,7 +313,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testOuterInterpolationWithSingleValueInPeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -339,7 +338,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testOuterInterpolationWithNoValueInPeriod() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
@@ -363,7 +362,7 @@ public class InterpolationBoundaryValuesTest extends SqlTest {
     /**
      * #4069
      */
-    @Test
+    @Test(enabled = false)
     public void testOuterInterpolationWithOuterBoundValue() throws ParseException {
         String sqlQuery = String.format(
                 "SELECT value " +
