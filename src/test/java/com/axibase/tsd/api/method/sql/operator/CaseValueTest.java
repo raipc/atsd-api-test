@@ -7,8 +7,8 @@ import com.axibase.tsd.api.model.series.Series;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class CaseValueTest extends SqlTest {
     private static final String METRIC_NAME = metric();
@@ -16,12 +16,14 @@ public class CaseValueTest extends SqlTest {
     @BeforeClass
     public static void prepareData() throws Exception {
         Series s = new Series(entity(), METRIC_NAME);
-        s.addSamples(new Sample("2017-01-01T09:30:00.000Z", "1", "a"));
-        s.addSamples(new Sample("2017-01-02T09:30:00.000Z", "2", "b"));
-        s.addSamples(new Sample("2017-01-03T09:30:00.000Z", "3", "c"));
-        s.addSamples(new Sample("2017-01-04T09:30:00.000Z", "4", "d"));
-        s.addSamples(new Sample("2017-01-05T09:30:00.000Z", "5", "e"));
-        s.addSamples(new Sample("2017-01-06T09:30:00.000Z", "6", "f"));
+        s.addSamples(
+                new Sample("2017-01-01T09:30:00.000Z", 1, "a"),
+                new Sample("2017-01-02T09:30:00.000Z", 2, "b"),
+                new Sample("2017-01-03T09:30:00.000Z", 3, "c"),
+                new Sample("2017-01-04T09:30:00.000Z", 4, "d"),
+                new Sample("2017-01-05T09:30:00.000Z", 5, "e"),
+                new Sample("2017-01-06T09:30:00.000Z", 6, "f")
+        );
 
         SeriesMethod.insertSeriesCheck(s);
     }

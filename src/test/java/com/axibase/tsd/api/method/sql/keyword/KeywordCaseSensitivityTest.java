@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class KeywordCaseSensitivityTest extends SqlTest {
     private static final String ENTITY_NAME = entity();
@@ -23,18 +23,13 @@ public class KeywordCaseSensitivityTest extends SqlTest {
     public void prepareData() throws Exception {
         List<Series> seriesList = new ArrayList<>();
 
-        {
-            Series series = new Series(ENTITY_NAME, METRIC1_NAME);
-            series.addSamples(new Sample("2016-06-03T09:20:18.000Z", "1"));
-            seriesList.add(series);
-        }
-        {
-            Series series = new Series();
-            series.setEntity(ENTITY_NAME);
-            series.setMetric(METRIC2_NAME);
-            series.addSamples(new Sample("2016-06-03T09:20:18.000Z", "2"));
-            seriesList.add(series);
-        }
+        Series series = new Series(ENTITY_NAME, METRIC1_NAME);
+        series.addSamples(new Sample("2016-06-03T09:20:18.000Z", 1));
+        seriesList.add(series);
+
+        series = new Series(ENTITY_NAME, METRIC2_NAME);
+        series.addSamples(new Sample("2016-06-03T09:20:18.000Z", 2));
+        seriesList.add(series);
 
         SeriesMethod.insertSeriesCheck(seriesList);
     }

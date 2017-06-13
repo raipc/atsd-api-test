@@ -24,15 +24,28 @@ public class Series {
 
     public Series(String entity, String metric) {
         if (null != entity) {
-            Registry.Entity.register(entity);
+            Registry.Entity.checkExists(entity);
         }
         if (null != metric) {
-            Registry.Metric.register(metric);
+            Registry.Metric.checkExists(metric);
         }
         this.entity = entity;
         this.metric = metric;
         this.data = new ArrayList<>();
         this.tags = new HashMap<>();
+    }
+
+    public Series(String entity, String metric, Map<String, String> tags) {
+        if (null != entity) {
+            Registry.Entity.checkExists(entity);
+        }
+        if (null != metric) {
+            Registry.Metric.checkExists(metric);
+        }
+        this.entity = entity;
+        this.metric = metric;
+        this.data = new ArrayList<>();
+        this.tags = tags;
     }
 
     public Series(String entity, String metric, String... tags) {

@@ -10,8 +10,8 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 
 import static com.axibase.tsd.api.util.Mocks.DECIMAL_VALUE;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class GroupByNullTagValue extends SqlTest {
     private static final String TEST_ENTITY_NAME = entity();
@@ -19,22 +19,16 @@ public class GroupByNullTagValue extends SqlTest {
 
     @BeforeClass
     public void prepareData() throws Exception {
-        Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME);
-
-        series.setSamples(Arrays.asList(
+        Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME, "tag1", "tagname");
+        series.addSamples(
                 new Sample("2017-02-09T12:00:00.000Z", DECIMAL_VALUE),
                 new Sample("2017-02-10T12:00:00.000Z", DECIMAL_VALUE)
-                )
         );
-        series.addTag("tag1", "tagname");
 
-        Series seriesWithoutTag = new Series();
-        seriesWithoutTag.setEntity(TEST_ENTITY_NAME);
-        seriesWithoutTag.setMetric(TEST_METRIC_NAME);
-        seriesWithoutTag.setSamples(Arrays.asList(
+        Series seriesWithoutTag = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME);
+        seriesWithoutTag.addSamples(
                 new Sample("2017-02-11T12:00:00.000Z", DECIMAL_VALUE),
                 new Sample("2017-02-12T12:00:00.000Z", DECIMAL_VALUE)
-                )
         );
 
         SeriesMethod.insertSeriesCheck(series, seriesWithoutTag);
@@ -53,8 +47,8 @@ public class GroupByNullTagValue extends SqlTest {
         );
 
         String[][] expectedRows = {
-                {"null", DECIMAL_VALUE},
-                {"tagname", DECIMAL_VALUE}
+                {"null", DECIMAL_VALUE.toString()},
+                {"tagname", DECIMAL_VALUE.toString()}
         };
 
         assertSqlQueryRows("GROUP BY tag name that has null values gives wrong result", expectedRows, sqlQuery);

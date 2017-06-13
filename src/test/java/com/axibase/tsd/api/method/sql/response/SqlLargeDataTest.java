@@ -25,15 +25,13 @@ public class SqlLargeDataTest extends SqlTest {
      */
     @Test
     public void testQueryLargeData() throws Exception {
-
         ArrayList<SeriesCommand> seriesRequests = new ArrayList<>(ENTITIES_COUNT);
-
-        Registry.Metric.register(METRIC_NAME);
-        Registry.Metric.register(ENTITY_NAME);
+        Registry.Entity.checkExists(ENTITY_NAME);
+        Registry.Metric.checkExists(METRIC_NAME);
 
         for (int i = 1; i <= ENTITIES_COUNT; i++) {
+            // manually set entity and metric to avoid check
             Series series = new Series();
-
             series.setEntity(ENTITY_NAME);
             series.setMetric(METRIC_NAME);
             series.addTag("tag", String.valueOf(i));
@@ -59,7 +57,7 @@ public class SqlLargeDataTest extends SqlTest {
 
     private static Sample createTestSample(int value) throws ParseException {
         Long millisTime = Mocks.MILLS_TIME + value * 1000;
-        return new Sample(new Date(millisTime), String.valueOf(value));
+        return new Sample(new Date(millisTime), value);
     }
 
     private class LargeDataCheck extends AbstractCheck {

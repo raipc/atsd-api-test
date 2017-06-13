@@ -10,8 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class AggregationEmptyValueTest extends SqlTest {
     private static final String METRIC_NAME1 = metric();
@@ -20,13 +20,17 @@ public class AggregationEmptyValueTest extends SqlTest {
     @BeforeClass
     public static void prepareData() throws Exception {
         Series series1 = new Series(entity(), METRIC_NAME1);
-        series1.addSamples(new Sample(Util.ISOFormat(1), "-2"));
-        series1.addSamples(new Sample(Util.ISOFormat(2), "-1"));
+        series1.addSamples(
+                new Sample(Util.ISOFormat(1), -2),
+                new Sample(Util.ISOFormat(2), -1)
+        );
 
         Series series2 = new Series(entity(), METRIC_NAME2);
         /* NaN value field */
-        series2.addSamples(new TextSample(Util.ISOFormat(1), "text"));
-        series2.addSamples(new TextSample(Util.ISOFormat(2), "text"));
+        series2.addSamples(
+                new TextSample(Util.ISOFormat(1), "text"),
+                new TextSample(Util.ISOFormat(2), "text")
+        );
 
         SeriesMethod.insertSeriesCheck(series1, series2);
     }

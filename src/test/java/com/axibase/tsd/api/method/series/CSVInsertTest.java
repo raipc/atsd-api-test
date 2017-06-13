@@ -14,12 +14,14 @@ import javax.ws.rs.core.Response;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 import static com.axibase.tsd.api.method.entity.EntityTest.assertEntityExisting;
 import static com.axibase.tsd.api.method.series.SeriesTest.assertSeriesExisting;
 import static com.axibase.tsd.api.util.Mocks.*;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.metric;
 import static com.axibase.tsd.api.util.TestUtil.parseDate;
 import static java.util.Collections.singletonList;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -43,7 +45,6 @@ public class CSVInsertTest extends CSVInsertMethod {
     @Test(dataProvider = "formatPatternProvider")
     public void testFormattedDate(String template) {
         Series expectedSeries = series();
-        expectedSeries.setSamples(singletonList(SAMPLE));
         String csvPayload = String.format(
                 "date, %s%n%s, %s%n",
                 expectedSeries.getMetric(),
@@ -93,9 +94,10 @@ public class CSVInsertTest extends CSVInsertMethod {
     @Test
     public void testTimeRangeInISO() throws Exception {
         Series series = Mocks.series();
-        series.setSamples(new ArrayList<Sample>());
-        series.addSamples(new Sample(MIN_STORABLE_DATE, Mocks.DECIMAL_VALUE));
-        series.addSamples(new Sample(MAX_STORABLE_DATE, Mocks.DECIMAL_VALUE));
+        series.setSamples(Arrays.asList(
+                new Sample(MIN_STORABLE_DATE, Mocks.DECIMAL_VALUE),
+                new Sample(MAX_STORABLE_DATE, Mocks.DECIMAL_VALUE)
+        ));
 
         String csvPayload = String.format(
                 "date, %s%n%s, %s%n%s, %s%n",
@@ -118,9 +120,11 @@ public class CSVInsertTest extends CSVInsertMethod {
     @Test
     public void testTimeRangeInMS() {
         Series series = Mocks.series();
-        series.setSamples(new ArrayList<Sample>());
-        series.addSamples(new Sample(MIN_STORABLE_DATE, Mocks.DECIMAL_VALUE));
-        series.addSamples(new Sample(MAX_STORABLE_DATE, Mocks.DECIMAL_VALUE));
+        series.setSamples(new ArrayList<>());
+        series.addSamples(
+                new Sample(MIN_STORABLE_DATE, Mocks.DECIMAL_VALUE),
+                new Sample(MAX_STORABLE_DATE, Mocks.DECIMAL_VALUE)
+        );
 
         String csvPayload = String.format(
                 "time, %s%n%s, %s%n%s, %s%n",

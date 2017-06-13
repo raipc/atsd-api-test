@@ -7,8 +7,8 @@ import com.axibase.tsd.api.model.series.Series;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class FunctionsInsideBetweenOperatorTest extends SqlTest {
     private static final String METRIC_NAME = metric();
@@ -17,12 +17,14 @@ public class FunctionsInsideBetweenOperatorTest extends SqlTest {
     public static void prepareData() throws Exception {
         Series series = new Series(entity(), METRIC_NAME);
 
-        series.addSamples(new Sample("2017-01-01T12:00:00.000Z", "1"));
-        series.addSamples(new Sample("2017-01-02T12:00:00.000Z", "2"));
-        series.addSamples(new Sample("2017-01-03T12:00:00.000Z", "4"));
-        series.addSamples(new Sample("2017-01-04T12:00:00.000Z", "3"));
-        series.addSamples(new Sample("2017-01-05T12:00:00.000Z", "5"));
-        series.addSamples(new Sample("2017-01-06T12:00:00.000Z", "6"));
+        series.addSamples(
+                new Sample("2017-01-01T12:00:00.000Z", 1),
+                new Sample("2017-01-02T12:00:00.000Z", 2),
+                new Sample("2017-01-03T12:00:00.000Z", 4),
+                new Sample("2017-01-04T12:00:00.000Z", 3),
+                new Sample("2017-01-05T12:00:00.000Z", 5),
+                new Sample("2017-01-06T12:00:00.000Z", 6)
+        );
 
         SeriesMethod.insertSeriesCheck(series);
     }

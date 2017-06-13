@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.*;
@@ -298,14 +299,14 @@ public class CSVUploadTest extends CSVUploadMethod {
         Series expectedSeries = new Series();
         expectedSeries.setEntity(entity);
         expectedSeries.setMetric(metric);
-        expectedSeries.addSamples(new Sample("2016-06-19T00:00:00.000Z", "123.45"));
+        expectedSeries.addSamples(new Sample(date, new BigDecimal(value)));
         List<Series> expectedSeriesList = Collections.singletonList(expectedSeries);
         assertEquals(expectedSeriesList, actualSeriesList);
     }
 
     private void checkBinaryFileUpload(String entityName, String metricName, File csvPath) throws Exception {
-        Registry.Entity.register(entityName);
-        Registry.Metric.register(metricName);
+        Registry.Entity.checkExists(entityName);
+        Registry.Metric.checkExists(metricName);
 
         Response response = binaryCsvUpload(csvPath, SIMPLE_PARSER);
 
@@ -323,8 +324,8 @@ public class CSVUploadTest extends CSVUploadMethod {
     }
 
     private void checkMultipartFileUpload(String entityName, String metricName, File csvPath) throws Exception {
-        Registry.Entity.register(entityName);
-        Registry.Metric.register(metricName);
+        Registry.Entity.checkExists(entityName);
+        Registry.Metric.checkExists(metricName);
         Response response = multipartCsvUpload(csvPath, SIMPLE_PARSER);
         assertEquals("Failed to upload file", OK.getStatusCode(), response.getStatus());
         SeriesQuery seriesQuery = new SeriesQuery(entityName, metricName, MIN_QUERYABLE_DATE, MAX_QUERYABLE_DATE);

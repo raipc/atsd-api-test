@@ -25,42 +25,31 @@ public class GroupByDatetime extends SqlTest {
 
     @BeforeClass
     public static void prepareData() throws Exception {
-        Registry.Metric.register(TEST_METRIC_NAME);
-        Registry.Entity.register(TESTS_ENTITY1_NAME);
-        Registry.Entity.register(TESTS_ENTITY2_NAME);
-        Registry.Entity.register(TESTS_ENTITY3_NAME);
-
         List<Series> seriesList = new ArrayList<>();
         seriesList.add(
-                new Series() {{
-                    setEntity(TESTS_ENTITY1_NAME);
-                    setMetric(TEST_METRIC_NAME);
-                    setSamples(Arrays.asList(
-                            new Sample("2016-06-19T11:00:00.500Z", "0"),
-                            new Sample("2016-06-19T11:00:01.500Z", "1"),
-                            new Sample("2016-06-19T11:00:02.500Z", "2")
-                    ));
+                new Series(TESTS_ENTITY1_NAME, TEST_METRIC_NAME) {{
+                    addSamples(
+                            new Sample("2016-06-19T11:00:00.500Z", 0),
+                            new Sample("2016-06-19T11:00:01.500Z", 1),
+                            new Sample("2016-06-19T11:00:02.500Z", 2)
+                    );
                 }}
         );
 
         seriesList.add(
-                new Series() {{
-                    setEntity(TESTS_ENTITY2_NAME);
-                    setMetric(TEST_METRIC_NAME);
-                    setSamples(Arrays.asList(
-                            new Sample("2016-06-19T11:00:00.500Z", "0"),
-                            new Sample("2016-06-19T11:00:01.500Z", "1")
-                    ));
+                new Series(TESTS_ENTITY2_NAME, TEST_METRIC_NAME) {{
+                    addSamples(
+                            new Sample("2016-06-19T11:00:00.500Z", 0),
+                            new Sample("2016-06-19T11:00:01.500Z", 1)
+                    );
                 }}
         );
 
         seriesList.add(
-                new Series() {{
-                    setEntity(TESTS_ENTITY3_NAME);
-                    setMetric(TEST_METRIC_NAME);
-                    setSamples(Collections.singletonList(
-                            new Sample("2016-06-19T11:00:00.500Z", "0")
-                    ));
+                new Series(TESTS_ENTITY3_NAME, TEST_METRIC_NAME) {{
+                    addSamples(
+                            new Sample("2016-06-19T11:00:00.500Z", 0)
+                    );
                 }}
         );
 

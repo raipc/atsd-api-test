@@ -13,6 +13,7 @@ import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,19 +32,19 @@ public class SqlPeriodAlignTest extends SqlTest {
 
     @BeforeClass
     public void prepareDataSet() throws Exception {
-        Registry.Entity.register(TEST_ENTITY_NAME);
-        Registry.Metric.register(TEST_METRIC_NAME);
+        Registry.Entity.checkExists(TEST_ENTITY_NAME);
+        Registry.Metric.checkExists(TEST_METRIC_NAME);
 
         Version version = VersionMethod.queryVersion().readEntity(Version.class);
         serverTimezone = ZoneId.of(version.getDate().getTimeZone().getName());
 
         insertSamples(
-                new Sample("2016-06-03T09:20:00.124Z", 16.0),
-                new Sample("2016-06-03T09:26:00.000Z", 8.1),
-                new Sample("2016-06-03T09:36:00.000Z", 6.0),
-                new Sample("2016-06-03T09:41:00.321Z", 19.0),
-                new Sample("2016-06-03T09:45:00.126Z", 19.0),
-                new Sample("2016-06-03T09:45:00.400Z", 17.0)
+                new Sample("2016-06-03T09:20:00.124Z", 16),
+                new Sample("2016-06-03T09:26:00.000Z", new BigDecimal("8.1")),
+                new Sample("2016-06-03T09:36:00.000Z", 6),
+                new Sample("2016-06-03T09:41:00.321Z", 19),
+                new Sample("2016-06-03T09:45:00.126Z", 19),
+                new Sample("2016-06-03T09:45:00.400Z", 17)
         );
     }
 

@@ -16,8 +16,8 @@ import java.util.Arrays;
 
 import static com.axibase.tsd.api.util.Mocks.DECIMAL_VALUE;
 import static com.axibase.tsd.api.util.Mocks.TEXT_VALUE;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class GroupByCaseExpression extends SqlTest {
     private static final String TEST_ENTITY1_NAME = entity();
@@ -33,40 +33,30 @@ public class GroupByCaseExpression extends SqlTest {
 
     @BeforeClass
     public static void prepareData() throws Exception {
-        Registry.Entity.register(TEST_ENTITY1_NAME);
-        Registry.Entity.register(TEST_ENTITY2_NAME);
-        Registry.Metric.register(TEST_METRIC_NAME);
 
-        Entity testEntity1 = new Entity();
-        testEntity1.setName(TEST_ENTITY1_NAME);
+        Entity testEntity1 = new Entity(TEST_ENTITY1_NAME);
         testEntity1.setLabel(TEST_ENTITY1_LABEL);
-        EntityMethod.createOrReplaceEntity(testEntity1);
 
-        Entity testEntity2 = new Entity();
-        testEntity2.setName(TEST_ENTITY2_NAME);
+        Entity testEntity2 = new Entity(TEST_ENTITY2_NAME);
         testEntity2.setLabel(TEST_ENTITY2_LABEL);
+
+
+        Series series1 = new Series(TEST_ENTITY1_NAME, TEST_METRIC_NAME);
+
+        series1.addSamples(
+                new Sample("2017-02-09T12:00:00.000Z", DECIMAL_VALUE, TEXT_VALUE_1),
+                new Sample("2017-02-10T12:00:00.000Z", DECIMAL_VALUE, TEXT_VALUE_1)
+        );
+
+        Series series2 = new Series(TEST_ENTITY2_NAME, TEST_METRIC_NAME);
+
+        series2.addSamples(
+                new Sample("2017-02-11T12:00:00.000Z", DECIMAL_VALUE, TEXT_VALUE_2),
+                new Sample("2017-02-12T12:00:00.000Z", DECIMAL_VALUE, TEXT_VALUE_2)
+        );
+
         EntityMethod.createOrReplaceEntity(testEntity2);
-
-        Series series1 = new Series();
-        series1.setEntity(TEST_ENTITY1_NAME);
-        series1.setMetric(TEST_METRIC_NAME);
-
-        series1.setSamples(Arrays.asList(
-                new Sample("2017-02-09T12:00:00.000Z", new BigDecimal(DECIMAL_VALUE), TEXT_VALUE_1),
-                new Sample("2017-02-10T12:00:00.000Z", new BigDecimal(DECIMAL_VALUE), TEXT_VALUE_1)
-                )
-        );
-
-        Series series2 = new Series();
-        series2.setEntity(TEST_ENTITY2_NAME);
-        series2.setMetric(TEST_METRIC_NAME);
-
-        series2.setSamples(Arrays.asList(
-                new Sample("2017-02-11T12:00:00.000Z", new BigDecimal(DECIMAL_VALUE), TEXT_VALUE_2),
-                new Sample("2017-02-12T12:00:00.000Z", new BigDecimal(DECIMAL_VALUE), TEXT_VALUE_2)
-                )
-        );
-
+        EntityMethod.createOrReplaceEntity(testEntity1);
         SeriesMethod.insertSeriesCheck(series1, series2);
     }
 

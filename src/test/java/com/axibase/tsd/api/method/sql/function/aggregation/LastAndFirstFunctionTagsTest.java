@@ -10,8 +10,8 @@ import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class LastAndFirstFunctionTagsTest extends SqlTest {
     private static final String TEST_METRIC = metric();
@@ -22,18 +22,18 @@ public class LastAndFirstFunctionTagsTest extends SqlTest {
         Entity entity = new Entity(testEntity);
         entity.addTag("literal_tag", "value");
         entity.addTag("numeric_tag", "123");
+
+        Series series = new Series(testEntity, TEST_METRIC);
+        series.addSamples(
+                new Sample("2017-01-01T09:30:00.000Z", 1),
+                new Sample("2017-01-01T10:30:00.000Z", 1),
+                new Sample("2017-01-01T11:30:00.000Z", 2),
+                new Sample("2017-01-01T12:30:00.000Z", 2),
+                new Sample("2017-01-01T13:30:00.000Z", 2)
+        );
+
         EntityMethod.createOrReplaceEntityCheck(entity);
 
-        Registry.Metric.register(TEST_METRIC);
-
-        Series series = new Series();
-        series.setEntity(testEntity);
-        series.setMetric(TEST_METRIC);
-        series.addSamples(new Sample("2017-01-01T09:30:00.000Z", 1));
-        series.addSamples(new Sample("2017-01-01T10:30:00.000Z", 1));
-        series.addSamples(new Sample("2017-01-01T11:30:00.000Z", 2));
-        series.addSamples(new Sample("2017-01-01T12:30:00.000Z", 2));
-        series.addSamples(new Sample("2017-01-01T13:30:00.000Z", 2));
         SeriesMethod.insertSeriesCheck(series);
     }
 

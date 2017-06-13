@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class JoinWithTags extends SqlTest {
     private static final String TEST_METRIC1_NAME = metric();
@@ -31,20 +31,11 @@ public class JoinWithTags extends SqlTest {
         String[] metricNames = {TEST_METRIC1_NAME, TEST_METRIC2_NAME, TEST_METRIC3_NAME};
         String[] tags = {"123", "123", "abc4"};
 
-        Registry.Entity.register(TEST_ENTITY_NAME);
+        Registry.Entity.checkExists(TEST_ENTITY_NAME);
 
         for (int i = 0; i < metricNames.length; i++) {
-            String metricName = metricNames[i];
-            Registry.Metric.register(metricName);
-
-            Series series = new Series();
-            series.setEntity(TEST_ENTITY_NAME);
-            series.setMetric(metricName);
-
+            Series series = new Series(TEST_ENTITY_NAME, metricNames[i], "tag", tags[i]);
             series.addSamples(new Sample("2016-06-03T09:20:00.000Z", i + 1));
-
-            String tag = tags[i];
-            series.addTag("tag", tag);
 
             seriesList.add(series);
         }
@@ -267,11 +258,9 @@ public class JoinWithTags extends SqlTest {
     @Test
     public void testJoinKeepsMetricTags() throws Exception {
         Series series = Mocks.series();
-        Metric metric = new Metric();
-        metric.setName(series.getMetric());
         Map<String, String> tags = new HashMap<>();
         tags.put("foobar", "foo");
-        metric.setTags(tags);
+        Metric metric = new Metric(series.getMetric(), tags);
         MetricMethod.createOrReplaceMetricCheck(metric);
 
         Series otherSeries = Mocks.series();
@@ -322,17 +311,9 @@ public class JoinWithTags extends SqlTest {
         String entity = entity();
         String[] metrics = { metric(), metric(), metric() };
 
-        Registry.Entity.register(entity);
-        for (String metric : metrics) {
-            Registry.Metric.register(metric);
-        }
-
         List<Series> initialSeries = new ArrayList<>(metrics.length);
         for (String metric : metrics) {
-            Series series = new Series();
-            series.setEntity(entity);
-            series.setMetric(metric);
-            series.addTag("tag", "value");
+            Series series = new Series(entity, metric, "tag", "value");
             series.addSamples(Mocks.SAMPLE);
 
             initialSeries.add(series);

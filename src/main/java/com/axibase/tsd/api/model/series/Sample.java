@@ -42,16 +42,6 @@ public class Sample {
         this.text = text;
     }
 
-    public Sample(String d, double v, String text) {
-        this.d = convertDateToISO(d);
-        this.v = new BigDecimal(v);
-        this.text = text;
-    }
-
-    public Sample(String d, String v, String text) {
-        this(d, new BigDecimal(v), text);
-    }
-
     public Sample(Sample sourceSample) {
         this(sourceSample.getD(), sourceSample.getV());
         setT(sourceSample.getT());
@@ -63,23 +53,18 @@ public class Sample {
         this.v = new BigDecimal(v);
     }
 
-    public Sample(String d, double v) {
-        this.d = convertDateToISO(d);
-        this.v = new BigDecimal(v);
-    }
-
-    public Sample(Date d, String v) {
-        this.d = Util.ISOFormat(d);
-        this.v = new BigDecimal(v);
-    }
-
     public Sample(String d, BigDecimal v) {
         this.d = convertDateToISO(d);
         this.v = v;
     }
 
-    public Sample(String d, String v) {
-        this.d = convertDateToISO(d);
+    public Sample(Date d, BigDecimal v) {
+        this.d = Util.ISOFormat(d);
+        this.v = v;
+    }
+
+    public Sample(Date d, int v) {
+        this.d = Util.ISOFormat(d);
         this.v = new BigDecimal(v);
     }
 
@@ -151,7 +136,7 @@ public class Sample {
             return false;
         if (t != null ? !t.equals(sample.t) : sample.t != null)
             return false;
-        if (v != null ? !v.equals(sample.v) : sample.v != null)
+        if (v != null ? !(v.compareTo(sample.v) == 0) : sample.v != null)
             return false;
         if (text != null ? !text.equals(sample.text) : sample.text != null)
             return false;

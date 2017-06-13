@@ -15,8 +15,8 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -35,22 +35,10 @@ public class CastTest extends SqlTest {
         String[] metricNames = {TEST_METRIC1_NAME, TEST_METRIC2_NAME, TEST_METRIC3_NAME};
         String[] tags = {"4", "123", "text12a3a"};
 
-        Registry.Entity.register(TEST_ENTITY_NAME);
-
         for (int i = 0; i < metricNames.length; i++) {
             String metricName = metricNames[i];
-            Registry.Metric.register(metricName);
-
-            Series series = new Series();
-            series.setEntity(TEST_ENTITY_NAME);
-            series.setMetric(metricName);
-
-            series.setSamples(Collections.singletonList(
-                    new Sample("2016-06-03T09:20:00.000Z", "1")));
-
-            String tag = tags[i];
-            series.addTag("numeric_tag", tag);
-
+            Series series = new Series(TEST_ENTITY_NAME, metricName, "numeric_tag", tags[i]);
+            series.addSamples(new Sample("2016-06-03T09:20:00.000Z", 1));
             seriesList.add(series);
         }
 
@@ -216,7 +204,7 @@ public class CastTest extends SqlTest {
     @BeforeClass
     public void createCastNumberAsStringTestData() throws Exception {
         castNumberAsStringSeries = Mocks.series();
-        castNumberAsStringSeries.setSamples(Collections.singleton(new Sample(Mocks.ISO_TIME, "12345.6789")));
+        castNumberAsStringSeries.setSamples(Collections.singleton(new Sample(Mocks.ISO_TIME, new BigDecimal("12345.6789"))));
         SeriesMethod.insertSeriesCheck(castNumberAsStringSeries);
     }
 
@@ -469,7 +457,7 @@ public class CastTest extends SqlTest {
     @Test
     public void testImplicitCastOfStringFunctionResult() throws Exception {
         Series series = Mocks.series();
-        series.setSamples(Arrays.asList(new Sample(Mocks.ISO_TIME, 10)));
+        series.setSamples(Collections.singletonList(new Sample(Mocks.ISO_TIME, 10)));
         SeriesMethod.insertSeriesCheck(series);
 
         String sql = String.format(

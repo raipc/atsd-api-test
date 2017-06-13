@@ -18,13 +18,13 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 import static java.util.Collections.singletonList;
 
 public class ApplyTest extends SqlTest {
     private static final String APPLY_METRIC = metric();
-    private static final Sample DEFAULT_SAMPLE = new Sample("2016-06-29T08:00:00.000Z", "0");
+    private static final Sample DEFAULT_SAMPLE = new Sample("2016-06-29T08:00:00.000Z", 0);
 
 
     @BeforeClass

@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class WhereTagInListTest extends SqlTest {
     private static final String ENTITY_NAME = entity();
@@ -30,15 +30,9 @@ public class WhereTagInListTest extends SqlTest {
                 {null, null},
         };
 
-        Registry.Entity.register(ENTITY_NAME);
-        Registry.Metric.register(METRIC_NAME);
-
         for (int i = 0; i < tags.length; i++) {
-            Series series = new Series();
-            series.setEntity(ENTITY_NAME);
-            series.setMetric(METRIC_NAME);
-            series.addSamples(new Sample(String.format("2017-01-0%dT12:00:00.000Z", i + 1),
-                    Integer.toString(i + 1)));
+            Series series = new Series(ENTITY_NAME, METRIC_NAME);
+            series.addSamples(new Sample(String.format("2017-01-0%dT12:00:00.000Z", i + 1), i + 1));
 
             if (tags[i][0] != null) {
                 series.addTag(tags[i][0], tags[i][1]);

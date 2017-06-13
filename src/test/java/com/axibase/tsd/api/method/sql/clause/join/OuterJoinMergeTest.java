@@ -12,8 +12,8 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class OuterJoinMergeTest extends SqlTest {
     private static final int METRIC_COUNT = 2;
@@ -26,29 +26,21 @@ public class OuterJoinMergeTest extends SqlTest {
 
     @BeforeClass
     public static void prepareData() throws Exception {
-
         List<Series> seriesList = new ArrayList<>();
 
         for (int i = 0; i < METRIC_COUNT; i++) {
             String metric = metric();
-            Registry.Metric.register(metric);
             METRIC_NAMES.add(metric);
         }
 
         for (int i = 0; i < ENTITY_COUNT; i++) {
             String entity = entity();
-            Registry.Entity.register(entity);
             ENTITY_NAMES.add(entity);
         }
 
         for (String metricName : METRIC_NAMES) {
-
             for (String entityName : ENTITY_NAMES) {
-
-                Series series = new Series();
-                series.setEntity(entityName);
-                series.setMetric(metricName);
-                series.setTags(Mocks.TAGS);
+                Series series = new Series(entityName, metricName, Mocks.TAGS);
 
                 for (int i = 0; i < VALUES_COUNT; i++) {
                     series.addSamples(new Sample(String.format("2017-01-0%1sT00:00:00.000Z", i + 1), i + 1));

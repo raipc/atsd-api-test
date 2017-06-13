@@ -7,8 +7,8 @@ import com.axibase.tsd.api.util.Mocks;
 import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.Test;
 
-import static com.axibase.tsd.api.util.TestUtil.TestNames.entity;
-import static com.axibase.tsd.api.util.TestUtil.TestNames.metric;
+import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class EntityRecreateTest extends SqlTest {
 
@@ -21,18 +21,10 @@ public class EntityRecreateTest extends SqlTest {
         final String entityName1 = entity();
         final String entityName2 = entity();
 
-        Registry.Entity.register(entityName1);
-        Registry.Entity.register(entityName2);
-        Registry.Metric.register(metricName);
-
-        Series series1 = new Series();
-        series1.setEntity(entityName1);
-        series1.setMetric(metricName);
+        Series series1 = new Series(entityName1, metricName);
         series1.addSamples(Mocks.SAMPLE);
 
-        Series series2 = new Series();
-        series2.setEntity(entityName2);
-        series2.setMetric(metricName);
+        Series series2 = new Series(entityName2, metricName);
         series2.addSamples(Mocks.SAMPLE);
 
         /* Insert first entity*/
