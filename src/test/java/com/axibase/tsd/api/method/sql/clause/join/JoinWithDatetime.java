@@ -1,11 +1,14 @@
 package com.axibase.tsd.api.method.sql.clause.join;
 
 import com.axibase.tsd.api.method.series.SeriesMethod;
+import com.axibase.tsd.api.method.sql.SqlMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+import javax.ws.rs.core.Response;
 
 import static com.axibase.tsd.api.util.Mocks.metric;
 import static com.axibase.tsd.api.util.Mocks.entity;
@@ -393,5 +396,134 @@ public class JoinWithDatetime extends SqlTest {
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    /**
+     * #4258
+     */
+    @Test
+    public void testIntersectingPeriodDatetimeCondition() {
+        String sqlQuery = String.format(
+                "SELECT datetime, m1.datetime, m2.datetime " +
+                        "FROM '%s' m1 " +
+                        "OUTER JOIN '%s' m2 " +
+                        "WHERE m1.datetime BETWEEN '2017-01-01T00:00:00Z' AND '2017-01-06T00:00:00Z' " +
+                        "   AND m2.datetime BETWEEN '2017-01-02T00:00:00Z' AND '2017-01-07T00:00:00Z' " +
+                        "ORDER BY datetime",
+                TEST_METRIC_1, TEST_METRIC_2
+        );
+
+        String[][] expectedRows = new String[][] {
+                {"2017-01-02T00:00:00.000Z", "2017-01-02T00:00:00.000Z", "2017-01-02T00:00:00.000Z"},
+                {"2017-01-06T00:00:00.000Z", "null",                     "2017-01-06T00:00:00.000Z"}
+        };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    /**
+     * #4258
+     */
+    @Test
+    public void testIntersectingSingleDayDatetimeCondition() {
+        String sqlQuery = String.format(
+                "SELECT datetime, m1.datetime, m2.datetime " +
+                        "FROM '%s' m1 " +
+                        "OUTER JOIN '%s' m2 " +
+                        "WHERE m1.datetime BETWEEN '2017-01-01T00:00:00Z' AND '2017-01-02T00:00:00Z' " +
+                        "   AND m2.datetime BETWEEN '2017-01-02T00:00:00Z' AND '2017-01-07T00:00:00Z' " +
+                        "ORDER BY datetime",
+                TEST_METRIC_1, TEST_METRIC_2
+        );
+
+        String[][] expectedRows = new String[][] {
+                {"2017-01-02T00:00:00.000Z", "2017-01-02T00:00:00.000Z", "2017-01-02T00:00:00.000Z"}
+        };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    /**
+     * #4258
+     */
+    @Test
+    public void testInvalidDatetimeCondition() {
+        String sqlQuery = String.format(
+                "SELECT datetime, m1.datetime, m2.datetime " +
+                        "FROM '%s' m1 " +
+                        "OUTER JOIN '%s' m2 " +
+                        "WHERE m1.datetime BETWEEN '2017-01-01T00:00:00Z' AND '2017-01-02T00:00:00Z' " +
+                        "   AND m2.datetime BETWEEN '2017-01-05T00:00:00Z' AND '2017-01-07T00:00:00Z'",
+                TEST_METRIC_1, TEST_METRIC_2
+        );
+
+        Response response = SqlMethod.queryResponse(sqlQuery);
+
+        assertBadRequest("Invalid date conditions", response);
+    }
+
+
+    /**
+     * #4258
+     */
+    @Test
+    public void testIntersectingPeriodTimeCondition() {
+        String sqlQuery = String.format(
+                "SELECT time, m1.time, m2.time " +
+                        "FROM '%s' m1 " +
+                        "OUTER JOIN '%s' m2 " +
+                        "WHERE m1.time >= 1483228800000 AND m1.time <= 1483660800000 " +
+                        "   AND m2.time >= 1483315200000 AND m2.time <= 1483747200000 " +
+                        "ORDER BY time",
+                TEST_METRIC_1, TEST_METRIC_2
+        );
+
+        String[][] expectedRows = new String[][] {
+                {"1483315200000", "1483315200000", "1483315200000"},
+                {"1483660800000", "null",          "1483660800000"}
+        };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    /**
+     * #4258
+     */
+    @Test
+    public void testIntersectingSingleDayTimeCondition() {
+        String sqlQuery = String.format(
+                "SELECT time, m1.time, m2.time " +
+                        "FROM '%s' m1 " +
+                        "OUTER JOIN '%s' m2 " +
+                        "WHERE m1.time >= 1483228800000 AND m1.time <= 1483660800000 " +
+                        "   AND m2.time >= 1483660800000 AND m2.time <= 1483747200000 " +
+                        "ORDER BY time",
+                TEST_METRIC_1, TEST_METRIC_2
+        );
+
+        String[][] expectedRows = new String[][] {
+                {"1483660800000", "null",          "1483660800000"}
+        };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    /**
+     * #4258
+     */
+    @Test
+    public void testInvalidTimeCondition() {
+        String sqlQuery = String.format(
+                "SELECT datetime, m1.datetime, m2.datetime " +
+                        "FROM '%s' m1 " +
+                        "OUTER JOIN '%s' m2 " +
+                        "WHERE m1.time >= 1483228800000 AND m1.time <= 1483315200000 " +
+                        "   AND m2.time >= 1483660800000 AND m2.time <= 1483747200000",
+                TEST_METRIC_1, TEST_METRIC_2
+        );
+
+        Response response = SqlMethod.queryResponse(sqlQuery);
+
+        assertBadRequest("Invalid date conditions", response);
     }
 }
