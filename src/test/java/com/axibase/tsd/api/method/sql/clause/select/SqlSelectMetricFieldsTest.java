@@ -10,6 +10,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
 
 public class SqlSelectMetricFieldsTest extends SqlTest {
 
@@ -59,5 +60,20 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
 
         // check for row existence
         assertEquals(String.format("Error in metric field query (%s)", field), resultTable.getRows().size(), 1);
+    }
+
+    /**
+     * #4035
+     */
+    @Test
+    public void testMetricLastInsertTimeNotNull() {
+        String sqlQuery = String.format(
+                "SELECT date_format(metric.lastInsertTime) FROM '%s'",
+                TEST_SERIES.getMetric()
+        );
+
+        String[][] expectedRows = {{Mocks.ISO_TIME}};
+
+        assertSqlQueryRows("Metric field 'lastInsertTime' has incorrect value", expectedRows, sqlQuery);
     }
 }
