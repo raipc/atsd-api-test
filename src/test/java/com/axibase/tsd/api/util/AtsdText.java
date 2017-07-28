@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 public final class AtsdText {
-
     private static final List<Character> SAFE_CHARACTERS = characterRanges(
             new int[][]{
                     {0x21},
@@ -20,25 +19,19 @@ public final class AtsdText {
             }
     );
 
-    private static final List<Character> NAME_CHARACTERS = uniteClasses(
-            SAFE_CHARACTERS,
-            individualCharacters(0x22, 0x3D)
-    );
+    private static final List<Character> NAME_CHARACTERS =
+            classWithAdditionalCharacters(SAFE_CHARACTERS, 0x22, 0x3D);
 
-    private static List<Character> uniteClasses(List<Character>... classes) {
-        List<Character> characters = new ArrayList<>();
-        for (List<Character> charClass : classes) {
-            characters.addAll(charClass);
+    private static final List<Character> VALUE_CHARACTERS =
+            classWithAdditionalCharacters(NAME_CHARACTERS, 0x20, 0x0D, 0x0A, 0x09);
+
+    private static List<Character> classWithAdditionalCharacters(List<Character> baseClass,
+                                                                 int... additionalCharacters) {
+        List<Character> characters = new ArrayList<>(baseClass);
+        for (int additionalCharacter : additionalCharacters) {
+            characters.add((char) additionalCharacter);
         }
         return Collections.unmodifiableList(characters);
-    }
-
-    private static List<Character> individualCharacters(int... characters) {
-        List<Character> characterList = new ArrayList<>();
-        for (int character : characters) {
-            characterList.add((char) character);
-        }
-        return Collections.unmodifiableList(characterList);
     }
 
     private static List<Character> characterRanges(int[][] ranges) {
