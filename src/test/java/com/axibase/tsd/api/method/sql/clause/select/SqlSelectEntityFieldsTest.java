@@ -7,6 +7,7 @@ import com.axibase.tsd.api.model.common.InterpolationMode;
 import com.axibase.tsd.api.model.entity.Entity;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.util.Mocks;
+import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -41,7 +42,7 @@ public class SqlSelectEntityFieldsTest extends SqlTest {
                 {"timeZone", Mocks.TIMEZONE_ID},
                 {"interpolate", "PREVIOUS"},
                 {"enabled", "true"},
-                {"lastInsertTime", "1464945780000"},
+                {"lastInsertTime", "" + Util.getMillis(Mocks.ISO_TIME)},
                 {"tags", "tag=value"}
         };
     }

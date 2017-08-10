@@ -77,7 +77,7 @@ public class Util {
         try {
             d = ISO8601Utils.parse(date, new ParsePosition(0));
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(String.format("Fail to parse date: %s", date));
         }
         return d;
     }
@@ -94,7 +94,7 @@ public class Util {
         return ISOFormat(parseDate(date).getTime() + 1);
     }
 
-    public static Long getMillis(String date) throws ParseException {
+    public static Long getMillis(String date){
         return parseDate(date).getTime();
     }
 

@@ -23,11 +23,11 @@ public class MessageQueryStatsTest extends MessageMethod {
     private final static String MESSAGE_STATS_ENTITY = "entity-message-statistics-1";
     private final static String MESSAGE_STATS_TYPE = "stats-type-1";
     private final static List<String> DATES = Arrays.asList(
-            "2016-05-21T00:00:01.000Z",
-            "2016-05-21T00:01:01.000Z",
-            "2016-05-21T00:02:01.000Z",
-            "2016-05-21T00:03:01.000Z",
-            "2016-05-21T00:04:01.000Z");
+            "2017-05-21T00:00:01.000Z",
+            "2017-05-21T00:01:01.000Z",
+            "2017-05-21T00:02:01.000Z",
+            "2017-05-21T00:03:01.000Z",
+            "2017-05-21T00:04:01.000Z");
 
     @BeforeClass
     public void insertMessages() throws Exception{

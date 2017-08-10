@@ -9,7 +9,6 @@ import com.axibase.tsd.api.model.TimeUnit;
 import com.axibase.tsd.api.model.metric.Metric;
 import com.axibase.tsd.api.model.series.*;
 import com.axibase.tsd.api.util.Mocks;
-import com.axibase.tsd.api.util.Registry;
 import com.axibase.tsd.api.util.TestUtil;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -605,7 +604,7 @@ public class SeriesInsertTest extends SeriesTest {
                 extractErrorMessage(response),
                 String.format(
                         JSON_MAPPING_EXCEPTION_UNEXPECTED_CHARACTER,
-                        "-", "9"
+                        "-", "5"
                 )
         );
     }

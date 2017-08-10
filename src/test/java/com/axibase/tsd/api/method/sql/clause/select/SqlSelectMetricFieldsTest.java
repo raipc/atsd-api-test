@@ -8,6 +8,7 @@ import com.axibase.tsd.api.model.metric.Metric;
 import com.axibase.tsd.api.model.series.DataType;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.util.Mocks;
+import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -57,7 +58,7 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
                 {"enabled", "true"},
                 {"persistent", "true"},
                 {"filter", "name = '*'"},
-                {"lastInsertTime", "1464945780000"},
+                {"lastInsertTime", "" + Util.getMillis(Mocks.ISO_TIME)},
                 {"retentionIntervalDays", "0"},
                 {"versioning", "false"},
                 {"minValue", "0"},

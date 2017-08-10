@@ -5,8 +5,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Mocks;
-import com.axibase.tsd.api.util.TestUtil;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -16,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.axibase.tsd.api.util.Mocks.ISO_TIME;
 import static com.axibase.tsd.api.util.Mocks.entity;
 import static com.axibase.tsd.api.util.Mocks.metric;
 
@@ -27,7 +24,7 @@ public class LimitAggregationFunctionTest extends SqlTest {
     @BeforeClass
     public static void setTestSeries() throws Exception {
         final Integer seriesCount = 10;
-        ZonedDateTime startDateTime = ZonedDateTime.parse(ISO_TIME);
+        ZonedDateTime startDateTime = ZonedDateTime.parse("2016-06-03T09:23:00.000Z");
         List<Series> seriesList = new ArrayList<>();
         int secondsOffset = 0;
         for (int i = 0; i < seriesCount; i++) {
