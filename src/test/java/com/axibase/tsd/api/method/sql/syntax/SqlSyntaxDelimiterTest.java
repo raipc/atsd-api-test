@@ -211,7 +211,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
 
         String expectedErrorMessage = ErrorTemplate.Sql.syntaxError(2, 43,
                 extraneousErrorMessage("a", "{<EOF>, '+', '-', '*', '/', '%', '!=', '<>', '<=', '>=', " +
-                        "'>', '<', '=', IS, AND, OR, NOT, LIKE, REGEX, IN, BETWEEN, ORDER, GROUP, LIMIT, WITH, OPTION}")
+                        "'>', '<', '=', '.', IS, AND, OR, NOT, LIKE, REGEX, IN, BETWEEN, ORDER, GROUP, LIMIT, WITH, OPTION}")
         );
         assertBadRequest(expectedErrorMessage, response);
     }
@@ -231,7 +231,7 @@ public class SqlSyntaxDelimiterTest extends SqlTest {
         String expectedMessage = ErrorTemplate.Sql.syntaxError(
                 2, 43,
                 extraneousErrorMessage("1", "{<EOF>, '+', '-', '*', '/', '%', '!=', '<>', '<=', '>='," +
-                        " '>', '<', '=', IS, AND, OR, NOT, LIKE, REGEX, IN, BETWEEN, ORDER, GROUP, LIMIT, WITH, OPTION}"
+                        " '>', '<', '=', '.', IS, AND, OR, NOT, LIKE, REGEX, IN, BETWEEN, ORDER, GROUP, LIMIT, WITH, OPTION}"
                 )
         );
         assertBadRequest("Query must return correct table",

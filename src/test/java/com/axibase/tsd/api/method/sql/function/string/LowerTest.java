@@ -56,7 +56,7 @@ public class LowerTest extends SqlTest {
         return new Object[][]{
                 {"VaLuE", "value"},
                 {"VALUE", "value"},
-                {"444'a3'A4", "444'a3'a4"},
+                {"444\"a3\"A4", "444\"a3\"a4"},
                 {"aBc12@", "abc12@"},
                 {"Кириллица", "кириллица"}
         };
@@ -67,7 +67,7 @@ public class LowerTest extends SqlTest {
         Series series = Mocks.series();
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
         String sqlQuery = String.format(
-                "SELECT LOWER(\"%s\") FROM '%s'",
+                "SELECT LOWER('%s') FROM '%s'",
                 text, series.getMetric()
         );
 
