@@ -5,7 +5,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -52,7 +51,7 @@ public class SqlSelectAllWithJoinTest extends SqlTest {
     @Test
     public void testSelectAllColumnsWithAlias() {
         String sqlQuery = String.format(
-                "SELECT * FROM '%s' t1 %nJOIN '%s' t2",
+                "SELECT * FROM \"%s\" t1 %nJOIN \"%s\" t2",
                 TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );
 
@@ -115,7 +114,7 @@ public class SqlSelectAllWithJoinTest extends SqlTest {
     @Test
     public void testSelectAllColumnsFromTableAlias() {
         String sqlQuery = String.format(
-                "SELECT t1.* FROM '%s' t1  %n JOIN '%s' t2",
+                "SELECT t1.* FROM \"%s\" t1  %n JOIN \"%s\" t2",
                 TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );
 
@@ -139,7 +138,7 @@ public class SqlSelectAllWithJoinTest extends SqlTest {
     @Test
     public void testSelectAllColumnsFromSeveralTableAliases() {
         String sqlQuery = String.format(
-                "SELECT t1.*, t2.* FROM '%s' t1 JOIN '%s' t2",
+                "SELECT t1.*, t2.* FROM \"%s\" t1 JOIN \"%s\" t2",
                 TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );
 

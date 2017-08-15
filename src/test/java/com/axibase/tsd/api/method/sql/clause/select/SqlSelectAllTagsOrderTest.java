@@ -7,7 +7,6 @@ import com.axibase.tsd.api.model.metric.Metric;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -45,7 +44,7 @@ public class SqlSelectAllTagsOrderTest extends SqlTest {
     @Test
     public void testSelectAll() {
         String sqlQuery = String.format(
-                "SELECT * FROM '%s'",
+                "SELECT * FROM \"%s\"",
                 TEST_METRIC_NAME
         );
 
@@ -62,7 +61,7 @@ public class SqlSelectAllTagsOrderTest extends SqlTest {
     @Test
     public void testSelectAllSeriesTags() {
         String sqlQuery = String.format(
-                "SELECT tags.* FROM '%s'",
+                "SELECT tags.* FROM \"%s\"",
                 TEST_METRIC_NAME
         );
 
@@ -80,7 +79,7 @@ public class SqlSelectAllTagsOrderTest extends SqlTest {
     @Test
     public void testSelectAllTagsAndColumnBefore() {
         String sqlQuery = String.format(
-                "SELECT entity, tags.* FROM '%s'",
+                "SELECT entity, tags.* FROM \"%s\"",
                 TEST_METRIC_NAME
         );
 
@@ -99,7 +98,7 @@ public class SqlSelectAllTagsOrderTest extends SqlTest {
     @Test
     public void testSelectAllTagsAndColumnAfter() {
         String sqlQuery = String.format(
-                "SELECT tags.*,entity FROM '%s'",
+                "SELECT tags.*,entity FROM \"%s\"",
                 TEST_METRIC_NAME
         );
 
@@ -118,7 +117,7 @@ public class SqlSelectAllTagsOrderTest extends SqlTest {
     @Test
     public void testSelectAllSeriesMetricTags() {
         String sqlQuery = String.format(
-                "SELECT metric.tags.* FROM '%s'",
+                "SELECT metric.tags.* FROM \"%s\"",
                 TEST_METRIC_NAME
         );
 
@@ -136,7 +135,7 @@ public class SqlSelectAllTagsOrderTest extends SqlTest {
     @Test
     public void testSelectAllMetricTagsAndColumnBefore() {
         String sqlQuery = String.format(
-                "SELECT entity, metric.tags.* FROM '%s'",
+                "SELECT entity, metric.tags.* FROM \"%s\"",
                 TEST_METRIC_NAME
         );
 
@@ -155,7 +154,7 @@ public class SqlSelectAllTagsOrderTest extends SqlTest {
     @Test
     public void testSelectAllMetricTagsAndColumnAfter() {
         String sqlQuery = String.format(
-                "SELECT metric.tags.*,entity FROM '%s'",
+                "SELECT metric.tags.*,entity FROM \"%s\"",
                 TEST_METRIC_NAME
         );
 

@@ -5,7 +5,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -48,7 +47,7 @@ public class SqlExampleSlidingWindowsTest extends SqlTest {
     public void testExample1() {
         String sqlQuery = String.format(
                 "SELECT entity, avg(value), max(value), last(value), count(*) %n" +
-                        "FROM '%s' %n" +
+                        "FROM \"%s\" %n" +
                         "WHERE datetime >= '2016-06-19T11:00:00.000Z' AND datetime < '2016-06-19T11:00:06.000Z'  %n" +
                         "GROUP BY entity",
                 TEST_METRIC_NAME);
@@ -73,7 +72,7 @@ public class SqlExampleSlidingWindowsTest extends SqlTest {
     public void testExample2() {
         String sqlQuery = String.format(
                 "SELECT entity,tags, avg(value), max(value), last(value), count(*) %n" +
-                        "FROM '%s' %n" +
+                        "FROM \"%s\" %n" +
                         "WHERE datetime >= '2016-06-19T11:00:00.000Z' AND datetime < '2016-06-19T11:00:06.000Z'  %n" +
                         "GROUP BY entity, tags",
                 TEST_METRIC_NAME);

@@ -31,7 +31,7 @@ public class SelectTagsWithGroupBy extends SqlTest {
     @Test
     public void testIfTagsAsteriskCanBeAppliedWhenGroupedByTags() {
         String sqlQuery = String.format(
-                "SELECT tags.* FROM '%s' t1 GROUP BY tags",
+                "SELECT tags.* FROM \"%s\" t1 GROUP BY tags",
                 TEST_METRIC_NAME
         );
 

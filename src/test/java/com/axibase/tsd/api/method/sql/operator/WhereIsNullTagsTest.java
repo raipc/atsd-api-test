@@ -4,7 +4,6 @@ import com.axibase.tsd.api.method.series.SeriesMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -35,7 +34,7 @@ public class WhereIsNullTagsTest extends SqlTest {
     public void testWhereIsNullTags() {
         String sqlQuery = String.format(
                 "SELECT tags.t1, tags.t2 " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE isnull(tags.t1, 'a') = 'a' ",
                 METRIC_NAME
         );

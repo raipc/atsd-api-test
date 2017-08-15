@@ -9,7 +9,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class CaseOperatorTest extends SqlTest {
     private final String TEST_METRIC = Mocks.metric();
@@ -40,7 +39,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testSimpleCaseOperator() {
         final String sql = String.format(
                 "SELECT CASE WHEN value > 0 THEN 'high' ELSE 'low' END%n" +
-                "FROM '%s'%n" +
+                "FROM \"%s\"%n" +
                 "ORDER BY datetime ASC",
                 TEST_METRIC
         );
@@ -61,7 +60,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testCaseOperator() {
         final String sql = String.format(
                 "SELECT CASE WHEN value > 0 THEN 'high' ELSE 'low' END%n" +
-                "FROM '%s'%n" +
+                "FROM \"%s\"%n" +
                 "ORDER BY datetime ASC",
                 TEST_METRIC
         );
@@ -82,7 +81,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testCaseOperatorInNumericFunction() {
         final String sql = String.format(
                 "SELECT SUM(CASE WHEN value > 0 THEN 100 ELSE 10 END)%n" +
-                "FROM '%s'",
+                "FROM \"%s\"",
                 TEST_METRIC
         );
 
@@ -100,7 +99,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testCaseOperatorInStringFunction() {
         final String sql = String.format(
                 "SELECT UPPER(CASE WHEN value > 0 THEN 'high' ELSE 'low' END)%n" +
-                "FROM '%s'%n" +
+                "FROM \"%s\"%n" +
                 "ORDER by datetime ASC",
                 TEST_METRIC
         );
@@ -121,7 +120,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testOrderByCaseOperator() {
         final String sql = String.format(
                 "SELECT value %n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "ORDER BY CASE WHEN value >= 0 THEN 1 ELSE 0 END ASC",
                 TEST_METRIC
         );
@@ -142,7 +141,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testOrderByCaseOperatorAsColumn() {
         final String sql = String.format(
                 "SELECT value, CASE WHEN value >= 0 THEN 1 ELSE 0 END as 'val_group'%n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "ORDER BY 'val_group' ASC",
                 TEST_METRIC
         );
@@ -163,7 +162,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testOrderByCaseOperatorOfDifferentTypes() {
         final String sql = String.format(
                 "SELECT value %n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "ORDER BY CASE WHEN value >= 0 THEN 'top' ELSE 10 END ASC",
                 TEST_METRIC
         );
@@ -184,7 +183,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testCaseOperatorInWhereSwitchingCondition() {
         final String sql = String.format(
                 "SELECT value %n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "WHERE CASE WHEN value >= 0 THEN value > 5 ELSE value < -3 END",
                 TEST_METRIC
         );
@@ -205,7 +204,7 @@ public class CaseOperatorTest extends SqlTest {
     public void testCaseOperatorInWhere() {
         final String sql = String.format(
                 "SELECT value %n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "WHERE value > CASE WHEN value > -1 THEN 5 ELSE  -8 END",
                 TEST_METRIC
         );

@@ -41,8 +41,8 @@ public class CoalesceTest extends SqlTest {
     public void testCoalesceTwoArguments() {
         String sqlQuery = String.format(
                 "SELECT coalesce(t1.value, t2.value) as v " +
-                        "FROM '%s' t1 " +
-                        "OUTER JOIN '%s' t2 " +
+                        "FROM \"%s\" t1 " +
+                        "OUTER JOIN \"%s\" t2 " +
                         "ORDER BY time",
                 METRIC_NAME1,
                 METRIC_NAME2
@@ -61,8 +61,8 @@ public class CoalesceTest extends SqlTest {
     public void testCoalesceThreeArguments() {
         String sqlQuery = String.format(
                 "SELECT coalesce(t2.text, t1.value, t2.value) as v " +
-                        "FROM '%s' t1 " +
-                        "OUTER JOIN '%s' t2 " +
+                        "FROM \"%s\" t1 " +
+                        "OUTER JOIN \"%s\" t2 " +
                         "ORDER BY time",
                 METRIC_NAME1,
                 METRIC_NAME2
@@ -81,7 +81,7 @@ public class CoalesceTest extends SqlTest {
     public void testCoalesceOneNaN() {
         String sqlQuery = String.format(
                 "SELECT coalesce(nan, value, value) as v " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "ORDER BY v",
                 METRIC_NAME1
         );
@@ -98,7 +98,7 @@ public class CoalesceTest extends SqlTest {
     public void testCoalesceOneNull() {
         String sqlQuery = String.format(
                 "SELECT coalesce(case 0 when 1 then 0 end, value, value) as v " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "ORDER BY v",
                 METRIC_NAME1
         );
@@ -115,7 +115,7 @@ public class CoalesceTest extends SqlTest {
     public void testCoalesceAllNaN() {
         String sqlQuery = String.format(
                 "SELECT coalesce(value/value, value/value, value/value) as v " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "ORDER BY v",
                 METRIC_NAME1
         );
@@ -132,7 +132,7 @@ public class CoalesceTest extends SqlTest {
     public void testCoalesceAllNull() {
         String sqlQuery = String.format(
                 "SELECT coalesce(lag(value), lag(value), lag(value)) as v " +
-                        "FROM '%s'" +
+                        "FROM \"%s\"" +
                         "ORDER BY v",
                 METRIC_NAME1
         );

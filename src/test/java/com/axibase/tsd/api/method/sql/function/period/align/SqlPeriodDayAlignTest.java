@@ -43,7 +43,7 @@ public class SqlPeriodDayAlignTest extends SqlTest {
     public void testDayAlign() {
         String sqlQuery = String.format(
                 "SELECT DATE_FORMAT(time,'%s'), COUNT(*) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "GROUP BY PERIOD(1 DAY)",
                 DAY_FORMAT_PATTERN, TEST_METRIC_NAME
         );

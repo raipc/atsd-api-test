@@ -56,7 +56,7 @@ public class GroupByEntityTag extends SqlTest {
     public void testGroupByWithoutAggregations() throws Exception {
         String sqlQuery = String.format(
                         "SELECT entity.tags.tagname " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "GROUP BY entity.tags.tagname " +
                         "ORDER BY 1 ASC",
                 TEST_METRIC_NAME
@@ -80,7 +80,7 @@ public class GroupByEntityTag extends SqlTest {
     public void testGroupByWithSum() throws Exception {
         String sqlQuery = String.format(
                         "SELECT entity.tags.tagname, sum(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "GROUP BY entity.tags.tagname " +
                         "ORDER BY 1 ASC",
                 TEST_METRIC_NAME

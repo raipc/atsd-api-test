@@ -7,8 +7,6 @@ import com.axibase.tsd.api.model.series.Series;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-
 import static com.axibase.tsd.api.util.Mocks.entity;
 import static com.axibase.tsd.api.util.Mocks.metric;
 
@@ -46,7 +44,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatInsideHavingGroupingByPeriod() throws Exception {
         String sqlQuery = String.format(
-                "SELECT count(value) FROM '%s' " +
+                "SELECT count(value) FROM \"%s\" " +
                         "GROUP BY period(1 day) " +
                         "HAVING date_format(time, 'u') = '4'",
                 METRIC_NAME2
@@ -65,7 +63,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatEWithTzInsideWhere() throws Exception {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s' " +
+                "SELECT value FROM \"%s\" " +
                         "WHERE date_format(time, 'E', 'PST') = 'Thu' " +
                         "ORDER BY value",
                 METRIC_NAME1
@@ -86,7 +84,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatUWithTzInsideWhere() throws Exception {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s' " +
+                "SELECT value FROM \"%s\" " +
                         "WHERE date_format(time, 'u', 'PST') = 4 " +
                         "ORDER BY value",
                 METRIC_NAME1
@@ -107,7 +105,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatInsideWhereComplexClause() throws Exception {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s' " +
+                "SELECT value FROM \"%s\" " +
                         "WHERE date_format(time) = '2017-02-10T07:00:00.000Z' OR date_format(time) = '2017-02-10T12:00:00.000Z'" +
                         "ORDER BY value",
                 METRIC_NAME1
@@ -127,7 +125,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatInsideWhereWithoutMs() throws Exception {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s' " +
+                "SELECT value FROM \"%s\" " +
                         "WHERE date_format(time, 'yyyy-MM-dd''T''HH:mm:ssZZ', 'GMT0') = '2017-02-10T07:00:00Z' " +
                         "ORDER BY value",
                 METRIC_NAME1
@@ -146,7 +144,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatDefaultInsideWhere() {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s' " +
+                "SELECT value FROM \"%s\" " +
                         "WHERE date_format(time) = '2017-02-10T07:00:00.000Z' " +
                         "ORDER BY value",
                 METRIC_NAME1
@@ -165,7 +163,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatWithTzInsideGroupBy() throws Exception {
         String sqlQuery = String.format(
-                "SELECT count(*) AS k FROM '%s' " +
+                "SELECT count(*) AS k FROM \"%s\" " +
                         "GROUP BY date_format(time, 'E', 'PST') " +
                         "ORDER BY k",
                 METRIC_NAME1
@@ -187,7 +185,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatEWithTzInsideOrderBy() throws Exception {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s' " +
+                "SELECT value FROM \"%s\" " +
                         "ORDER BY date_format(time, 'E', 'PST'), value",
                 METRIC_NAME1
         );
@@ -210,7 +208,7 @@ public class DateFormatInsideClausesTest extends SqlTest {
     @Test
     public void testDateFormatUWithTzInsideOrderBy() throws Exception {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s' " +
+                "SELECT value FROM \"%s\" " +
                         "ORDER BY date_format(time, 'u', 'PST'), value",
                 METRIC_NAME1
         );

@@ -5,13 +5,11 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -62,7 +60,7 @@ public class GroupByDatetime extends SqlTest {
     @Test
     public void testGroupByDatetimeSyntax() {
         String sqlQuery = String.format(
-                "SELECT datetime , entity, value FROM '%s' %nGROUP BY datetime, entity, value",
+                "SELECT datetime , entity, value FROM \"%s\" %nGROUP BY datetime, entity, value",
                 TEST_METRIC_NAME
         );
 
@@ -88,7 +86,7 @@ public class GroupByDatetime extends SqlTest {
     @Test
     public void testGroupByDatetimeWithAggregateFunction() {
         String sqlQuery = String.format(
-                "SELECT datetime, COUNT(value) FROM '%s' %nGROUP BY datetime, value",
+                "SELECT datetime, COUNT(value) FROM \"%s\" %nGROUP BY datetime, value",
                 TEST_METRIC_NAME
         );
 

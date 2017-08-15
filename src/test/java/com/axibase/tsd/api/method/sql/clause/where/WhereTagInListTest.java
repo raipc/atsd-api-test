@@ -4,7 +4,6 @@ import com.axibase.tsd.api.method.series.SeriesMethod;
 import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -51,7 +50,7 @@ public class WhereTagInListTest extends SqlTest {
     public void testWhereTagInList() {
         String sqlQuery = String.format(
                 "SELECT value " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE tags.t1 IN ('a', 'b')",
                 METRIC_NAME
         );
@@ -70,7 +69,7 @@ public class WhereTagInListTest extends SqlTest {
     public void testWhereTagNotInList() {
         String sqlQuery = String.format(
                 "SELECT value " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE tags.t1 NOT IN ('a', 'b')",
                 METRIC_NAME
         );

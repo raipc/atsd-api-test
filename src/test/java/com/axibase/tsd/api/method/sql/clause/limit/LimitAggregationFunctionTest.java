@@ -67,7 +67,7 @@ public class LimitAggregationFunctionTest extends SqlTest {
     @Test(dataProvider = "aggregationFunctionProvider")
     public void testAggregateFunctionLimit(String function) {
         String sqlQuery = String.format(
-                "SELECT %s(value) FROM '%s' %n",
+                "SELECT %s(value) FROM \"%s\" %n",
                 function, testMetric
         );
         StringTable tableWithoutLimit = queryTable(sqlQuery);
@@ -82,7 +82,7 @@ public class LimitAggregationFunctionTest extends SqlTest {
     public void testAggregateFunctionLimitWithPredicate(String function) {
         String sqlQuery = String.format(
                 "SELECT %s(value) " +
-                "FROM '%s' " +
+                "FROM \"%s\" " +
                 "WHERE datetime > '2016-06-03T09:23:00.000Z' AND datetime < '2016-06-03T09:23:10.000Z' ",
                 function, testMetric
         );
@@ -98,7 +98,7 @@ public class LimitAggregationFunctionTest extends SqlTest {
     public void testAggregateFunctionLimitWithGrouping(String function) {
         String sqlQuery = String.format(
                 "SELECT %s(value) " +
-                "FROM '%s' " +
+                "FROM \"%s\" " +
                 "WHERE datetime > '2016-06-03T09:23:00.000Z' AND datetime < '2016-06-03T09:23:10.000Z' " +
                 "GROUP BY entity ",
                 function, testMetric

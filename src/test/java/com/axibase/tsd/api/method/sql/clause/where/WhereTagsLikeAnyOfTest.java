@@ -7,8 +7,8 @@ import com.axibase.tsd.api.util.Mocks;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.axibase.tsd.api.util.Mocks.metric;
 import static com.axibase.tsd.api.util.Mocks.entity;
+import static com.axibase.tsd.api.util.Mocks.metric;
 
 public class WhereTagsLikeAnyOfTest extends SqlTest {
     private static final String METRIC_NAME = metric();
@@ -36,7 +36,7 @@ public class WhereTagsLikeAnyOfTest extends SqlTest {
     public void testWhereTagsAny() {
         String sqlQuery = String.format(
                 "SELECT tags.tag " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE tags.tag LIKE '*'",
                 METRIC_NAME
         );
@@ -58,7 +58,7 @@ public class WhereTagsLikeAnyOfTest extends SqlTest {
     public void testWhereTagsAnyOrAny() {
         String sqlQuery = String.format(
                 "SELECT tags.tag " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE tags.tag LIKE '*' " +
                         "OR tags.tag LIKE '*'",
                 METRIC_NAME
@@ -81,7 +81,7 @@ public class WhereTagsLikeAnyOfTest extends SqlTest {
     public void testWhereTagsAnyOrAnyOf() {
         String sqlQuery = String.format(
                 "SELECT tags.tag " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE tags.tag LIKE '*' " +
                         "OR tags.tag LIKE '*b'",
                 METRIC_NAME

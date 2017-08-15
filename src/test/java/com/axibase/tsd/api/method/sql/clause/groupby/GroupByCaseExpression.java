@@ -7,17 +7,10 @@ import com.axibase.tsd.api.model.entity.Entity;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.util.Mocks;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-
-import static com.axibase.tsd.api.util.Mocks.DECIMAL_VALUE;
-import static com.axibase.tsd.api.util.Mocks.TEXT_VALUE;
-import static com.axibase.tsd.api.util.Mocks.entity;
-import static com.axibase.tsd.api.util.Mocks.metric;
+import static com.axibase.tsd.api.util.Mocks.*;
 
 public class GroupByCaseExpression extends SqlTest {
     private static final String TEST_ENTITY1_NAME = entity();
@@ -67,7 +60,7 @@ public class GroupByCaseExpression extends SqlTest {
     public void testCaseInSelectWithoutGroupBy() {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN date_format(time, 'u') > '5' THEN 'weekend' ELSE 'workday' END " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "ORDER BY 1",
                 TEST_METRIC_NAME
         );
@@ -88,7 +81,7 @@ public class GroupByCaseExpression extends SqlTest {
     @Test
     public void testCaseInGroupByOnly() {
         String sqlQuery = String.format(
-                "SELECT count(value) FROM '%s' " +
+                "SELECT count(value) FROM \"%s\" " +
                         "GROUP BY CASE WHEN date_format(time, 'u') > '5' THEN 'weekend' ELSE 'workday' END",
                 TEST_METRIC_NAME
         );
@@ -109,7 +102,7 @@ public class GroupByCaseExpression extends SqlTest {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN date_format(time, 'u') > '5' THEN 'weekend' ELSE 'workday' END AS day_type, " +
                         "count(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "GROUP BY day_type " +
                         "ORDER BY 1",
                 TEST_METRIC_NAME
@@ -131,7 +124,7 @@ public class GroupByCaseExpression extends SqlTest {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN date_format(time, 'u') > '5' THEN 'weekend' ELSE 'workday' END AS \"Day type\"," +
                         "count(value) AS \"Value\"" +
-                        "FROM '%s'" +
+                        "FROM \"%s\"" +
                         "GROUP BY \"Day type\"",
                 TEST_METRIC_NAME
         );
@@ -151,7 +144,7 @@ public class GroupByCaseExpression extends SqlTest {
     public void testGroupByEntityLabel() {
         String sqlQuery = String.format(
                 "SELECT entity.label, COUNT(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "GROUP BY entity.label",
                 TEST_METRIC_NAME
         );
@@ -171,7 +164,7 @@ public class GroupByCaseExpression extends SqlTest {
     public void testGroupByEntityLabelAlias() {
         String sqlQuery = String.format(
                 "SELECT entity.label AS \"Label\", COUNT(value)" +
-                "FROM '%s' " +
+                "FROM \"%s\" " +
                 "GROUP BY \"Label\"",
                 TEST_METRIC_NAME
         );
@@ -191,7 +184,7 @@ public class GroupByCaseExpression extends SqlTest {
     public void testGroupByTextField() {
         String sqlQuery = String.format(
                 "SELECT text, COUNT(value) " +
-                "FROM '%s' " +
+                "FROM \"%s\" " +
                 "GROUP BY text",
                 TEST_METRIC_NAME
         );
@@ -211,7 +204,7 @@ public class GroupByCaseExpression extends SqlTest {
     public void testGroupByTextFieldAlias() {
         String sqlQuery = String.format(
                 "SELECT text AS \"Text field\", COUNT(value) " +
-                "FROM '%s' " +
+                "FROM \"%s\" " +
                 "GROUP BY \"Text field\"",
                 TEST_METRIC_NAME
         );

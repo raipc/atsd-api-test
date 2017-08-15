@@ -130,7 +130,7 @@ public class KeywordCaseSensitivityTest extends SqlTest {
                 "select sum(value), avg(value), min(value), max(value), count(value), counter(value), delta(value), " +
                         "first(value), last(value), max_value_time(value), min_value_time(value), " +
                         "percentile(75, value), stddev(value), wavg(value), wtavg(value) " +
-                        "from '%s'",
+                        "FROM \"%s\"",
                 METRIC1_NAME
         );
 
@@ -151,7 +151,7 @@ public class KeywordCaseSensitivityTest extends SqlTest {
                 "select sum(value), avg(value), min(value), max(value), count(value), counter(value), delta(value), " +
                         "first(value), last(value), max_value_time(value), min_value_time(value), " +
                         "percentile(75, value), stddev(value), wavg(value), wtavg(value) " +
-                        "from '%s'",
+                        "FROM \"%s\"",
                 METRIC1_NAME
         ).replaceAll(keyword.toLowerCase(), keyword);
 
@@ -178,7 +178,7 @@ public class KeywordCaseSensitivityTest extends SqlTest {
         String sqlQuery = String.format(
                 "select abs(value), ceil(value), floor(value), round(value), mod(value, 3), power(value, 2), " +
                         "exp(value), ln(value), log(10, value), sqrt(value) " +
-                        "from '%s'",
+                        "FROM \"%s\"",
                 METRIC1_NAME
         );
 
@@ -198,7 +198,7 @@ public class KeywordCaseSensitivityTest extends SqlTest {
         String sqlQuery = String.format(
                 "select abs(value), ceil(value), floor(value), round(value), mod(value, 3), power(value, 2), " +
                         "exp(value), ln(value), log(10, value), sqrt(value) " +
-                        "from '%s'",
+                        "FROM \"%s\"",
                 METRIC1_NAME
         ).replaceAll(keyword.toLowerCase(), keyword);
 
@@ -225,7 +225,7 @@ public class KeywordCaseSensitivityTest extends SqlTest {
         String sqlQuery = String.format(
                 "select upper('a'), lower('A'), replace('a', 'a', 'b'), length('a'), concat('a', 'b'), " +
                         "locate('a', 'a'), substr('a', 1, 1) " +
-                        "from '%s'",
+                        "FROM \"%s\"",
                 METRIC1_NAME
         );
 
@@ -245,7 +245,7 @@ public class KeywordCaseSensitivityTest extends SqlTest {
         String sqlQuery = String.format(
                 "select upper('a'), lower('A'), replace('a', 'a', 'b'), length('a'), concat('a', 'b'), " +
                         "locate('a', 'a'), substr('a', 1, 1) " +
-                        "from '%s'",
+                        "FROM \"%s\"",
                 METRIC1_NAME
         ).replaceAll(keyword.toLowerCase(), keyword);
 

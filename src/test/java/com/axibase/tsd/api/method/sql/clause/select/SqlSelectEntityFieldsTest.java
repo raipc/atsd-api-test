@@ -53,7 +53,7 @@ public class SqlSelectEntityFieldsTest extends SqlTest {
     @Test(dataProvider = "entityFieldsProvider")
     public void testQueryEntityFields(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.entity.%s FROM '%s' m",
+                "SELECT m.entity.%s FROM \"%s\" m",
                 field,
                 TEST_METRIC);
 

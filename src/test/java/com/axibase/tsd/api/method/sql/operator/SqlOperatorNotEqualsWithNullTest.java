@@ -5,7 +5,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -37,7 +36,7 @@ public class SqlOperatorNotEqualsWithNullTest extends SqlTest {
     @Test
     public void testIgnoringNullObjectsComparison() {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s'%nWHERE tags.a != 'b'",
+                "SELECT value FROM \"%s\"%nWHERE tags.a != 'b'",
                 TEST_METRIC_NAME
         );
         Response response = queryResponse(sqlQuery);
@@ -52,7 +51,7 @@ public class SqlOperatorNotEqualsWithNullTest extends SqlTest {
     @Test
     public void testIgnoringNullObjectsComparison1() {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s'%nWHERE tags.a != 'a'",
+                "SELECT value FROM \"%s\"%nWHERE tags.a != 'a'",
                 TEST_METRIC_NAME
         );
         Response response = queryResponse(sqlQuery);

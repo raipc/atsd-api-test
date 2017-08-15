@@ -7,7 +7,6 @@ import com.axibase.tsd.api.model.series.Series;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static com.axibase.tsd.api.util.Mocks.entity;
@@ -37,7 +36,7 @@ public class BetweenInsideWhere extends SqlTest {
     @Test
     public void checkIfBetweenSuccededByAndWorks() {
         String sqlQuery = String.format(
-                "SELECT value FROM '%s' WHERE datetime BETWEEN \"2017-03-10T12:00:00.000Z\" " +
+                "SELECT value FROM \"%s\" WHERE datetime BETWEEN \"2017-03-10T12:00:00.000Z\" " +
                         "AND \"2017-03-11T12:00:00.000Z\" AND value != 0",
                 TEST_METRIC_NAME
         );

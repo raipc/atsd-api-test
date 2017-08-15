@@ -5,13 +5,11 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -56,7 +54,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     @Test
     public void testPeriodExtendOptionBegin() {
         String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s' %nWHERE entity = '%s' %n" +
+                "SELECT datetime, AVG(value) FROM \"%s\" %nWHERE entity = '%s' %n" +
                         "AND datetime >= '2016-07-14T15:00:05.000Z' AND datetime <'2016-07-14T15:00:07.000Z' %n" +
                         "GROUP BY PERIOD(1 SECOND,EXTEND)",
                 TEST_METRIC_NAME, TEST_ENTITY1_NAME
@@ -78,7 +76,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     @Test
     public void testPeriodExtendOptionTrail() {
         String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s' %nWHERE entity = '%s' %n" +
+                "SELECT datetime, AVG(value) FROM \"%s\" %nWHERE entity = '%s' %n" +
                         "AND datetime >= '2016-07-14T15:00:08.000Z' AND datetime <'2016-07-14T15:00:10.000Z'" +
                         "GROUP BY PERIOD(1 SECOND,EXTEND)",
                 TEST_METRIC_NAME, TEST_ENTITY1_NAME
@@ -101,7 +99,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     @Test
     public void testPeriodExtendOptionBeginAndTrail() {
         String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s' %n" +
+                "SELECT datetime, AVG(value) FROM \"%s\" %n" +
                         "WHERE entity = '%s' %nAND datetime >= '2016-07-14T15:00:05.000Z' " +
                         "AND datetime <'2016-07-14T15:00:10.000Z' %nGROUP BY PERIOD(1 SECOND,EXTEND)",
                 TEST_METRIC_NAME, TEST_ENTITY1_NAME
@@ -128,7 +126,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     @Test
     public void testPeriodExtendOptionBeginAndTrailWithValueInterpolation() {
         String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s' %nWHERE entity = '%s' %n" +
+                "SELECT datetime, AVG(value) FROM \"%s\" %nWHERE entity = '%s' %n" +
                         "AND datetime >= '2016-07-14T15:00:05.000Z' AND datetime <'2016-07-14T15:00:10.000Z'" +
                         "GROUP BY PERIOD(1 SECOND,EXTEND, VALUE 0)",
                 TEST_METRIC_NAME, TEST_ENTITY1_NAME
@@ -154,7 +152,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     @Test
     public void testPeriodExtendOptionBeginAndTrailWithLinearInterpolation() {
         String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s' %nWHERE entity = '%s' %n" +
+                "SELECT datetime, AVG(value) FROM \"%s\" %nWHERE entity = '%s' %n" +
                         "AND datetime >= '2016-07-14T15:00:05.000Z' AND datetime <'2016-07-14T15:00:10.000Z'" +
                         "GROUP BY PERIOD(1 SECOND,EXTEND, LINEAR)",
                 TEST_METRIC_NAME, TEST_ENTITY1_NAME
@@ -181,7 +179,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     public void testPeriodExtendOptionWithIntervalLinear() {
 
         String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s' %nWHERE entity='%s' %n" +
+                "SELECT datetime, AVG(value) FROM \"%s\" %nWHERE entity='%s' %n" +
                         "AND datetime >= '2016-07-14T15:00:06.000Z' AND datetime < '2016-07-14T15:00:09.000Z'" +
                         "GROUP BY entity, PERIOD(1 SECOND,EXTEND, LINEAR), tags.a, tags.b",
                 TEST_METRIC_NAME, TEST_ENTITY1_NAME
@@ -207,7 +205,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     public void testPeriodExtendOptionWithMultipleEntityWithoutInterval() {
 
         String sqlQuery = String.format(
-                "SELECT entity, datetime, AVG(value) FROM '%s' %nWHERE tags.a LIKE 'b*' %n" +
+                "SELECT entity, datetime, AVG(value) FROM \"%s\" %nWHERE tags.a LIKE 'b*' %n" +
                         "GROUP BY entity, PERIOD(1 SECOND,EXTEND, LINEAR) %nORDER BY datetime",
                 TEST_METRIC_NAME
         );
@@ -234,7 +232,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     public void testPeriodExtendOptionWithMultipleEntityWithstartDate() {
 
         String sqlQuery = String.format(
-                "SELECT entity, datetime, AVG(value) FROM '%s' %n" +
+                "SELECT entity, datetime, AVG(value) FROM \"%s\" %n" +
                         "WHERE tags.a LIKE 'b*' AND datetime >= '2016-07-14T15:00:05.000Z' %n" +
                         "GROUP BY entity, PERIOD(1 SECOND,EXTEND, LINEAR) %nORDER BY datetime",
                 TEST_METRIC_NAME
@@ -264,7 +262,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     public void testPeriodExtendOptionWithMultipleEntityWithEndDate() {
 
         String sqlQuery = String.format(
-                "SELECT entity, datetime, AVG(value) FROM '%s' %n" +
+                "SELECT entity, datetime, AVG(value) FROM \"%s\" %n" +
                         "WHERE tags.a LIKE 'b*' AND datetime < '2016-07-14T15:00:09.000Z' %n" +
                         "GROUP BY entity, PERIOD(1 SECOND,EXTEND, LINEAR) %nORDER BY datetime",
                 TEST_METRIC_NAME
@@ -293,7 +291,7 @@ public class SqlPeriodExtendTest extends SqlTest {
     public void testPeriodExtendOptionWithMultipleEntityWithStartAndEndDate() {
 
         String sqlQuery = String.format(
-                "SELECT entity, datetime, AVG(value) FROM '%s' %n" +
+                "SELECT entity, datetime, AVG(value) FROM \"%s\" %n" +
                         "WHERE datetime >= '2016-07-14T15:00:05.000Z' AND datetime < '2016-07-14T15:00:09.000Z' %n" +
                         "GROUP BY entity, PERIOD(1 SECOND,EXTEND, LINEAR) %nORDER BY datetime",
                 TEST_METRIC_NAME

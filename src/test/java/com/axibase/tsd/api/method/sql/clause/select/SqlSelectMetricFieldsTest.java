@@ -75,7 +75,7 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
     @Test(dataProvider = "metricFieldsProvider")
     public void testQueryMetricFields(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.metric.%s FROM '%s' m",
+                "SELECT m.metric.%s FROM \"%s\" m",
                 field,
                 TEST_METRIC);
 

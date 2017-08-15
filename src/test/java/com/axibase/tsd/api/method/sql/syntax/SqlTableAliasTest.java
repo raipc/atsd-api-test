@@ -5,7 +5,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -48,7 +47,7 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectColumnWithoutJoinWithoutAlias() {
         String sqlQuery = String.format(
-                "SELECT entity, value, tags FROM '%s'", TEST_METRIC1_NAME
+                "SELECT entity, value, tags FROM \"%s\"", TEST_METRIC1_NAME
         );
 
         StringTable resultTable = queryResponse(sqlQuery)
@@ -66,7 +65,7 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectAllWithoutJoinWithoutAlias() {
         String sqlQuery = String.format(
-                "SELECT * FROM '%s'",
+                "SELECT * FROM \"%s\"",
                 TEST_METRIC1_NAME
         );
 
@@ -90,7 +89,7 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectAllWithoutJoinWithAlias() {
         String sqlQuery = String.format(
-                "SELECT * FROM '%s' t1",
+                "SELECT * FROM \"%s\" t1",
                 TEST_METRIC1_NAME
         );
 
@@ -114,8 +113,8 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectColumnWithJoinWithAlias() {
         String sqlQuery = String.format(
-                "SELECT '%s'.entity, '%s'.value, '%s'.entity, '%s'.value FROM '%s' t1 %n" +
-                        "JOIN  '%s' t2 ",
+                "SELECT '%s'.entity, '%s'.value, '%s'.entity, '%s'.value FROM \"%s\" t1 %n" +
+                        "JOIN  \"%s\" t2 ",
                 TEST_METRIC1_NAME, TEST_METRIC1_NAME, TEST_METRIC2_NAME, TEST_METRIC2_NAME, TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );
 
@@ -133,8 +132,8 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectColumnWithJoinWithoutAlias() {
         String sqlQuery = String.format(
-                "SELECT '%s'.entity, '%s'.value, '%s'.entity, '%s'.value FROM '%s' %n" +
-                        "JOIN  '%s'",
+                "SELECT '%s'.entity, '%s'.value, '%s'.entity, '%s'.value FROM \"%s\" %n" +
+                        "JOIN  \"%s\"",
                 TEST_METRIC1_NAME, TEST_METRIC1_NAME, TEST_METRIC2_NAME, TEST_METRIC2_NAME, TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );
 
@@ -152,8 +151,8 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectAllWithJoinWithoutAlias() {
         String sqlQuery = String.format(
-                "SELECT * FROM '%s' %n" +
-                        "JOIN '%s'",
+                "SELECT * FROM \"%s\" %n" +
+                        "JOIN \"%s\"",
                 TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );
 
@@ -184,8 +183,8 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectAllWithJoinWithAlias() {
         String sqlQuery = String.format(
-                "SELECT * FROM '%s' t1 %n" +
-                        "JOIN '%s' t2",
+                "SELECT * FROM \"%s\" t1 %n" +
+                        "JOIN \"%s\" t2",
                 TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );
 

@@ -7,11 +7,7 @@ import com.axibase.tsd.api.model.series.Series;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-
-import static com.axibase.tsd.api.util.Mocks.DECIMAL_VALUE;
-import static com.axibase.tsd.api.util.Mocks.entity;
-import static com.axibase.tsd.api.util.Mocks.metric;
+import static com.axibase.tsd.api.util.Mocks.*;
 
 public class GroupByNullTagValue extends SqlTest {
     private static final String TEST_ENTITY_NAME = entity();
@@ -41,7 +37,7 @@ public class GroupByNullTagValue extends SqlTest {
     public void testGroupingByTagnameThatHasNullValues() {
         String sqlQuery = String.format(
                         "SELECT tags.tag1, avg(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "GROUP BY tags.tag1",
                 TEST_METRIC_NAME
         );

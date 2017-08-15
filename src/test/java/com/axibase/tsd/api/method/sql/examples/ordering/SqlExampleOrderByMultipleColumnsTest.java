@@ -5,7 +5,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -56,7 +55,7 @@ public class SqlExampleOrderByMultipleColumnsTest extends SqlTest {
     @Test
     public void test() {
         String sqlQuery = String.format(
-                "SELECT entity, tags.tag, delta(value) FROM '%s'%nGROUP BY entity, tags%nORDER BY  tags.tag, DELTA(value) DESC",
+                "SELECT entity, tags.tag, delta(value) FROM \"%s\"%nGROUP BY entity, tags%nORDER BY  tags.tag, DELTA(value) DESC",
                 TEST_METRIC_NAME
         );
         Response response = queryResponse(sqlQuery);

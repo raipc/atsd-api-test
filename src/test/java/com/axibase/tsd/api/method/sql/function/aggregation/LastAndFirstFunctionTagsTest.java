@@ -6,7 +6,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.entity.Entity;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -43,7 +42,7 @@ public class LastAndFirstFunctionTagsTest extends SqlTest {
     @Test
     public void testLastFunctionWithLiteralTags() {
         String sqlQuery = String.format(
-                "SELECT LAST(entity.tags.literal_tag) FROM '%s'",
+                "SELECT LAST(entity.tags.literal_tag) FROM \"%s\"",
                 TEST_METRIC);
 
         String[][] expectedRows = {{"NaN"}};
@@ -57,7 +56,7 @@ public class LastAndFirstFunctionTagsTest extends SqlTest {
     @Test
     public void testLastFunctionWithNumericTags() {
         String sqlQuery = String.format(
-                "SELECT LAST(entity.tags.numeric_tag) FROM '%s'",
+                "SELECT LAST(entity.tags.numeric_tag) FROM \"%s\"",
                 TEST_METRIC);
 
         String[][] expectedRows = {{"123"}};
@@ -75,7 +74,7 @@ public class LastAndFirstFunctionTagsTest extends SqlTest {
                 "LAST(entity.tags.literal_tag), " +
                 "LAST(entity.tags.numeric_tag), " +
                 "COUNT(*) " +
-                "FROM '%s' " +
+                "FROM \"%s\" " +
                 "GROUP BY value",
                 TEST_METRIC);
 
@@ -93,7 +92,7 @@ public class LastAndFirstFunctionTagsTest extends SqlTest {
     @Test
     public void testFirstFunctionWithLiteralTags() {
         String sqlQuery = String.format(
-                "SELECT FIRST(entity.tags.literal_tag) FROM '%s'",
+                "SELECT FIRST(entity.tags.literal_tag) FROM \"%s\"",
                 TEST_METRIC);
 
         String[][] expectedRows = {{"NaN"}};
@@ -107,7 +106,7 @@ public class LastAndFirstFunctionTagsTest extends SqlTest {
     @Test
     public void testFirstFunctionWithNumericTags() {
         String sqlQuery = String.format(
-                "SELECT FIRST(entity.tags.numeric_tag) FROM '%s'",
+                "SELECT FIRST(entity.tags.numeric_tag) FROM \"%s\"",
                 TEST_METRIC);
 
         String[][] expectedRows = {{"123"}};
@@ -125,7 +124,7 @@ public class LastAndFirstFunctionTagsTest extends SqlTest {
                         "FIRST(entity.tags.literal_tag), " +
                         "FIRST(entity.tags.numeric_tag), " +
                         "COUNT(*) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "GROUP BY value",
                 TEST_METRIC);
 

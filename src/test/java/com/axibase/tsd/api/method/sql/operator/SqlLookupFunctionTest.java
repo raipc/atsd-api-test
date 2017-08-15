@@ -104,7 +104,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupFromText() {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest1', t1.text) " +
-                        "FROM '%s' t1",
+                        "FROM \"%s\" t1",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
         );
 
@@ -137,7 +137,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupCompositionFromText() {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest1', LOOKUP('tableForLookupTest1', t1.text)) " +
-                        "FROM '%s' t1",
+                        "FROM \"%s\" t1",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
         );
 
@@ -171,7 +171,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupCaseSensitivity() {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest1', 'Word'), LOOKUP('tableForLookupTest1', 'word') " +
-                        "FROM '%s' t1 " +
+                        "FROM \"%s\" t1 " +
                         "LIMIT 1",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
         );
@@ -191,7 +191,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupWithWrongTable() {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('noTable', t1.text) " +
-                        "FROM '%s' t1",
+                        "FROM \"%s\" t1",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
         );
 
@@ -220,7 +220,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupInWhere() {
         String sqlQuery = String.format(
                 "SELECT t1.text " +
-                        "FROM '%s' t1 " +
+                        "FROM \"%s\" t1 " +
                         "WHERE LOOKUP('tableForLookupTest1', t1.text) IS NOT NULL",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
         );
@@ -249,7 +249,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupInCast() {
         String sqlQuery = String.format(
                 "SELECT CAST(LOOKUP('tableForLookupTest1', t1.text) as Number) " +
-                        "FROM '%s' t1",
+                        "FROM \"%s\" t1",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
         );
 
@@ -278,7 +278,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupInGroupBy() {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest1', t1.text), count(*) " +
-                        "FROM '%s' t1 " +
+                        "FROM \"%s\" t1 " +
                         "GROUP BY LOOKUP('tableForLookupTest1', t1.text) " +
                         "ORDER BY 1 DESC",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
@@ -307,7 +307,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupInHaving() {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest1', t1.text), count(*) " +
-                        "FROM '%s' t1 " +
+                        "FROM \"%s\" t1 " +
                         "GROUP BY LOOKUP('tableForLookupTest1', t1.text) " +
                         "HAVING sum(CAST(LOOKUP('tableForLookupTest1', t1.text) as Number)) > 0 " +
                         "ORDER BY 1 DESC",
@@ -331,7 +331,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupInLength() {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest1', t1.text) " +
-                        "FROM '%s' t1 " +
+                        "FROM \"%s\" t1 " +
                         "WHERE LENGTH(LOOKUP('tableForLookupTest1', t1.text)) > 3",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
         );
@@ -355,7 +355,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupWithLike() {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest1', t1.text) " +
-                        "FROM '%s' t1 " +
+                        "FROM \"%s\" t1 " +
                         "WHERE LOOKUP('tableForLookupTest1', t1.text) LIKE '3'",
                 TEST_METRIC_NAME_BASE_LOOKUP_CASE
         );
@@ -392,7 +392,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupWithEntityTags(String key, String expectedResult) {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest2', t1.entity.tags.'%s') " +
-                        "FROM '%s' t1 ",
+                        "FROM \"%s\" t1 ",
                 key,
                 TEST_METRIC_NAME_TAGS_CASE
         );
@@ -412,7 +412,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupWithMetricTags(String key, String expectedResult) {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest2', t1.metric.tags.'%s') " +
-                        "FROM '%s' t1 ",
+                        "FROM \"%s\" t1 ",
                 key,
                 TEST_METRIC_NAME_TAGS_CASE
         );
@@ -432,7 +432,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     public void testLookupWithSeriesTags(String key, String expectedResult) {
         String sqlQuery = String.format(
                 "SELECT LOOKUP('tableForLookupTest2', t1.tags.'%s') " +
-                        "FROM '%s' t1 ",
+                        "FROM \"%s\" t1 ",
                 key,
                 TEST_METRIC_NAME_TAGS_CASE
         );

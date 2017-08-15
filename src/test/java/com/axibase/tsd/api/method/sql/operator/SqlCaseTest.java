@@ -7,7 +7,6 @@ import com.axibase.tsd.api.model.series.Series;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static com.axibase.tsd.api.util.Mocks.entity;
@@ -40,7 +39,7 @@ public class SqlCaseTest extends SqlTest {
                 "SELECT CASE WHEN t1.value > 30 THEN 'b'" +
                         " WHEN t1.value <= 1 THEN 'a'" +
                         " ELSE 'c' END" +
-                        " FROM '%s' t1",
+                        " FROM \"%s\" t1",
                 TEST_METRIC_NAME
         );
 
@@ -61,7 +60,7 @@ public class SqlCaseTest extends SqlTest {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN avg(t1.value) > 2 THEN 'b'" +
                         " ELSE 'c' END" +
-                        " FROM '%s' t1",
+                        " FROM \"%s\" t1",
                 TEST_METRIC_NAME
         );
 
@@ -79,7 +78,7 @@ public class SqlCaseTest extends SqlTest {
     public void testCaseReturnsNull() {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN t1.value = 30 THEN 'b' END" +
-                        " FROM '%s' t1",
+                        " FROM \"%s\" t1",
                 TEST_METRIC_NAME
         );
 
@@ -99,7 +98,7 @@ public class SqlCaseTest extends SqlTest {
     public void testCaseNullCheck() {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN t1.value IS NOT NULL THEN 'ok' END" +
-                        " FROM '%s' t1",
+                        " FROM \"%s\" t1",
                 TEST_METRIC_NAME
         );
 
@@ -120,7 +119,7 @@ public class SqlCaseTest extends SqlTest {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN t1.tags.tag1 = 'abc' THEN t1.value" +
                         " ELSE 'error' END" +
-                        " FROM '%s' t1",
+                        " FROM \"%s\" t1",
                 TEST_METRIC_NAME
         );
 
@@ -141,7 +140,7 @@ public class SqlCaseTest extends SqlTest {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN LOCATE('b', t1.tags.tag1) = 2 THEN t1.value" +
                         " ELSE 'error' END" +
-                        " FROM '%s' t1",
+                        " FROM \"%s\" t1",
                 TEST_METRIC_NAME
         );
 
@@ -163,7 +162,7 @@ public class SqlCaseTest extends SqlTest {
                 "SELECT CASE WHEN t1.value > 20 THEN t1.value" +
                         " ELSE tags.tag2 END as \'ATTRIBUTE\'," +
                         " sum(value)" +
-                        " FROM '%s' t1" +
+                        " FROM \"%s\" t1" +
                         " GROUP BY \'ATTRIBUTE\'",
                 TEST_METRIC_NAME
         );
@@ -185,7 +184,7 @@ public class SqlCaseTest extends SqlTest {
     public void testCaseInWhere() {
         String sqlQuery = String.format(
                 "SELECT value" +
-                        " FROM '%s' t1" +
+                        " FROM \"%s\" t1" +
                         " WHERE CASE WHEN t1.value > 10 THEN t1.value < 35" +
                         " ELSE t1.value > 10 END",
                 TEST_METRIC_NAME
@@ -205,7 +204,7 @@ public class SqlCaseTest extends SqlTest {
     public void testCaseInGroupBy() {
         String sqlQuery = String.format(
                 "SELECT sum(value)" +
-                        " FROM '%s' t1" +
+                        " FROM \"%s\" t1" +
                         " GROUP BY CASE WHEN t1.value > 10 THEN tags.tag1" +
                         " ELSE tags.tag2 END",
                 TEST_METRIC_NAME
@@ -226,7 +225,7 @@ public class SqlCaseTest extends SqlTest {
     public void testCaseInHaving() {
         String sqlQuery = String.format(
                 "SELECT sum(value)" +
-                        " FROM '%s' t1" +
+                        " FROM \"%s\" t1" +
                         " GROUP BY CASE WHEN t1.value > 10 THEN tags.tag1" +
                         " ELSE tags.tag2 END" +
                         " HAVING CASE WHEN sum(value) > 10 THEN avg(value) > 10" +
@@ -247,7 +246,7 @@ public class SqlCaseTest extends SqlTest {
     @Test
     public void testCaseInExpression() throws Exception {
         String sqlQuery = String.format(
-                "SELECT 100 - CASE WHEN value < 30 THEN value ELSE 100 END FROM '%s'",
+                "SELECT 100 - CASE WHEN value < 30 THEN value ELSE 100 END FROM \"%s\"",
                 TEST_METRIC_NAME);
 
         String[][] expectedRows = {
@@ -268,7 +267,7 @@ public class SqlCaseTest extends SqlTest {
     @Test
     public void testCaseInAggregationFunction() throws Exception {
         String sqlQuery = String.format(
-                "SELECT SUM(100 - CASE WHEN value < 30 THEN value ELSE 100 END) FROM '%s'",
+                "SELECT SUM(100 - CASE WHEN value < 30 THEN value ELSE 100 END) FROM \"%s\"",
                 TEST_METRIC_NAME);
 
         String[][] expectedRows = {{"184"}};
@@ -285,7 +284,7 @@ public class SqlCaseTest extends SqlTest {
     @Test
     public void testCaseInCastFunction() throws Exception {
         String sqlQuery = String.format(
-                "SELECT CAST(100 - CASE WHEN value < 30 THEN 0 ELSE 100 END AS STRING) FROM '%s'",
+                "SELECT CAST(100 - CASE WHEN value < 30 THEN 0 ELSE 100 END AS STRING) FROM \"%s\"",
                 TEST_METRIC_NAME);
 
         String[][] expectedRows = {

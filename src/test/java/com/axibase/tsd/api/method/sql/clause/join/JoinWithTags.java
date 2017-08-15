@@ -269,8 +269,8 @@ public class JoinWithTags extends SqlTest {
 
         String sql = String.format(
                 "SELECT t1.metric.tags.foobar, t1.metric.tags%n" +
-                "FROM '%s' as t1%n" +
-                "JOIN '%s' as t2",
+                "FROM \"%s\" as t1%n" +
+                "JOIN \"%s\" as t2",
                 metric.getName(), otherSeries.getMetric()
         );
         String[][] expected = {
@@ -292,8 +292,8 @@ public class JoinWithTags extends SqlTest {
 
         String sql = String.format(
                 "SELECT t1.metric.interpolate, t2.metric.interpolate%n" +
-                "FROM '%s' as t1%n" +
-                "JOIN '%s' as t2",
+                "FROM \"%s\" as t1%n" +
+                "JOIN \"%s\" as t2",
                 series.getMetric(), otherSeries.getMetric()
         );
         String[][] expected = {
@@ -323,9 +323,9 @@ public class JoinWithTags extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT t1.tags " +
-                "FROM '%s' t1 " +
-                "JOIN USING ENTITY '%s' t2 " +
-                "JOIN USING ENTITY '%s' t3 " +
+                "FROM \"%s\" t1 " +
+                "JOIN USING ENTITY \"%s\" t2 " +
+                "JOIN USING ENTITY \"%s\" t3 " +
                 "WHERE t1.tags.tag = 'value' AND " +
                 "t2.tags.tag = 'value' AND " +
                 "t3.tags.tag = 'value'",

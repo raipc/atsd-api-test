@@ -15,8 +15,6 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +60,7 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testStartTimeInclusiveAlignment() {
         final String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s'  %nWHERE datetime >= '2016-06-03T09:20:00.123Z' " +
+                "SELECT datetime, AVG(value) FROM \"%s\"  %nWHERE datetime >= '2016-06-03T09:20:00.123Z' " +
                         "AND datetime < '2016-06-03T09:45:00.000Z' %n GROUP BY PERIOD(5 minute, NONE, START_TIME)",
                 TEST_METRIC_NAME
         );
@@ -88,7 +86,7 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testStartTimeExclusiveAlignment() {
         final String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s'  %nWHERE datetime > '2016-06-03T09:20:00.123Z' " +
+                "SELECT datetime, AVG(value) FROM \"%s\"  %nWHERE datetime > '2016-06-03T09:20:00.123Z' " +
                         "AND datetime < '2016-06-03T09:45:00.000Z' %nGROUP BY PERIOD(5 minute, NONE, START_TIME)",
                 TEST_METRIC_NAME
         );
@@ -115,7 +113,7 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testEndTimeInclusiveAlignment() {
         final String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s'  %nWHERE datetime >= '2016-06-03T09:20:00.000Z' " +
+                "SELECT datetime, AVG(value) FROM \"%s\"  %nWHERE datetime >= '2016-06-03T09:20:00.000Z' " +
                         "AND datetime <= '2016-06-03T09:45:00.321Z' %nGROUP BY PERIOD(5 minute, NONE, END_TIME)",
                 TEST_METRIC_NAME
         );
@@ -141,7 +139,7 @@ public class SqlPeriodAlignTest extends SqlTest {
     @Test
     public void testEndTimeExclusiveAlignment() {
         final String sqlQuery = String.format(
-                "SELECT datetime, AVG(value) FROM '%s'  %nWHERE datetime >= '2016-06-03T09:20:00.123Z' AND " +
+                "SELECT datetime, AVG(value) FROM \"%s\"  %nWHERE datetime >= '2016-06-03T09:20:00.123Z' AND " +
                         "datetime <= '2016-06-03T09:45:00.323Z' %nGROUP BY PERIOD(5 minute, NONE, END_TIME)",
                 TEST_METRIC_NAME
         );
@@ -175,7 +173,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2000-01-01T00:00:00.001Z' AND datetime < '2000-01-01T00:00:00.004Z' " +
                         "GROUP BY PERIOD(1 MILLISECOND, START_TIME)",
                 TEST_METRIC_NAME
@@ -205,7 +203,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2000-01-01T00:00:00.001Z' AND datetime < '2000-01-01T00:00:00.004Z' " +
                         "GROUP BY PERIOD(1 MILLISECOND, END_TIME)",
                 TEST_METRIC_NAME
@@ -235,7 +233,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2000-01-01T00:00:00.001Z' AND datetime < '2000-01-01T00:00:00.004Z' " +
                         "GROUP BY PERIOD(1 MILLISECOND, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
@@ -265,7 +263,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2001-01-01T00:00:01.000Z' AND datetime < '2001-01-01T00:00:03.007Z' " +
                         "GROUP BY PERIOD(1 SECOND, START_TIME)",
                 TEST_METRIC_NAME
@@ -295,7 +293,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2001-01-01T00:00:01.000Z' AND datetime < '2001-01-01T00:00:03.007Z' " +
                         "GROUP BY PERIOD(1 SECOND, END_TIME)",
                 TEST_METRIC_NAME
@@ -324,7 +322,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2001-01-01T00:00:01.000Z' AND datetime < '2001-01-01T00:00:03.007Z' " +
                         "GROUP BY PERIOD(1 SECOND, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
@@ -354,7 +352,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2002-01-01T00:01:00.000Z' AND datetime < '2002-01-01T00:03:00.007Z' " +
                         "GROUP BY PERIOD(1 MINUTE, START_TIME)",
                 TEST_METRIC_NAME
@@ -384,7 +382,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2002-01-01T00:01:00.000Z' AND datetime < '2002-01-01T00:03:00.007Z' " +
                         "GROUP BY PERIOD(1 MINUTE, END_TIME)",
                 TEST_METRIC_NAME
@@ -413,7 +411,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2002-01-01T00:01:00.000Z' AND datetime < '2002-01-01T00:03:00.007Z' " +
                         "GROUP BY PERIOD(1 MINUTE, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
@@ -443,7 +441,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2003-01-01T01:00:00.000Z' AND datetime < '2003-01-01T03:00:00.007Z' " +
                         "GROUP BY PERIOD(1 HOUR, START_TIME)",
                 TEST_METRIC_NAME
@@ -473,7 +471,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2003-01-01T01:00:00.000Z' AND datetime < '2003-01-01T03:00:00.007Z' " +
                         "GROUP BY PERIOD(1 HOUR, END_TIME)",
                 TEST_METRIC_NAME
@@ -502,7 +500,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2003-01-01T01:00:00.000Z' AND datetime < '2003-01-01T03:00:00.007Z' " +
                         "GROUP BY PERIOD(1 HOUR, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
@@ -532,7 +530,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2004-01-01T00:00:00.000Z' AND datetime < '2004-01-03T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 DAY, START_TIME)",
                 TEST_METRIC_NAME
@@ -562,7 +560,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2004-01-01T00:00:00.000Z' AND datetime < '2004-01-03T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 DAY, END_TIME)",
                 TEST_METRIC_NAME
@@ -591,7 +589,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2004-01-01T00:00:00.000Z' AND datetime < '2004-01-03T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 DAY, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
@@ -623,7 +621,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2004-03-26T00:00:00Z' AND datetime < '2004-03-31T00:00:00Z' " +
                         "GROUP BY PERIOD(1 DAY, START_TIME, 'Europe/Moscow')",
                 TEST_METRIC_NAME
@@ -657,7 +655,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2004-03-26T00:00:00Z' AND datetime < '2004-03-31T00:00:00Z' " +
                         "GROUP BY PERIOD(1 DAY, END_TIME, 'Europe/Moscow')",
                 TEST_METRIC_NAME
@@ -691,7 +689,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2004-03-26T00:00:00Z' AND datetime < '2004-03-31T00:00:00Z' " +
                         "GROUP BY PERIOD(1 DAY, FIRST_VALUE_TIME, 'Europe/Moscow')",
                 TEST_METRIC_NAME
@@ -723,7 +721,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2005-01-01T00:00:00.000Z' AND datetime < '2005-01-15T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 WEEK, START_TIME)",
                 TEST_METRIC_NAME
@@ -753,7 +751,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2005-01-01T00:00:00.000Z' AND datetime < '2005-01-15T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 WEEK, END_TIME)",
                 TEST_METRIC_NAME
@@ -782,7 +780,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2005-01-01T00:00:00.000Z' AND datetime < '2005-01-15T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 WEEK, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
@@ -812,7 +810,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2006-02-02T00:00:00.000Z' AND datetime < '2006-04-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 MONTH, START_TIME)",
                 TEST_METRIC_NAME
@@ -842,7 +840,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2006-02-02T00:00:00.000Z' AND datetime < '2006-04-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 MONTH, END_TIME)",
                 TEST_METRIC_NAME
@@ -871,7 +869,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2006-02-02T00:00:00.000Z' AND datetime < '2006-04-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 MONTH, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
@@ -901,7 +899,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2007-01-02T00:00:00.000Z' AND datetime < '2007-07-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 QUARTER, START_TIME)",
                 TEST_METRIC_NAME
@@ -935,7 +933,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2007-01-02T00:00:00.000Z' AND datetime < '2007-07-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 QUARTER, END_TIME)",
                 TEST_METRIC_NAME
@@ -967,7 +965,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2007-01-02T00:00:00.000Z' AND datetime < '2007-07-02T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 QUARTER, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME
@@ -1001,7 +999,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2008-01-01T00:00:00.000Z' AND datetime < '2010-01-01T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 YEAR, START_TIME)",
                 TEST_METRIC_NAME
@@ -1031,7 +1029,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2008-01-01T00:00:00.000Z' AND datetime < '2010-01-01T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 YEAR, END_TIME)",
                 TEST_METRIC_NAME
@@ -1060,7 +1058,7 @@ public class SqlPeriodAlignTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT datetime, MAX(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime >= '2008-01-01T00:00:00.000Z' AND datetime < '2010-01-01T00:00:00.007Z' " +
                         "GROUP BY PERIOD(1 YEAR, FIRST_VALUE_TIME)",
                 TEST_METRIC_NAME

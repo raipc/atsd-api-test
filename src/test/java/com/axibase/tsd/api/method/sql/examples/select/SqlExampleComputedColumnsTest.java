@@ -5,7 +5,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -54,7 +53,7 @@ public class SqlExampleComputedColumnsTest extends SqlTest {
     public void testExample1() {
         String sqlQuery = String.format(
                 "SELECT t1.datetime, t1.entity AS 'entity', t1.value, t2.value, t1.value + t2.value AS total_cpu %n" +
-                        "FROM '%s' t1 %nJOIN '%s' t2 %n" +
+                        "FROM \"%s\" t1 %nJOIN \"%s\" t2 %n" +
                         "WHERE t1.datetime >= '2016-08-15T07:24:00.000Z' AND t1.datetime < '2016-08-15T07:26:00.000Z' %n" +
                         "AND t2.datetime >= '2016-08-15T07:24:00.000Z' AND t2.datetime < '2016-08-15T07:26:00.000Z' %n",
                 TEST_METRIC1_NAME, TEST_METRIC2_NAME
@@ -77,7 +76,7 @@ public class SqlExampleComputedColumnsTest extends SqlTest {
     public void testExample2() {
         String sqlQuery = String.format(
                 "SELECT t1.datetime, t1.entity, max(t1.value), max(t2.value), max(t1.value) + max(t2.value), max(t1.value + t2.value) AS max_total_cpu %n" +
-                        "FROM '%s' t1 %nJOIN '%s' t2 %n" +
+                        "FROM \"%s\" t1 %nJOIN \"%s\" t2 %n" +
                         "WHERE t1.datetime >= '2016-08-15T07:24:00.000Z' AND t1.datetime < '2016-08-15T07:26:00.000Z' %n" +
                         "AND t2.datetime >= '2016-08-15T07:24:00.000Z' AND t2.datetime < '2016-08-15T07:26:00.000Z' %n" +
                         "GROUP BY t1.entity, t1.datetime %n",
@@ -101,7 +100,7 @@ public class SqlExampleComputedColumnsTest extends SqlTest {
     public void testExample3() {
         String sqlQuery = String.format(
                 "SELECT t1.datetime, t1.entity, max(t1.value), max(t2.value), max(t1.value) + max(t2.value), max(t1.value + t2.value) AS max_total_cpu %n" +
-                        "FROM '%s' t1 %nJOIN '%s' t2 %n" +
+                        "FROM \"%s\" t1 %nJOIN \"%s\" t2 %n" +
                         "WHERE t1.datetime >= '2016-08-15T07:24:00.000Z' AND t1.datetime < '2016-08-15T07:26:00.000Z' %n" +
                         "AND t2.datetime >= '2016-08-15T07:24:00.000Z' AND t2.datetime < '2016-08-15T07:26:00.000Z' %n" +
                         "GROUP BY t1.entity, t1.datetime %nORDER BY max(t1.value) - min(t2.value) DESC",
@@ -126,7 +125,7 @@ public class SqlExampleComputedColumnsTest extends SqlTest {
     public void testExample4() {
         String sqlQuery = String.format(
                 "SELECT entity, min(value), max(value), max(value) - min(value) %n" +
-                        "FROM '%s' %n" +
+                        "FROM \"%s\" %n" +
                         "WHERE datetime >= '2016-08-15T07:24:00.000Z' AND datetime < '2016-08-15T07:26:00.000Z' %n" +
                         "GROUP BY entity %nHAVING max(value) - min(value) > 1 %nORDER BY max(value) - min(value) DESC",
                 TEST_METRIC1_NAME

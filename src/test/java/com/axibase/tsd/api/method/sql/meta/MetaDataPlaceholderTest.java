@@ -13,7 +13,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
     public void testSelectExpression() {
         String metricName = Mocks.metric();
         String sqlQuery = String.format(
-                "SELECT value * ? FROM '%s'",
+                "SELECT value * ? FROM \"%s\"",
                 metricName
         );
 
@@ -36,7 +36,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
         String metricNameA = Mocks.metric();
         String sqlQuery = String.format(
                 "SELECT datetime, value " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime between ? and ?",
                 metricNameA
         );
@@ -62,7 +62,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
         String metricName = Mocks.metric();
         String sqlQuery = String.format(
                 "SELECT value, case ? when ? then ? else ? end " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime < ? GROUP BY tags.t " +
                         "ORDER BY value * ?",
                 metricName
@@ -89,7 +89,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
         String metricName = Mocks.metric();
         String sqlQuery = String.format(
                 "SELECT entity, avg(value) " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime < ? " +
                         "GROUP BY entity",
                 metricName
@@ -116,7 +116,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
         String metricName = Mocks.metric();
         String sqlQuery = String.format(
                 "SELECT entity, value " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "WHERE datetime < ? " +
                         "ORDER BY entity",
                 metricName
@@ -144,8 +144,8 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
         String metricNameB = Mocks.metric();
         String sqlQuery = String.format(
                 "SELECT entity, metric, value " +
-                        "FROM '%s' " +
-                        "JOIN '%s'  " +
+                        "FROM \"%s\" " +
+                        "JOIN \"%s\"  " +
                         "WHERE datetime < ? ",
                 metricNameA,
                 metricNameB
@@ -175,8 +175,8 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
         String metricNameB = Mocks.metric();
         String sqlQuery = String.format(
                 "SELECT entity, metric, value " +
-                        "FROM '%s' " +
-                        "JOIN USING ENTITY '%s'  " +
+                        "FROM \"%s\" " +
+                        "JOIN USING ENTITY \"%s\"  " +
                         "WHERE datetime < ? ",
                 metricNameA,
                 metricNameB
@@ -205,7 +205,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
         String metricName = Mocks.metric();
         String sqlQuery = String.format(
                 "SELECT time, value " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "OPTION(ROW_MEMORY_THRESHOLD 0)",
                 metricName
         );
@@ -231,7 +231,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
         String metricName = Mocks.metric();
         String sqlQuery = String.format(
                 "SELECT time, sum(value) AS sum_v " +
-                        "FROM '%s' " +
+                        "FROM \"%s\" " +
                         "GROUP BY time " +
                         "HAVING sum_v = ? and ? < ?",
                 metricName
@@ -310,7 +310,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
                         "concat(?, ?)," +
                         "locate(?, ?)," +
                         "substr(?, ?, ?) " +
-                        "FROM '%s'",
+                        "FROM \"%s\"",
                 metricName
         );
 
@@ -347,7 +347,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
                 "SELECT " +
                         "isnull(?, ?), " +
                         "coalesce(?, ?, ?) " +
-                        "FROM '%s'",
+                        "FROM \"%s\"",
                 metricName
         );
 

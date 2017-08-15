@@ -5,7 +5,6 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
-import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -56,7 +55,7 @@ public class SqlExampleOrderByValueTest extends SqlTest {
     @Test
     public void test() {
         String sqlQuery = String.format(
-                "SELECT entity, AVG(value) FROM '%s'%nGROUP BY entity%nORDER BY AVG(value) DESC",
+                "SELECT entity, AVG(value) FROM \"%s\"%nGROUP BY entity%nORDER BY AVG(value) DESC",
                 TEST_METRIC_NAME
         );
         Response response = queryResponse(sqlQuery);

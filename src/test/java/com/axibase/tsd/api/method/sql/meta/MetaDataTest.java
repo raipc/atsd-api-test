@@ -100,7 +100,7 @@ public class MetaDataTest extends SqlMetaTest {
     @Test
     public void testValueTimeNonExistent() {
         String sqlQuery = String.format(
-                "SELECT time, datetime, value FROM '%s'",
+                "SELECT time, datetime, value FROM \"%s\"",
                 NON_EXISTENT_METRIC_1
         );
 
@@ -129,7 +129,7 @@ public class MetaDataTest extends SqlMetaTest {
         SeriesMethod.insertSeriesCheck(series);
 
         String sqlQuery = String.format(
-                "SELECT time, datetime, value FROM '%s'",
+                "SELECT time, datetime, value FROM \"%s\"",
                 series.getMetric()
         );
 
@@ -154,7 +154,7 @@ public class MetaDataTest extends SqlMetaTest {
      */
     @Test
     public void testNonExistentMeta() {
-        String sqlQuery = String.format("SELECT * from '%s'", NON_EXISTENT_METRIC_1);
+        String sqlQuery = String.format("SELECT * FROM \"%s\"", NON_EXISTENT_METRIC_1);
 
         String[] expectedNames = {
                 "time",
@@ -220,7 +220,7 @@ public class MetaDataTest extends SqlMetaTest {
      */
     @Test
     public void testNonExistentTagsExpansionMeta() {
-        String sqlQuery = String.format("SELECT tags.* from '%s'", NON_EXISTENT_METRIC_1);
+        String sqlQuery = String.format("SELECT tags.* FROM \"%s\"", NON_EXISTENT_METRIC_1);
 
         String[] expectedNames = {};
         String[] expectedTypes = {};
@@ -275,7 +275,7 @@ public class MetaDataTest extends SqlMetaTest {
         Metric existentMetric = new Metric(Mocks.metric());
         MetricMethod.createOrReplaceMetricCheck(existentMetric);
 
-        String sqlQuery = String.format("SELECT tags.* from '%s'", NON_EXISTENT_METRIC_1);
+        String sqlQuery = String.format("SELECT tags.* FROM \"%s\"", NON_EXISTENT_METRIC_1);
 
         String[] expectedNames = {};
         String[] expectedTypes = {};
@@ -340,7 +340,7 @@ public class MetaDataTest extends SqlMetaTest {
     @Test
     public void testMetaNonExistentJoin() {
         String sqlQuery = String.format(
-                "SELECT * from '%s' JOIN '%s'",
+                "SELECT * FROM \"%s\" JOIN \"%s\"",
                 NON_EXISTENT_METRIC_1,
                 NON_EXISTENT_METRIC_2
         );
@@ -391,7 +391,7 @@ public class MetaDataTest extends SqlMetaTest {
     @Test
     public void testMetaNonExistentJoinUsingEntity() {
         String sqlQuery = String.format(
-                "SELECT * from '%s' JOIN USING ENTITY '%s'",
+                "SELECT * FROM \"%s\" JOIN USING ENTITY \"%s\"",
                 NON_EXISTENT_METRIC_1,
                 NON_EXISTENT_METRIC_2
         );
@@ -442,7 +442,7 @@ public class MetaDataTest extends SqlMetaTest {
     @Test
     public void testMetaExpression() {
         String sqlQuery = String.format(
-                "SELECT sum(value * 2) from '%s'",
+                "SELECT sum(value * 2) FROM \"%s\"",
                 NON_EXISTENT_METRIC_1
         );
 

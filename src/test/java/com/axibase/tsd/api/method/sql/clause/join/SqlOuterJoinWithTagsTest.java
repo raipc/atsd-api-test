@@ -8,7 +8,8 @@ import com.axibase.tsd.api.util.Mocks;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.axibase.tsd.api.util.Mocks.entity;
 import static com.axibase.tsd.api.util.Mocks.metric;
@@ -67,7 +68,7 @@ public class SqlOuterJoinWithTagsTest extends SqlTest {
     public void testJoinUsingEntityWithTags() {
         String sqlQuery = String.format(
                 "SELECT t1.tags, t2.tags " +
-                "FROM '%s' t1 JOIN USING ENTITY '%s' t2 " +
+                "FROM \"%s\" t1 JOIN USING ENTITY \"%s\" t2 " +
                 "WHERE t1.datetime = '%s' ",
                 TEST_METRIC1_NAME,
                 TEST_METRIC2_NAME,
@@ -94,8 +95,8 @@ public class SqlOuterJoinWithTagsTest extends SqlTest {
                 "    t1.value, t2.value, " +
                 "    t1.tags, t2.tags, " +
                 "    t1.datetime, t2.datetime " +
-                "FROM '%s' t1 " +
-                "OUTER JOIN USING ENTITY '%s' t2 " +
+                "FROM \"%s\" t1 " +
+                "OUTER JOIN USING ENTITY \"%s\" t2 " +
                 "WHERE t1.datetime BETWEEN '2017-01-02T12:00:00.000Z' AND '2017-01-06T12:00:00.000Z'",
                 TEST_METRIC1_NAME,
                 TEST_METRIC2_NAME);

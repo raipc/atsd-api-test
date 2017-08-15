@@ -8,7 +8,6 @@ import com.axibase.tsd.api.model.sql.StringTable;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class SqlSyntaxComputedColumnsInClausesTest extends SqlTest {
     @Test
     public void testSelectExpression() {
         String sqlQuery = String.format(
-                "SELECT SUM(ABS(value)-1) AS \"computed\" FROM '%s' %n",
+                "SELECT SUM(ABS(value)-1) AS \"computed\" FROM \"%s\" %n",
                 TEST_METRIC_NAME
         );
 
@@ -52,7 +51,7 @@ public class SqlSyntaxComputedColumnsInClausesTest extends SqlTest {
     @Test
     public void testOrderByComputedAlias() {
         String sqlQuery = String.format(
-                "SELECT SUM(ABS(value)-1) AS \"computed\" FROM '%s' %nORDER BY \"computed\"",
+                "SELECT SUM(ABS(value)-1) AS \"computed\" FROM \"%s\" %nORDER BY \"computed\"",
                 TEST_METRIC_NAME
         );
         StringTable resultTable = queryResponse(sqlQuery)
@@ -69,7 +68,7 @@ public class SqlSyntaxComputedColumnsInClausesTest extends SqlTest {
     @Test
     public void testOrderByComputedColumn() {
         String sqlQuery = String.format(
-                "SELECT SUM(ABS(value)-1) AS \"computed\" FROM '%s' %nORDER BY SUM(ABS(value)-1)",
+                "SELECT SUM(ABS(value)-1) AS \"computed\" FROM \"%s\" %nORDER BY SUM(ABS(value)-1)",
                 TEST_METRIC_NAME
         );
 
@@ -87,7 +86,7 @@ public class SqlSyntaxComputedColumnsInClausesTest extends SqlTest {
     @Test
     public void testOrder() {
         String sqlQuery = String.format(
-                "SELECT SUM(ABS(value)-1) AS \"computed\" FROM '%s' %nORDER BY SUM(ABS(value)-1)",
+                "SELECT SUM(ABS(value)-1) AS \"computed\" FROM \"%s\" %nORDER BY SUM(ABS(value)-1)",
                 TEST_METRIC_NAME
         );
 

@@ -43,7 +43,7 @@ public class IsNullTest extends SqlTest {
      */
     @Test(dataProvider = "applyTestProvider")
     public void testApply(String params) throws Exception {
-        String sqlQuery = String.format("SELECT ISNULL(%s) FROM '%s'",
+        String sqlQuery = String.format("SELECT ISNULL(%s) FROM \"%s\"",
                 params, TEST_METRIC
         );
         assertOkRequest(String.format("Can't apply ISNULL function to %s", params), queryResponse(sqlQuery));
@@ -130,7 +130,7 @@ public class IsNullTest extends SqlTest {
     @Test(dataProvider = "functionResultProvider")
     public void testFunctionResult(String text, String expectedValue) throws Exception {
         String sqlQuery = String.format(
-                "SELECT ISNULL(%s) FROM '%s'",
+                "SELECT ISNULL(%s) FROM \"%s\"",
                 text, TEST_METRIC
         );
         String actualValue = queryTable(sqlQuery).getValueAt(0, 0);
@@ -145,7 +145,7 @@ public class IsNullTest extends SqlTest {
      */
     @Test
     public void testIsNullInExpression() throws Exception {
-        String sqlQuery = String.format("SELECT ROUND(100 - ISNULL(value, 0)) FROM '%s'", TEST_METRIC);
+        String sqlQuery = String.format("SELECT ROUND(100 - ISNULL(value, 0)) FROM \"%s\"", TEST_METRIC);
 
         StringTable resultTable = queryResponse(sqlQuery).readEntity(StringTable.class);
 

@@ -8,7 +8,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static com.axibase.tsd.api.util.Mocks.entity;
@@ -64,7 +63,7 @@ public class SqlFunctionMathAbs extends SqlTest {
     @Test(dataProvider = "provideTestsDataForAbsTest")
     public void testAbsWithAggregateExpressionsInside(String query, String value) {
         String sqlQuery = String.format(
-                "SELECT abs( %s ) FROM '%s'",
+                "SELECT abs( %s ) FROM \"%s\"",
                 query, TEST_METRIC1_NAME
         );
 

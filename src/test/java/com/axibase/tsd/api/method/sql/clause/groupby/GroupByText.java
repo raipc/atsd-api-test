@@ -5,12 +5,8 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.series.TextSample;
-import com.axibase.tsd.api.util.Mocks;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.axibase.tsd.api.util.Mocks.entity;
 import static com.axibase.tsd.api.util.Mocks.metric;
@@ -40,7 +36,7 @@ public class GroupByText extends SqlTest {
     public void testGroupByText() {
         String query = String.format(
                 "SELECT text %n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "WHERE entity = '%s' %n" +
                 "GROUP BY text",
                 DEFAULT_METRIC, DEFAULT_ENTITY
@@ -64,7 +60,7 @@ public class GroupByText extends SqlTest {
     public void testGroupByFunctionOfText() {
         String query = String.format(
                 "SELECT COUNT(entity) %n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "WHERE entity = '%s' %n" +
                 "GROUP BY UPPER(text)",
                 DEFAULT_METRIC, DEFAULT_ENTITY
@@ -86,7 +82,7 @@ public class GroupByText extends SqlTest {
     public void testGroupByIsNullText() {
         String query = String.format(
                 "SELECT COUNT(entity) %n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "WHERE entity = '%s' %n" +
                 "GROUP BY (text IS NULL)",
                 DEFAULT_METRIC, DEFAULT_ENTITY
@@ -105,7 +101,7 @@ public class GroupByText extends SqlTest {
     public void testGroupByTextAsNumber() {
         String query = String.format(
                 "SELECT COUNT(entity) %n" +
-                "FROM '%s' %n" +
+                "FROM \"%s\" %n" +
                 "WHERE entity = '%s' %n" +
                 "GROUP BY CAST(text as number)",
                 DEFAULT_METRIC, DEFAULT_ENTITY
