@@ -19,7 +19,7 @@ public class MetaDataTest extends SqlMetaTest {
      */
     @Test
     public void testAtsdSeries() {
-        String sqlQuery = "SELECT * from 'atsd_series'";
+        String sqlQuery = "SELECT * from \"atsd_series\"";
 
         String[] expectedNames = {
                 "time",
@@ -51,7 +51,7 @@ public class MetaDataTest extends SqlMetaTest {
     @Test
     public void testSelectConst() {
         String sqlQuery = "SELECT 1, 'a', 1/0, CASE 0 WHEN 1 THEN 'a' ELSE 5 END " +
-                "FROM 'atsd_series'";
+                "FROM \"atsd_series\"";
 
         String[] expectedNames = {
                 "1",
@@ -76,7 +76,7 @@ public class MetaDataTest extends SqlMetaTest {
      */
     @Test
     public void testValueTimeAtsdSeriesMeta() {
-        String sqlQuery = "SELECT time, datetime, value FROM 'atsd_series'";
+        String sqlQuery = "SELECT time, datetime, value FROM \"atsd_series\"";
 
         String[] expectedNames = {
                 "time",

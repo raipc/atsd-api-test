@@ -338,7 +338,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT entity %n" +
-                        "FROM 'm-test-operator-is-null-metric-label' %n" +
+                        "FROM \"m-test-operator-is-null-metric-label\" %n" +
                         "WHERE datetime >= '2016-06-19T00:00:00.000Z' and datetime < '2016-06-19T00:01:00.000Z' %n" +
                         "AND metric.label IS NULL %n"
         );
@@ -368,7 +368,7 @@ public class SqlIsNullOperatorTest extends SqlTest {
 
         String sqlQuery = String.format(
                 "SELECT entity %n" +
-                        "FROM 'm-test-operator-is-not-null-metric-label' %n" +
+                        "FROM \"m-test-operator-is-not-null-metric-label\" %n" +
                         "WHERE datetime >= '2016-06-19T00:00:00.000Z' and datetime < '2016-06-19T00:01:00.000Z' %n" +
                         "AND metric.label IS NOT NULL %n"
         );

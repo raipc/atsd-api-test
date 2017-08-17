@@ -58,6 +58,7 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
                 {"enabled", "true"},
                 {"persistent", "true"},
                 {"filter", "name = '*'"},
+//                {"filter", "name = \'\'*\'\'"},
                 {"lastInsertTime", "" + Util.getMillis(Mocks.ISO_TIME)},
                 {"retentionIntervalDays", "0"},
                 {"versioning", "false"},
@@ -80,6 +81,7 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
                 TEST_METRIC);
 
         String[][] expectedRows = {{value}};
+//        String[][] expectedRows = {{value.replaceAll("\\''","'")}};
 
         assertSqlQueryRows("Error in metric field query (%s)", expectedRows, sqlQuery);
     }
@@ -90,7 +92,7 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
     @Test(dataProvider = "metricFieldsProvider")
     public void testMetricFieldsInWhere(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.metric.%1$s FROM '%2$s' m WHERE m.metric.%1$s = \"%3$s\"",
+                "SELECT m.metric.%1$s FROM \"%2$s\" m WHERE m.metric.%1$s = '%3$s'",
                 field,
                 TEST_METRIC,
                 value);
@@ -106,7 +108,7 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
     @Test(dataProvider = "metricFieldsProvider")
     public void testMetricFieldsInGroupBy(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.metric.%1$s FROM '%2$s' m GROUP BY m.metric.%1$s",
+                "SELECT m.metric.%1$s FROM \"%2$s\" m GROUP BY m.metric.%1$s",
                 field,
                 TEST_METRIC);
 
@@ -121,7 +123,7 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
     @Test(dataProvider = "metricFieldsProvider")
     public void testMetricFieldsInOrderBy(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.metric.%1$s FROM '%2$s' m ORDER BY m.metric.%1$s",
+                "SELECT m.metric.%1$s FROM \"%2$s\" m ORDER BY m.metric.%1$s",
                 field,
                 TEST_METRIC);
 
@@ -136,7 +138,7 @@ public class SqlSelectMetricFieldsTest extends SqlTest {
     @Test(dataProvider = "metricFieldsProvider")
     public void testMetricFieldsInHaving(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.metric.%1$s FROM '%2$s' m GROUP BY m.metric.%1$s HAVING m.metric.%1$s = \"%3$s\"",
+                "SELECT m.metric.%1$s FROM \"%2$s\" m GROUP BY m.metric.%1$s HAVING m.metric.%1$s = '%3$s'",
                 field,
                 TEST_METRIC,
                 value);

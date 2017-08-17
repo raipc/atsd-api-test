@@ -344,7 +344,7 @@ public class CastTest extends SqlTest {
          */
         Series series = castNumberAsStringSeries;
         String sqlQuery = String.format(
-                "SELECT %1$s, CAST(%1$s AS string) FROM '%2$s'",
+                "SELECT %1$s, CAST(%1$s AS string) FROM \"%2$s\"",
                 castArgument, series.getMetric()
         );
 
@@ -396,7 +396,7 @@ public class CastTest extends SqlTest {
         String sql = String.format(
                 "SELECT metric%n" +
                 "FROM \"%s\"%n" +
-                "WHERE tags.'value' = 10",
+                "WHERE tags.\"value\" = 10",
                 series.getMetric()
         );
 
@@ -461,7 +461,7 @@ public class CastTest extends SqlTest {
         SeriesMethod.insertSeriesCheck(series);
 
         String sql = String.format(
-                "SELECT ABS(tags.'value')%n" +
+                "SELECT ABS(tags.\"value\")%n" +
                 "FROM \"%s\"",
                 series.getMetric()
         );

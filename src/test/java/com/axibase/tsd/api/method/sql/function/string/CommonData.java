@@ -18,7 +18,6 @@ public class CommonData {
                     "metric",
                     "tags",
                     "tags.a",
-                    "tags.'a'",
                     "tags.\"a\"",
                     "metric.tags",
                     "metric.tags.a",
@@ -32,7 +31,7 @@ public class CommonData {
                     "metric.timezone",
                     "metric.interpolate",
                     "text",
-                    "\"a\""
+                    "'a'"
             )
     );
 

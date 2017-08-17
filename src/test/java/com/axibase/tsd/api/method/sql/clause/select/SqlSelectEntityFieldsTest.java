@@ -68,7 +68,7 @@ public class SqlSelectEntityFieldsTest extends SqlTest {
     @Test(dataProvider = "entityFieldsProvider")
     public void testEntityFieldsInWhere(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.entity.%1$s FROM '%2$s' m WHERE m.entity.%1$s = '%3$s'",
+                "SELECT m.entity.%1$s FROM \"%2$s\" m WHERE m.entity.%1$s = '%3$s'",
                 field,
                 TEST_METRIC,
                 value);
@@ -84,7 +84,7 @@ public class SqlSelectEntityFieldsTest extends SqlTest {
     @Test(dataProvider = "entityFieldsProvider")
     public void testEntityFieldsInGroupBy(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.entity.%1$s FROM '%2$s' m GROUP BY m.entity.%1$s",
+                "SELECT m.entity.%1$s FROM \"%2$s\" m GROUP BY m.entity.%1$s",
                 field,
                 TEST_METRIC);
 
@@ -99,7 +99,7 @@ public class SqlSelectEntityFieldsTest extends SqlTest {
     @Test(dataProvider = "entityFieldsProvider")
     public void testEntityFieldsInOrderBy(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.entity.%1$s FROM '%2$s' m ORDER BY m.entity.%1$s",
+                "SELECT m.entity.%1$s FROM \"%2$s\" m ORDER BY m.entity.%1$s",
                 field,
                 TEST_METRIC);
 
@@ -114,7 +114,7 @@ public class SqlSelectEntityFieldsTest extends SqlTest {
     @Test(dataProvider = "entityFieldsProvider")
     public void testEntityFieldsInHaving(String field, String value) {
         String sqlQuery = String.format(
-                "SELECT m.entity.%1$s FROM '%2$s' m GROUP BY m.entity.%1$s HAVING m.entity.%1$s = '%3$s'",
+                "SELECT m.entity.%1$s FROM \"%2$s\" m GROUP BY m.entity.%1$s HAVING m.entity.%1$s = '%3$s'",
                 field,
                 TEST_METRIC,
                 value);

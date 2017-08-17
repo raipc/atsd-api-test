@@ -83,8 +83,8 @@ public class SqlSelectAllWithJoinTest extends SqlTest {
     @Test
     public void testSelectAllColumnsWithoutAlias() {
         String sqlQuery =
-                "SELECT * FROM 'sql-select-all-join-metric-1' " +
-                        "JOIN 'sql-select-all-join-metric-2'";
+                "SELECT * FROM \"sql-select-all-join-metric-1\" " +
+                        "JOIN \"sql-select-all-join-metric-2\"";
 
         StringTable resultTable = queryResponse(sqlQuery).readEntity(StringTable.class);
 

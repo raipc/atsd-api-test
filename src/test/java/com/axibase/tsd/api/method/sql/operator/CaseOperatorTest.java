@@ -140,9 +140,9 @@ public class CaseOperatorTest extends SqlTest {
     @Test
     public void testOrderByCaseOperatorAsColumn() {
         final String sql = String.format(
-                "SELECT value, CASE WHEN value >= 0 THEN 1 ELSE 0 END as 'val_group'%n" +
+                "SELECT value, CASE WHEN value >= 0 THEN 1 ELSE 0 END as \"val_group\"%n" +
                 "FROM \"%s\" %n" +
-                "ORDER BY 'val_group' ASC",
+                "ORDER BY \"val_group\" ASC",
                 TEST_METRIC
         );
 

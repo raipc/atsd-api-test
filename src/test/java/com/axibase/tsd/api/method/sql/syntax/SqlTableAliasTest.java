@@ -113,7 +113,7 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectColumnWithJoinWithAlias() {
         String sqlQuery = String.format(
-                "SELECT '%s'.entity, '%s'.value, '%s'.entity, '%s'.value FROM \"%s\" t1 %n" +
+                "SELECT \"%s\".entity, \"%s\".value, \"%s\".entity, \"%s\".value FROM \"%s\" t1 %n" +
                         "JOIN  \"%s\" t2 ",
                 TEST_METRIC1_NAME, TEST_METRIC1_NAME, TEST_METRIC2_NAME, TEST_METRIC2_NAME, TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );
@@ -132,7 +132,7 @@ public class SqlTableAliasTest extends SqlTest {
     @Test
     public void testSelectColumnWithJoinWithoutAlias() {
         String sqlQuery = String.format(
-                "SELECT '%s'.entity, '%s'.value, '%s'.entity, '%s'.value FROM \"%s\" %n" +
+                "SELECT \"%s\".entity, \"%s\".value, \"%s\".entity, \"%s\".value FROM \"%s\" %n" +
                         "JOIN  \"%s\"",
                 TEST_METRIC1_NAME, TEST_METRIC1_NAME, TEST_METRIC2_NAME, TEST_METRIC2_NAME, TEST_METRIC1_NAME, TEST_METRIC2_NAME
         );

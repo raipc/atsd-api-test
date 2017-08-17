@@ -67,7 +67,7 @@ public class SqlSubqueryTest extends SqlTest {
         String sqlQuery = String.format(
                 "SELECT value, entity, datetime\n" +
                         "FROM (\n" +
-                        "    SELECT value, entity, datetime, value as 'value'\n" +
+                        "    SELECT value, entity, datetime, value as \"value\"\n" +
                         "    FROM \"%s\"\n" +
                         ")",
                 METRIC_NAME
@@ -84,7 +84,7 @@ public class SqlSubqueryTest extends SqlTest {
         String sqlQuery = String.format(
                 "SELECT *\n" +
                         "FROM (\n" +
-                        "    SELECT value, entity, -1 AS 'time'\n" +
+                        "    SELECT value, entity, -1 AS \"time\"\n" +
                         "    FROM \"%s\"\n" +
                         ")",
                 METRIC_NAME
@@ -100,7 +100,7 @@ public class SqlSubqueryTest extends SqlTest {
     public void testIncorrectCreatedTags() {
         String sqlQuery = String.format(
                 "SELECT * FROM (\n" +
-                        "    SELECT entity, value, time, 'x' AS 'tags'\n" +
+                        "    SELECT entity, value, time, 'x' AS \"tags\"\n" +
                         "    FROM \"%s\"\n" +
                         ")",
                 METRIC_NAME
@@ -134,7 +134,7 @@ public class SqlSubqueryTest extends SqlTest {
     public void testCreatedTags() {
         String sqlQuery = String.format(
                 "SELECT tags.* FROM (\n" +
-                        "    SELECT entity, value, time, 'x' AS 'tags'\n" +
+                        "    SELECT entity, value, time, 'x' AS \"tags\"\n" +
                         "    FROM \"%s\"\n" +
                         ")",
                 METRIC_NAME

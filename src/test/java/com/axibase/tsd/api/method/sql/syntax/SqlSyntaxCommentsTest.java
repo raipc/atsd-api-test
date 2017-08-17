@@ -62,7 +62,7 @@ public class SqlSyntaxCommentsTest extends SqlTest {
     @Test
     public void testCorrectCommentAfterFrom() {
         String sqlQuery = String.format(
-                "/*comment*/ %nSELECT *FROM   /*comment*/  '%s' %nWHERE datetime > now -5*minute",
+                "/*comment*/ %nSELECT *FROM   /*comment*/  \"%s\" %nWHERE datetime > now -5*minute",
                 TEST_METRIC_NAME
         );
         Response response = queryResponse(sqlQuery);

@@ -391,7 +391,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     @Test(dataProvider = "lookupWithTagsTestProvider")
     public void testLookupWithEntityTags(String key, String expectedResult) {
         String sqlQuery = String.format(
-                "SELECT LOOKUP('tableForLookupTest2', t1.entity.tags.'%s') " +
+                "SELECT LOOKUP('tableForLookupTest2', t1.entity.tags.\"%s\") " +
                         "FROM \"%s\" t1 ",
                 key,
                 TEST_METRIC_NAME_TAGS_CASE
@@ -411,7 +411,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     @Test(dataProvider = "lookupWithTagsTestProvider")
     public void testLookupWithMetricTags(String key, String expectedResult) {
         String sqlQuery = String.format(
-                "SELECT LOOKUP('tableForLookupTest2', t1.metric.tags.'%s') " +
+                "SELECT LOOKUP('tableForLookupTest2', t1.metric.tags.\"%s\") " +
                         "FROM \"%s\" t1 ",
                 key,
                 TEST_METRIC_NAME_TAGS_CASE
@@ -431,7 +431,7 @@ public class SqlLookupFunctionTest extends SqlTest {
     @Test(dataProvider = "lookupWithTagsTestProvider")
     public void testLookupWithSeriesTags(String key, String expectedResult) {
         String sqlQuery = String.format(
-                "SELECT LOOKUP('tableForLookupTest2', t1.tags.'%s') " +
+                "SELECT LOOKUP('tableForLookupTest2', t1.tags.\"%s\") " +
                         "FROM \"%s\" t1 ",
                 key,
                 TEST_METRIC_NAME_TAGS_CASE

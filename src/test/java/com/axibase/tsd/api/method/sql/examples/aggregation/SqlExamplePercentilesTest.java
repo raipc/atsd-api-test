@@ -58,7 +58,7 @@ public class SqlExamplePercentilesTest extends SqlTest {
                         "  percentile(99.99, value) AS \"p99.99\" %n" +
                         "  FROM \"%s\" %n" +
                         "WHERE entity = '%s'  %n" +
-                        " AND datetime >=\"2016-06-19T11:00:00.000Z\" AND datetime < \"2016-06-19T11:08:00.000Z\"",
+                        " AND datetime >='2016-06-19T11:00:00.000Z' AND datetime < '2016-06-19T11:08:00.000Z'",
                 TEST_METRIC_NAME, TEST_ENTITY_NAME
         );
 

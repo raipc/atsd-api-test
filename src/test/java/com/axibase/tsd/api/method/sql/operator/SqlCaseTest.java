@@ -160,10 +160,10 @@ public class SqlCaseTest extends SqlTest {
     public void testCaseInSelectWithGrouping() {
         String sqlQuery = String.format(
                 "SELECT CASE WHEN t1.value > 20 THEN t1.value" +
-                        " ELSE tags.tag2 END as \'ATTRIBUTE\'," +
+                        " ELSE tags.tag2 END as \"ATTRIBUTE\"," +
                         " sum(value)" +
                         " FROM \"%s\" t1" +
-                        " GROUP BY \'ATTRIBUTE\'",
+                        " GROUP BY \"ATTRIBUTE\"",
                 TEST_METRIC_NAME
         );
 

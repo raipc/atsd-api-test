@@ -52,7 +52,7 @@ public class SqlExampleComputedColumnsTest extends SqlTest {
     @Test
     public void testExample1() {
         String sqlQuery = String.format(
-                "SELECT t1.datetime, t1.entity AS 'entity', t1.value, t2.value, t1.value + t2.value AS total_cpu %n" +
+                "SELECT t1.datetime, t1.entity AS \"entity\", t1.value, t2.value, t1.value + t2.value AS total_cpu %n" +
                         "FROM \"%s\" t1 %nJOIN \"%s\" t2 %n" +
                         "WHERE t1.datetime >= '2016-08-15T07:24:00.000Z' AND t1.datetime < '2016-08-15T07:26:00.000Z' %n" +
                         "AND t2.datetime >= '2016-08-15T07:24:00.000Z' AND t2.datetime < '2016-08-15T07:26:00.000Z' %n",

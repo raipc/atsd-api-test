@@ -266,7 +266,7 @@ public class MetaDataPlaceholderTest extends SqlMetaTest {
                 "exp(?)," +
                 "ln(?)," +
                 "log(?, ?) " +
-                "FROM '" + metricName + "'";
+                "FROM \"" + metricName + "\"";
 
         String[] expectedNames = {
                 "sqrt(?)",
