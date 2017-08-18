@@ -117,7 +117,7 @@ public class LocateTest extends SqlTest {
     @Test(dataProvider = "applyFunctionalTestProvider")
     public void testLocateInSelect(String word, String position) {
         String sqlQuery = String.format(
-                "SELECT LOCATE(\"%s\", tags.tag1) FROM \"%s\" t1",
+                "SELECT LOCATE('%s', tags.tag1) FROM \"%s\" t1",
                 word,
                 TEST_METRIC2_NAME
         );
@@ -135,7 +135,7 @@ public class LocateTest extends SqlTest {
     @Test(dataProvider = "applyFunctionalTestProvider")
     public void testLocateInWhere(String word, String position) {
         String sqlQuery = String.format(
-                "SELECT value FROM \"%s\" t1 WHERE LOCATE(\"%s\", tags.tag1) = %s",
+                "SELECT value FROM \"%s\" t1 WHERE LOCATE('%s', tags.tag1) = %s",
                 TEST_METRIC2_NAME,
                 word,
                 position
@@ -156,7 +156,7 @@ public class LocateTest extends SqlTest {
         String sqlQuery = String.format(
                 "SELECT tags.tag1, count(value) FROM \"%s\" t1 " +
                         "GROUP BY tags.tag1 " +
-                        "HAVING count(LOCATE(\"%s\", tags.tag1)) > 0",
+                        "HAVING count(LOCATE('%s', tags.tag1)) > 0",
                 TEST_METRIC2_NAME,
                 word
         );
