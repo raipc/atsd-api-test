@@ -12,7 +12,7 @@ import java.util.Arrays;
 import static com.axibase.tsd.api.util.Mocks.entity;
 import static com.axibase.tsd.api.util.Mocks.metric;
 
-public class SqlJoinWithAggregations extends SqlTest {
+public class SqlJoinWithAggregationsTest extends SqlTest {
     private static final String TEST_METRIC1_NAME = metric();
     private static final String TEST_METRIC2_NAME = metric();
     private static final String TEST_ENTITY_NAME = entity();
@@ -99,8 +99,8 @@ public class SqlJoinWithAggregations extends SqlTest {
     @Test
     public void testCountJoinWithGroupBy() {
         String sqlQuery = String.format(
-                "SELECT count(t1.value) as 'first', count(t2.value) FROM \"%s\" t1 JOIN \"%s\" t2 GROUP BY t2.period(2 minute)" +
-                        "ORDER by 'first' DESC",
+                "SELECT count(t1.value) as \"first\", count(t2.value) FROM \"%s\" t1 JOIN \"%s\" t2 GROUP BY t2.period(2 minute)" +
+                        "ORDER by \"first\" DESC",
                 TEST_METRIC1_NAME,
                 TEST_METRIC2_NAME
         );
