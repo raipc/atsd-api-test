@@ -10,7 +10,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 
-public class SqlTestPeriodServerTimeZoneIndependent extends SqlTest {
+public class SqlTestPeriodServerTimeZoneIndependentTest extends SqlTest {
     private static final String METRIC_NAME = Mocks.metric();
 
     @BeforeClass
@@ -41,7 +41,7 @@ public class SqlTestPeriodServerTimeZoneIndependent extends SqlTest {
     public void testPeriodTimezoneIndependence(String timeZoneId, String expectedDate) {
         String sqlQuery = String.format(
                 "SELECT date_format(time, 'yyyy-MM-dd HH:mm:ss.SSS', '%2$s')\n" +
-                        "FROM '%1$s' \n" +
+                        "FROM \"%1$s\" \n" +
                         "GROUP BY period(1 day, '%2$s')\n",
                 METRIC_NAME,
                 timeZoneId
