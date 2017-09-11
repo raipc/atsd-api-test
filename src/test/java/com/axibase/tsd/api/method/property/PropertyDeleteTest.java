@@ -13,9 +13,7 @@ import java.util.Map;
 
 import static com.axibase.tsd.api.util.TestUtil.appendChar;
 import static com.axibase.tsd.api.util.TestUtil.getNextDay;
-import static com.axibase.tsd.api.util.Util.MAX_QUERYABLE_DATE;
-import static com.axibase.tsd.api.util.Util.MIN_QUERYABLE_DATE;
-import static com.axibase.tsd.api.util.Util.MIN_STORABLE_DATE;
+import static com.axibase.tsd.api.util.Util.*;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.testng.AssertJUnit.*;

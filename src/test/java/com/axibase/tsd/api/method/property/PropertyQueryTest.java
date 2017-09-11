@@ -17,10 +17,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.axibase.tsd.api.util.Mocks.*;
-import static com.axibase.tsd.api.util.TestUtil.getCurrentDate;
-import static com.axibase.tsd.api.util.TestUtil.getNextDay;
-import static com.axibase.tsd.api.util.TestUtil.getPreviousDay;
+import static com.axibase.tsd.api.util.Mocks.ENTITY_TAGS_PROPERTY_TYPE;
+import static com.axibase.tsd.api.util.TestUtil.*;
 import static com.axibase.tsd.api.util.Util.MAX_QUERYABLE_DATE;
 import static com.axibase.tsd.api.util.Util.MIN_QUERYABLE_DATE;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;

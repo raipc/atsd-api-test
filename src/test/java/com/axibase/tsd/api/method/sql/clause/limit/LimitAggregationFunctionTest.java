@@ -30,7 +30,7 @@ public class LimitAggregationFunctionTest extends SqlTest {
         for (int i = 0; i < seriesCount; i++) {
             Series series = new Series(entity(), testMetric);
             for (int j = 0; j < (i + 1); j++) {
-                series.addSamples(new Sample(startDateTime
+                series.addSamples(Sample.ofDateInteger(startDateTime
                                         .plusSeconds(secondsOffset)
                                         .format(DateTimeFormatter.ISO_INSTANT),
                         j));

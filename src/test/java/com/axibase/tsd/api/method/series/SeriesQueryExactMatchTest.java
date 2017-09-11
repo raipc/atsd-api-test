@@ -3,7 +3,6 @@ package com.axibase.tsd.api.method.series;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.series.SeriesQuery;
-import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -30,16 +29,16 @@ public class SeriesQueryExactMatchTest extends SeriesMethod {
     @BeforeClass
     public void prepareDataset() throws Exception {
         seriesA = new Series(exactMatchEntityName, exactMatchMetricName, "tag-1", "val-1", "tag-2", "val-2");
-        seriesA.addSamples(new Sample("1970-01-01T00:00:00.000Z", 0));
+        seriesA.addSamples(Sample.ofDateInteger("1970-01-01T00:00:00.000Z", 0));
 
         seriesB = new Series(exactMatchEntityName, exactMatchMetricName, "tag-1", "val-1");
-        seriesB.addSamples(new Sample("1970-01-01T00:00:00.000Z", 0));
+        seriesB.addSamples(Sample.ofDateInteger("1970-01-01T00:00:00.000Z", 0));
 
         seriesC = new Series(exactMatchEntityName, exactMatchMetricName, "tag-2", "val-2");
-        seriesC.addSamples(new Sample("1970-01-01T00:00:00.000Z", 0));
+        seriesC.addSamples(Sample.ofDateInteger("1970-01-01T00:00:00.000Z", 0));
 
         seriesD = new Series(exactMatchEntityName, exactMatchMetricName);
-        seriesD.addSamples(new Sample("1970-01-01T00:00:00.000Z", 0));
+        seriesD.addSamples(Sample.ofDateInteger("1970-01-01T00:00:00.000Z", 0));
 
         insertSeriesCheck(Arrays.asList(seriesA, seriesB, seriesC, seriesD));
     }

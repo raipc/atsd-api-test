@@ -24,7 +24,7 @@ public class AlertTest extends AlertMethod {
         series.setEntity(entityName);
         series.setMetric(RULE_METRIC_NAME);
         String date = VersionMethod.queryVersion().readEntity(Version.class).getDate().getCurrentDate();
-        series.addSamples(new Sample(Util.parseDate(date), ALERT_OPEN_VALUE));
+        series.addSamples(Sample.ofJavaDateInteger(Util.parseDate(date), ALERT_OPEN_VALUE));
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
     }
 }

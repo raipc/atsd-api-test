@@ -16,7 +16,7 @@ public class SqlTestPeriodServerTimeZoneIndependentTest extends SqlTest {
     @BeforeClass
     public static void prepareData() throws Exception {
         Series testSeries = new Series(Mocks.entity(), METRIC_NAME);
-        testSeries.addSamples(new Sample("2017-03-24T23:00:00Z", 1));
+        testSeries.addSamples(Sample.ofDateInteger("2017-03-24T23:00:00Z", 1));
 
         SeriesMethod.insertSeriesCheck(testSeries);
     }

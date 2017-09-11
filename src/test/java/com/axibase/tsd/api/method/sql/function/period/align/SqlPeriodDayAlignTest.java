@@ -5,6 +5,7 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.util.TestUtil;
+import com.axibase.tsd.api.util.TestUtil.TimeTranslation;
 import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -14,9 +15,6 @@ import java.util.*;
 
 import static com.axibase.tsd.api.util.Mocks.entity;
 import static com.axibase.tsd.api.util.Mocks.metric;
-import static com.axibase.tsd.api.util.TestUtil.MILLIS_IN_DAY;
-import static com.axibase.tsd.api.util.TestUtil.timeTranslate;
-import static com.axibase.tsd.api.util.TestUtil.timeTranslateDefault;
 
 public class SqlPeriodDayAlignTest extends SqlTest {
     private static final String TEST_METRIC_NAME = metric();
@@ -32,7 +30,7 @@ public class SqlPeriodDayAlignTest extends SqlTest {
         long firstTime = Util.parseDate(START_TIME).getTime();
         long lastTime = Util.parseDate(END_TIME).getTime();
         for (long time = firstTime; time < lastTime; time += DELTA) {
-            series.addSamples(new Sample(Util.ISOFormat(time), 0));
+            series.addSamples(Sample.ofDateInteger(Util.ISOFormat(time), 0));
         }
 
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
@@ -79,11 +77,11 @@ public class SqlPeriodDayAlignTest extends SqlTest {
         final String localStartDate, localEndDate;
 
         if (timeZone == null) {
-            localStartDate = timeTranslateDefault(START_TIME, TestUtil.TimeTranslation.UNIVERSAL_TO_LOCAL);
-            localEndDate = timeTranslateDefault(END_TIME, TestUtil.TimeTranslation.UNIVERSAL_TO_LOCAL);
+            localStartDate = TestUtil.timeTranslateDefault(START_TIME, TimeTranslation.UNIVERSAL_TO_LOCAL);
+            localEndDate = TestUtil.timeTranslateDefault(END_TIME, TimeTranslation.UNIVERSAL_TO_LOCAL);
         } else {
-            localStartDate = timeTranslate(START_TIME, timeZone, TestUtil.TimeTranslation.UNIVERSAL_TO_LOCAL);
-            localEndDate = timeTranslate(END_TIME, timeZone, TestUtil.TimeTranslation.UNIVERSAL_TO_LOCAL);
+            localStartDate = TestUtil.timeTranslate(START_TIME, timeZone, TimeTranslation.UNIVERSAL_TO_LOCAL);
+            localEndDate = TestUtil.timeTranslate(END_TIME, timeZone, TimeTranslation.UNIVERSAL_TO_LOCAL);
         }
 
         long startTime = Util.parseDate(localStartDate).getTime();
@@ -93,7 +91,7 @@ public class SqlPeriodDayAlignTest extends SqlTest {
         int daySeriesCount = 0;
         for (time = startTime; time < endTime; time += DELTA) {
             if (isDayStart(time) && daySeriesCount > 0) {
-                resultRows.add(formatRow(time - MILLIS_IN_DAY, daySeriesCount));
+                resultRows.add(formatRow(time - TestUtil.MILLIS_IN_DAY, daySeriesCount));
                 daySeriesCount = 0;
             }
             daySeriesCount++;
@@ -113,7 +111,7 @@ public class SqlPeriodDayAlignTest extends SqlTest {
     }
 
     private boolean isDayStart(Long time) {
-        return time % MILLIS_IN_DAY == 0;
+        return time % TestUtil.MILLIS_IN_DAY == 0;
     }
 
 }

@@ -2,7 +2,6 @@ package com.axibase.tsd.api.method.property;
 
 
 import com.axibase.tsd.api.model.property.Property;
-import com.axibase.tsd.api.util.Util;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

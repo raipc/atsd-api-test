@@ -27,11 +27,11 @@ public class SqlNullDataTypeTest extends SqlTest {
         List<Series> seriesList = new ArrayList<>();
 
         seriesList.add(new Series(TEST_ENTITY_NAME, TEST_METRIC1_NAME) {{
-            addSamples(new Sample("2016-06-29T08:00:00.000Z", 0));
+            addSamples(Sample.ofDateInteger("2016-06-29T08:00:00.000Z", 0));
         }});
 
         seriesList.add(new Series(TEST_ENTITY_NAME, TEST_METRIC2_NAME) {{
-            addSamples(new Sample("2016-06-29T08:00:01.000Z", 0));
+            addSamples(Sample.ofDateInteger("2016-06-29T08:00:01.000Z", 0));
         }});
 
         SeriesMethod.insertSeriesCheck(seriesList);

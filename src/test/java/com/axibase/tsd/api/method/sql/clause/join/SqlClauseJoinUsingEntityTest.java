@@ -23,7 +23,7 @@ public class SqlClauseJoinUsingEntityTest extends SqlTest {
         for (int i = 0; i < tags.length; i++) {
             testMetricNames[i] = metric();
             arraySeries[i] = new Series(TEST_ENTITY_NAME, testMetricNames[i]);
-            arraySeries[i].addSamples(new Sample("2016-06-03T09:20:00.000Z", i + 1));
+            arraySeries[i].addSamples(Sample.ofDateInteger("2016-06-03T09:20:00.000Z", i + 1));
             if (tags[i][0] != null) {
                 arraySeries[i].addTag(tags[i][0], tags[i][1]);
             }

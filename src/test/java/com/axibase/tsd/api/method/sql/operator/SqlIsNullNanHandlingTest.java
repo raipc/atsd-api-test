@@ -27,8 +27,8 @@ public class SqlIsNullNanHandlingTest extends SqlTest {
         seriesList.add(
                 new Series(TEST_ENTITY_NAME, TEST_METRIC1_NAME) {{
                     addSamples(
-                            new Sample("2016-06-29T08:00:00.000Z", null),
-                            new Sample("2016-06-29T08:00:01.000Z", 3)
+                            Sample.ofDateDecimal("2016-06-29T08:00:00.000Z", null),
+                            Sample.ofDateInteger("2016-06-29T08:00:01.000Z", 3)
                     );
                 }}
         );
@@ -36,8 +36,8 @@ public class SqlIsNullNanHandlingTest extends SqlTest {
         seriesList.add(
                 new Series(TEST_ENTITY_NAME, TEST_METRIC2_NAME) {{
                     addSamples(
-                            new Sample("2016-06-29T08:00:00.000Z", 0),
-                            new Sample("2016-06-29T08:00:01.000Z", 1)
+                            Sample.ofDateInteger("2016-06-29T08:00:00.000Z", 0),
+                            Sample.ofDateInteger("2016-06-29T08:00:01.000Z", 1)
                     );
                 }}
         );

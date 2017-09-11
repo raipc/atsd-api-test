@@ -31,7 +31,7 @@ public class SqlSelectAllTagsOrderTest extends SqlTest {
         tags.put("имя", "значение");
 
         Series series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME, tags);
-        series.addSamples(new Sample("2016-06-03T09:23:00.000Z", 7));
+        series.addSamples(Sample.ofDateInteger("2016-06-03T09:23:00.000Z", 7));
 
         MetricMethod.createOrReplaceMetric(new Metric(TEST_METRIC_NAME, tags));
 

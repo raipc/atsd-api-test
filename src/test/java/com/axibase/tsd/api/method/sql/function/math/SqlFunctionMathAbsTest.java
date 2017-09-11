@@ -22,9 +22,9 @@ public class SqlFunctionMathAbsTest extends SqlTest {
     public static void prepareData() throws Exception {
         Series series1 = new Series(TEST_ENTITY_NAME, TEST_METRIC1_NAME);
         series1.addSamples(
-                new Sample("2016-06-03T09:20:00.000Z", 1),
-                new Sample("2016-06-03T09:20:01.000Z", 2),
-                new Sample("2016-06-03T09:20:02.000Z", 3)
+                Sample.ofDateInteger("2016-06-03T09:20:00.000Z", 1),
+                Sample.ofDateInteger("2016-06-03T09:20:01.000Z", 2),
+                Sample.ofDateInteger("2016-06-03T09:20:02.000Z", 3)
         );
 
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series1));

@@ -291,11 +291,11 @@ public class MetaDataTest extends SqlMetaTest {
     public void testMetaNonEmptyTagsExpansion() throws Exception {
         String metricA = Mocks.metric();
         Series seriesA = new Series(Mocks.entity(), metricA, "t1", "a");
-        seriesA.addSamples(new Sample("2017-07-18T12:00:00.000Z", 1));
+        seriesA.addSamples(Sample.ofDateInteger("2017-07-18T12:00:00.000Z", 1));
 
         String metricB = Mocks.metric();
         Series seriesB = new Series(Mocks.entity(), metricB, "t2", "b");
-        seriesB.addSamples(new Sample("2017-07-18T13:00:00.000Z", 2));
+        seriesB.addSamples(Sample.ofDateInteger("2017-07-18T13:00:00.000Z", 2));
 
         SeriesMethod.insertSeriesCheck(seriesB, seriesA);
 

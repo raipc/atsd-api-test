@@ -15,10 +15,10 @@ public class OrderByNegativeDateTest extends SqlTest {
     public void prepareData() throws Exception {
         Series series = new Series(Mocks.entity(), METRIC_NAME);
         series.addSamples(
-                new Sample("2000-01-01T00:00:00.000Z", 4),
-                new Sample("1980-01-01T00:00:00.000Z", 2),
-                new Sample("1970-01-01T00:00:00.000Z", 1),
-                new Sample("1990-01-01T00:00:00.000Z", 3)
+                Sample.ofDateInteger("2000-01-01T00:00:00.000Z", 4),
+                Sample.ofDateInteger("1980-01-01T00:00:00.000Z", 2),
+                Sample.ofDateInteger("1970-01-01T00:00:00.000Z", 1),
+                Sample.ofDateInteger("1990-01-01T00:00:00.000Z", 3)
         );
 
         SeriesMethod.insertSeriesCheck(series);

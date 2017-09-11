@@ -29,7 +29,7 @@ public class SqlExampleOrderByCollationTest extends SqlTest {
     public static void prepareData() throws Exception {
         List<Series> seriesList = new ArrayList<>();
         Series nullSeries = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME);
-        nullSeries.addSamples(new Sample("2016-06-03T09:24:00.000Z", 0));
+        nullSeries.addSamples(Sample.ofDateInteger("2016-06-03T09:24:00.000Z", 0));
         seriesList.add(nullSeries);
 
         Series series;
@@ -38,7 +38,7 @@ public class SqlExampleOrderByCollationTest extends SqlTest {
             if (name != null) {
                 final int value = i;
                 series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME, "tag", name);
-                series.addSamples(new Sample("2016-06-03T09:24:00.000Z", value));
+                series.addSamples(Sample.ofDateInteger("2016-06-03T09:24:00.000Z", value));
                 seriesList.add(series);
                 i++;
             }

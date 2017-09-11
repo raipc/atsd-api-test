@@ -46,7 +46,7 @@ public class LimitTest extends SqlTest {
             Long date = Util.parseDate("2016-06-19T11:00:00.000Z").getTime();
             Series series = new Series(entity(), ENTITY_ORDER_METRIC);
             for (int j = 0; j < 10 - i; j++) {
-                Sample sample = new Sample(Util.ISOFormat(date + j * TimeUnit.HOURS.toMillis(1)), j);
+                Sample sample = Sample.ofDateInteger(Util.ISOFormat(date + j * TimeUnit.HOURS.toMillis(1)), j);
                 series.addSamples(sample);
 
             }
@@ -93,7 +93,7 @@ public class LimitTest extends SqlTest {
         Series series = new Series(entity(), VALUE_ORDER_METRIC);
         float[] values = {1.23f, 3.12f, 5.67f, 4.13f, 5, -4, 4, 8, 6, 5};
         for (int i = 1; i < 10; i++) {
-            Sample sample = new Sample(
+            Sample sample = Sample.ofDateDecimal(
                     Util.ISOFormat(date + i * TimeUnit.HOURS.toMillis(1)),
                     new BigDecimal(values[i])
             );
@@ -135,11 +135,11 @@ public class LimitTest extends SqlTest {
     public void prepareDateTimeOrderData() throws Exception {
         Series series = new Series(entity(), DATETIME_ORDER_METRIC);
         series.addSamples(
-                new Sample("2016-06-19T11:00:00.000Z", 1),
-                new Sample("2016-06-19T11:03:00.000Z", 2),
-                new Sample("2016-06-19T11:02:00.000Z", 3),
-                new Sample("2016-06-19T11:01:00.000Z", 5),
-                new Sample("2016-06-19T11:04:00.000Z", 4)
+                Sample.ofDateInteger("2016-06-19T11:00:00.000Z", 1),
+                Sample.ofDateInteger("2016-06-19T11:03:00.000Z", 2),
+                Sample.ofDateInteger("2016-06-19T11:02:00.000Z", 3),
+                Sample.ofDateInteger("2016-06-19T11:01:00.000Z", 5),
+                Sample.ofDateInteger("2016-06-19T11:04:00.000Z", 4)
         );
         SeriesMethod.insertSeriesCheck(Collections.singletonList(series));
     }
@@ -170,7 +170,7 @@ public class LimitTest extends SqlTest {
         int[] values = {6, 7, 0, -1, 5, 15, 88, 3, 11, 2};
         for (int i = 0; i < 3; i++) {
             Series series = new Series(entityName, TAGS_ORDER_METRIC);
-            series.addSamples(new Sample(Util.ISOFormat(startTime + i * TimeUnit.HOURS.toMillis(1)), values[i]));
+            series.addSamples(Sample.ofDateInteger(Util.ISOFormat(startTime + i * TimeUnit.HOURS.toMillis(1)), values[i]));
             seriesList.add(series);
         }
         SeriesMethod.insertSeriesCheck(seriesList);

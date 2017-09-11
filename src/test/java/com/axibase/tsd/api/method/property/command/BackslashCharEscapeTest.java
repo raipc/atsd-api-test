@@ -5,7 +5,6 @@ import com.axibase.tsd.api.method.property.PropertyMethod;
 import com.axibase.tsd.api.model.command.PlainCommand;
 import com.axibase.tsd.api.model.command.PropertyCommand;
 import com.axibase.tsd.api.model.property.Property;
-import com.axibase.tsd.api.util.Util;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;

@@ -27,9 +27,9 @@ public class GroupByDatetimeTest extends SqlTest {
         seriesList.add(
                 new Series(TESTS_ENTITY1_NAME, TEST_METRIC_NAME) {{
                     addSamples(
-                            new Sample("2016-06-19T11:00:00.500Z", 0),
-                            new Sample("2016-06-19T11:00:01.500Z", 1),
-                            new Sample("2016-06-19T11:00:02.500Z", 2)
+                            Sample.ofDateInteger("2016-06-19T11:00:00.500Z", 0),
+                            Sample.ofDateInteger("2016-06-19T11:00:01.500Z", 1),
+                            Sample.ofDateInteger("2016-06-19T11:00:02.500Z", 2)
                     );
                 }}
         );
@@ -37,8 +37,8 @@ public class GroupByDatetimeTest extends SqlTest {
         seriesList.add(
                 new Series(TESTS_ENTITY2_NAME, TEST_METRIC_NAME) {{
                     addSamples(
-                            new Sample("2016-06-19T11:00:00.500Z", 0),
-                            new Sample("2016-06-19T11:00:01.500Z", 1)
+                            Sample.ofDateInteger("2016-06-19T11:00:00.500Z", 0),
+                            Sample.ofDateInteger("2016-06-19T11:00:01.500Z", 1)
                     );
                 }}
         );
@@ -46,7 +46,7 @@ public class GroupByDatetimeTest extends SqlTest {
         seriesList.add(
                 new Series(TESTS_ENTITY3_NAME, TEST_METRIC_NAME) {{
                     addSamples(
-                            new Sample("2016-06-19T11:00:00.500Z", 0)
+                            Sample.ofDateInteger("2016-06-19T11:00:00.500Z", 0)
                     );
                 }}
         );

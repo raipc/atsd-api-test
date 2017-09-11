@@ -13,7 +13,6 @@ import java.util.Collections;
 
 import static com.axibase.tsd.api.util.ErrorTemplate.DATE_FILTER_COMBINATION_REQUIRED;
 import static com.axibase.tsd.api.util.ErrorTemplate.DATE_FILTER_END_GREATER_START_REQUIRED;
-import static com.axibase.tsd.api.util.Mocks.*;
 import static com.axibase.tsd.api.util.Util.*;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -21,7 +20,7 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class SeriesQueryDateFilterTest extends SeriesMethod {
-    private final Sample DATE_FILTER_DEFAULT_SAMPLE = new Sample("2014-06-06T00:00:00.000Z", 1);
+    private final Sample DATE_FILTER_DEFAULT_SAMPLE = Sample.ofDateInteger("2014-06-06T00:00:00.000Z", 1);
 
     /**
      * #3030
