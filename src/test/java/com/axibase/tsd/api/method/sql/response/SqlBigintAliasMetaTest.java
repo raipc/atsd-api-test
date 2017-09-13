@@ -9,6 +9,7 @@ import com.axibase.tsd.api.model.series.DataType;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.TableMetaData;
 import com.axibase.tsd.api.util.Mocks;
+import io.qameta.allure.Issue;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -47,9 +48,7 @@ public class SqlBigintAliasMetaTest {
                 expectedDataType, actualDataType);
     }
 
-    /**
-     * #4420
-     */
+    @Issue("4426")
     @Test(
             description = "Check that LONG value has bigint type alias"
     )
@@ -59,9 +58,7 @@ public class SqlBigintAliasMetaTest {
 
     }
 
-    /**
-     * #4420
-     */
+    @Issue("4426")
     @Test(
             description = "Check function application to LONG values has bigint type alias"
     )
@@ -70,9 +67,7 @@ public class SqlBigintAliasMetaTest {
         assertBigintAliasForQuery(sqlQuery);
     }
 
-    /**
-     * #4420
-     */
+    @Issue("4426")
     @Test(
             description = "Check that result for some other function has bigint type alias"
     )
