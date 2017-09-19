@@ -22,19 +22,19 @@ public class AppendFieldTest extends CommandMethodTest {
     @Test
     public void testAppendDuplicates() throws Exception {
         final String entityName = entity();
-        final String metricAppendDuplicates = metric();
+        final String metricName = metric();
         String[] dataWithDuplicates = {"a", "a", "b", "a", "b", "c", "b", "0.1", "word1 word2", "0", "word1", "0.1"};
 
-        Series series = new Series(entityName, metricAppendDuplicates);
+        Series series = new Series(entityName, metricName);
         series.addSamples(Sample.ofDateText(ISO_TIME, "a;\nb;\nc;\n0.1;\nword1 word2;\n0;\nword1"));
 
-        SeriesCommand seriesCommand = new SeriesCommand(singletonMap(metricAppendDuplicates, dataWithDuplicates[0]),
+        SeriesCommand seriesCommand = new SeriesCommand(singletonMap(metricName, dataWithDuplicates[0]),
                                                         null, entityName, null, null, null, ISO_TIME, false);
         CommandMethod.send(seriesCommand);
 
         seriesCommand.setAppend(true);
         for(int i = 1; i < dataWithDuplicates.length; i++) {
-            seriesCommand.setTexts(singletonMap(metricAppendDuplicates, dataWithDuplicates[i]));
+            seriesCommand.setTexts(singletonMap(metricName, dataWithDuplicates[i]));
             CommandMethod.send(seriesCommand);
         }
 
