@@ -107,6 +107,13 @@ public abstract class SqlTest extends SqlMethod {
         return String.format("%s expected:<%s> but was:<%s>", message, expected, actual);
     }
 
+    public void assertRowsMatch(String message, String[][] expectedRows, StringTable resultTable, String sqlQuery) {
+        assertTableRowsExist(
+                String.format("%s%nWrong result of the following SQL query: %n\t%s", message, sqlQuery),
+                expectedRows, resultTable
+        );
+    }
+
     public void assertSqlQueryRows(String message, List<List<String>> expectedRows, String sqlQuery) {
         StringTable resultTable = queryTable(sqlQuery);
         assertTableRowsExist(String.format("%s%nWrong result of the following SQL query: %n\t%s", message, sqlQuery), expectedRows,

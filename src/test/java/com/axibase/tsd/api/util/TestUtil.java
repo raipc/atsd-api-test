@@ -8,9 +8,11 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.zip.GZIPOutputStream;
 
@@ -34,7 +36,6 @@ public class TestUtil {
     public static String formatDate(Date date, String pattern) {
         return formatDate(date, pattern, getServerTimeZone());
     }
-
 
     public static Date getCurrentDate() {
         return new Date();
@@ -125,6 +126,13 @@ public class TestUtil {
         SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         localDateFormat.setTimeZone(serverTimeZone);
         return localDateFormat.format(parsedDate);
+    }
+
+    public static long truncateTime(long time, TimeZone trucnationTimeZone, TemporalUnit truncationUnit) {
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(time),  trucnationTimeZone.toZoneId())
+                .truncatedTo(truncationUnit)
+                .toInstant()
+                .toEpochMilli();
     }
 
     public static <T> List<List<T>> twoDArrayToList(T[][] twoDArray) {
