@@ -1,6 +1,8 @@
 package com.axibase.tsd.api.method.metric;
 
 
+import com.axibase.tsd.api.Checker;
+import com.axibase.tsd.api.method.checks.MetricCheck;
 import com.axibase.tsd.api.method.extended.CommandMethod;
 import com.axibase.tsd.api.model.command.MetricCommand;
 import com.axibase.tsd.api.model.common.InterpolationMode;
@@ -8,11 +10,14 @@ import com.axibase.tsd.api.model.extended.CommandSendingResult;
 import com.axibase.tsd.api.model.metric.Metric;
 import com.axibase.tsd.api.util.Mocks;
 import io.qameta.allure.Issue;
+import com.axibase.tsd.api.util.Registry;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import javax.ws.rs.core.Response;
+
 import static com.axibase.tsd.api.util.Mocks.metric;
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.*;
 
 public class MetricCommandTest extends MetricTest {
 
@@ -21,6 +26,7 @@ public class MetricCommandTest extends MetricTest {
     public void testRequired() throws Exception {
         MetricCommand command = new MetricCommand((String) null);
         CommandSendingResult expectedResult = new CommandSendingResult(1, 0);
+
         assertEquals("Command without metric Name sholdn't be inserted", expectedResult, CommandMethod.send(command));
     }
 
@@ -35,6 +41,7 @@ public class MetricCommandTest extends MetricTest {
                 "Failed to insert metric with label: %s",
                 metric.getLabel()
         );
+
         assertMetricExisting(assertMessage, metric);
     }
 
@@ -49,6 +56,7 @@ public class MetricCommandTest extends MetricTest {
                 "Failed to insert metric with description: %s",
                 metric.getDescription()
         );
+
         assertMetricExisting(assertMessage, metric);
     }
 
@@ -63,6 +71,7 @@ public class MetricCommandTest extends MetricTest {
                 "Failed to insert metric with versioned: %s",
                 metric.getVersioned()
         );
+
         assertMetricExisting(assertMessage, metric);
     }
 
@@ -78,6 +87,7 @@ public class MetricCommandTest extends MetricTest {
                 "Failed to insert metric with filter expression: %s",
                 metric.getTimeZoneID()
         );
+
         assertMetricExisting(assertMessage, metric);
     }
 
@@ -92,6 +102,7 @@ public class MetricCommandTest extends MetricTest {
                 "Failed to insert metric with filter expression: %s",
                 metric.getFilter()
         );
+
         assertMetricExisting(assertMessage, metric);
     }
 
@@ -105,6 +116,7 @@ public class MetricCommandTest extends MetricTest {
                 "Failed to insert metric with tags: %s",
                 metric.getTags()
         );
+
         assertMetricExisting(assertMessage, metric);
     }
 
@@ -119,6 +131,7 @@ public class MetricCommandTest extends MetricTest {
                 "Failed to insert metric with interpolate mode: %s",
                 metric.getInterpolate()
         );
+
         assertMetricExisting(assertMessage, metric);
     }
 
@@ -146,6 +159,7 @@ public class MetricCommandTest extends MetricTest {
                 "Metric with incorrect versioning field (%s) shouldn't be inserted",
                 value
         );
+
         assertEquals(assertMessage, expectedResult, CommandMethod.send(incorrectCommand));
     }
 
@@ -170,6 +184,7 @@ public class MetricCommandTest extends MetricTest {
                 "Metric with incorrect interpolate field (%s) shouldn't be inserted",
                 value
         );
+
         assertEquals(assertMessage, expectedResult, CommandMethod.send(incorrectCommand));
     }
 
@@ -195,9 +210,9 @@ public class MetricCommandTest extends MetricTest {
                 "Metric with incorrect type field (%s) shouldn't be inserted",
                 value
         );
+
         assertEquals(assertMessage, expectedResult, CommandMethod.send(incorrectCommand));
     }
-
 
     @DataProvider(name = "incorrectTimeZoneProvider")
     public Object[][] provideIncorrectTimeZoneData() {
@@ -219,6 +234,100 @@ public class MetricCommandTest extends MetricTest {
                 "Metric with incorrect versioning field (%s) shouldn't be inserted",
                 incorrectCommand
         );
+
         assertEquals(assertMessage, expectedResult, CommandMethod.send(incorrectCommand));
+    }
+
+    @Issue("3550")
+    @Test
+    public void testEnabled() throws Exception {
+        String metricName = metric();
+        Metric metric = new Metric(metricName);
+        MetricCommand command = new MetricCommand(metric);
+        command.setEnabled(true);
+        CommandMethod.send(command);
+        Checker.check(new MetricCheck(metric));
+        Metric actualMetric = MetricMethod.queryMetric(metricName).readEntity(Metric.class);
+
+        assertTrue("Failed to set enabled", actualMetric.getEnabled());
+    }
+
+    @Issue("3550")
+    @Test
+    public void testDisabled() throws Exception {
+        String metricName = metric();
+        Metric metric = new Metric(metricName);
+        MetricCommand command = new MetricCommand(metric);
+        command.setEnabled(false);
+        CommandMethod.send(command);
+        Checker.check(new MetricCheck(metric));
+        Metric actualMetric = MetricMethod.queryMetric(metricName).readEntity(Metric.class);
+
+        assertFalse("Failed to set disabled", actualMetric.getEnabled());
+    }
+
+    @Issue("3550")
+    @Test
+    public void testNullEnabled() throws Exception {
+        String metricName = metric();
+        Metric metric = new Metric(metricName);
+        MetricCommand command = new MetricCommand(metricName);
+        command.setEnabled(null);
+        CommandMethod.send(command);
+        Checker.check(new MetricCheck(metric));
+        Metric actualMetric = MetricMethod.queryMetric(metricName).readEntity(Metric.class);
+
+        assertTrue("Failed to omit enabled", actualMetric.getEnabled());
+    }
+
+    @DataProvider(name = "incorrectEnabledProvider")
+    public Object[][] provideIncorrectEnabledData() {
+        return new Object[][]{
+                {"y"},
+                {"Y"},
+                {"yes"},
+                {"да"},
+                {"non"},
+                {"1"},
+                {"+"},
+                {"azazaz"},
+                {"'true'"},
+                {"'false'"}
+        };
+    }
+
+    @Issue("3550")
+    @Test(dataProvider = "incorrectEnabledProvider")
+    public void testIncorrectEnabled(String enabled) throws Exception {
+        String metricName = metric();
+        String command = String.format("metric m:%s b:%s", metricName, enabled);
+        CommandMethod.send(command);
+        Response serverResponse = MetricMethod.queryMetric(metricName);
+
+        assertTrue("Bad metric was accepted :: " + command, serverResponse.getStatus() >= 400);
+    }
+
+    @DataProvider(name = "correctEnabledProvider")
+    public Object[][] provideCorrectEnabledData() {
+        return new Object[][]{
+                {"true"},
+                {"false"},
+                {"\"true\""},
+                {"\"false\""}
+        };
+    }
+
+
+    @Issue("3550")
+    @Test(dataProvider = "correctEnabledProvider")
+    public void testRawEnabled(String enabled) throws Exception {
+        String metricName = metric();
+        Metric metric = new Metric(metricName);
+        String command = String.format("metric m:%s b:%s", metricName, enabled);
+        CommandMethod.send(command);
+        Checker.check(new MetricCheck(metric));
+        Metric actualMetric = MetricMethod.queryMetric(metricName).readEntity(Metric.class);
+
+        assertEquals("Failed to set enabled (raw)", enabled.replaceAll("[\\'\\\"]", ""), actualMetric.getEnabled().toString());
     }
 }
