@@ -61,6 +61,99 @@ public class SqlNotEqualsOperatorTest extends SqlTest {
         assertSqlQueryRows(expectedRows, sqlQuery);
     }
 
+    @Issue("4554")
+    @Test
+    public void testNotEqualsDatetimeAllowedTrueCondition() {
+        final String sqlQuery = String.format(
+                "SELECT entity, value, datetime FROM \"%s\"" +
+                        "WHERE datetime != '2016-06-03T09:25:00.000Z'",
+                TEST_METRIC_NAME
+        );
+
+        String[][] expectedRows = {
+                {TEST_ENTITY_NAME, "1.01", "2016-06-03T09:23:00.000Z" }
+        };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    @Issue("4554")
+    @Test
+    public void testNotEqualsDatetimeAllowedFalseCondition() {
+        final String sqlQuery = String.format(
+                "SELECT entity, value, datetime FROM \"%s\"" +
+                        "WHERE datetime != '2016-06-03T09:23:00.000Z'",
+                TEST_METRIC_NAME
+        );
+
+        String[][] expectedRows = { };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    @Issue("4554")
+    @Test
+    public void testNotEqualsDatetimeAllowedComplexANDTrueCondition() {
+        final String sqlQuery = String.format(
+                "SELECT entity, value, datetime FROM \"%s\"" +
+                        "WHERE datetime != '2016-06-03T09:25:00.000Z' AND " +
+                        "datetime BETWEEN '2016-06-03T09:22:00.000Z' AND '2016-06-03T09:26:00.000Z'",
+                TEST_METRIC_NAME
+        );
+
+        String[][] expectedRows = {
+                {TEST_ENTITY_NAME, "1.01", "2016-06-03T09:23:00.000Z" }
+        };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    @Issue("4554")
+    @Test
+    public void testNotEqualsDatetimeAllowedComplexANDFalseCondition() {
+        final String sqlQuery = String.format(
+                "SELECT entity, value, datetime FROM \"%s\" " +
+                        "WHERE datetime != '2016-06-03T09:23:00.000Z' AND " +
+                        "datetime BETWEEN '2016-06-03T09:22:00.000Z' AND '2016-06-03T09:26:00.000Z'",
+                TEST_METRIC_NAME
+        );
+
+        String[][] expectedRows = { };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
+    //TODO pending fix in #4554
+    @Issue("4554")
+    @Test(enabled = false)
+    public void testNotEqualsDatetimeAllowedNotOperatorTrue() {
+        final String sqlQuery = String.format(
+                "SELECT entity, value, datetime FROM \"%s\" " +
+                        "WHERE NOT datetime = '2016-06-03T09:25:00.000Z'",
+                TEST_METRIC_NAME
+        );
+
+        String[][] expectedRows = {
+                {TEST_ENTITY_NAME, "1.01", "2016-06-03T09:23:00.000Z" }
+        };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+//  TODO pending fix in #4554
+    @Issue("4554")
+    @Test(enabled = false)
+    public void testNotEqualsDatetimeAllowedNotOperatorFalse() {
+        final String sqlQuery = String.format(
+                "SELECT entity, value, datetime FROM \"%s\" " +
+                        "WHERE NOT datetime = '2016-06-03T09:23:00.000Z'",
+                TEST_METRIC_NAME
+        );
+
+        String[][] expectedRows = { };
+
+        assertSqlQueryRows(expectedRows, sqlQuery);
+    }
+
     @Issue("2933")
     @Test
     public void testNotEqualsWithNumericIsFalse() {
