@@ -192,6 +192,14 @@ public abstract class SqlTest extends SqlMethod {
         } catch (ProcessingException e) {
             fail("Failed to read table from response!");
         }
+
+        String message = null;
+        try {
+            message = extractSqlErrorMessage(response);
+        } catch (JSONException e) {
+            fail("Can't read json from response");
+        }
+        assertEquals(assertMessage + ": Response contains error", null, message);
     }
 
     public void assertBadSqlRequest(String expectedMessage, String sqlQuery) {
@@ -208,28 +216,20 @@ public abstract class SqlTest extends SqlMethod {
     }
 
     public void assertBadRequest(String assertMessage, String expectedMessage, Response response) {
-        String responseMessage = null;
+        String responseMessage;
         int code = response.getStatus();
-        if (OK.getStatusCode() == code) {
-            String responseText = response.readEntity(String.class);
-            JSONObject responseObject;
+        if (OK.getStatusCode() == code || BAD_REQUEST.getStatusCode() == code) {
             try {
-                responseObject = new JSONObject(responseText);
+                responseMessage = extractSqlErrorMessage(response);
             } catch (JSONException e) {
-                e.printStackTrace();
                 throw new IllegalArgumentException(assertMessage +
                         ": Can't check if there is error message, because JSON is invalid.");
             }
-            try {
-                responseMessage = responseObject.getJSONArray("errors").getJSONObject(0).getString("message");
-            } catch (JSONException e) {
-                e.printStackTrace();
-                fail(assertMessage + ": Response doesn't contain error message");
-            }
-        } else if(BAD_REQUEST.getStatusCode() == code) {
-            responseMessage = extractSqlErrorMessage(response);
         } else {
             throw new IllegalArgumentException(assertMessage + ": Unexpected response status code");
+        }
+        if (responseMessage == null) {
+            fail(assertMessage + ": Response doesn't contain error message");
         }
         assertEquals(assertMessage + ": Error message is different form expected", expectedMessage, responseMessage);
     }
@@ -262,16 +262,15 @@ public abstract class SqlTest extends SqlMethod {
         return columnNames;
     }
 
-    private String extractSqlErrorMessage(Response response) {
+    private String extractSqlErrorMessage(Response response) throws JSONException {
         String jsonText = response.readEntity(String.class);
+        JSONObject json = new JSONObject(jsonText);
         try {
-            JSONObject json = new JSONObject(jsonText);
             return json.getJSONArray("errors")
                     .getJSONObject(0)
                     .getString("message");
         } catch (JSONException e) {
             return null;
         }
-
     }
 }

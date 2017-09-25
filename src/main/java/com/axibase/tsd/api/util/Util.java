@@ -21,10 +21,14 @@ public class Util {
     public static final String MAX_STORABLE_DATE = "2106-02-07T06:59:59.999Z";
     public static final String DEFAULT_TIMEZONE_NAME = "UTC";
     private static ObjectWriter objectWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
+    private static TimeZone serverTimeZone;
 
     public static TimeZone getServerTimeZone() {
-        Version version = VersionMethod.queryVersion().readEntity(Version.class);
-        return TimeZone.getTimeZone(version.getDate().getTimeZone().getName());
+        if (serverTimeZone == null) {
+            Version version = VersionMethod.queryVersion().readEntity(Version.class);
+            serverTimeZone = TimeZone.getTimeZone(version.getDate().getTimeZone().getName());
+        }
+        return serverTimeZone;
     }
 
     public static String getHBaseVersion() {
