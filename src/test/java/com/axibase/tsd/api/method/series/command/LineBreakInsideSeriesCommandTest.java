@@ -74,7 +74,6 @@ public class LineBreakInsideSeriesCommandTest {
             dataProvider = "provideTestTypeAndValue"
     )
     public void testTagLineBreak(TestData data) throws Exception {
-        log.info("Data", data);
         Series seriesWithBreak = new Series(Mocks.entity(), Mocks.metric());
         seriesWithBreak.addTag("test-tag", data.insertData);
         seriesWithBreak.addSamples(testSample);
