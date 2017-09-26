@@ -10,7 +10,7 @@ public class SeriesCommand extends AbstractCommand {
     private String entityName;
     private Map<String, String> tags;
     private Long timeMills;
-    private Integer timeSeconds;
+    private Long timeSeconds;
     private String timeISO;
     private Boolean append;
 
@@ -20,7 +20,7 @@ public class SeriesCommand extends AbstractCommand {
     }
 
     public SeriesCommand(Map<String, String> texts, Map<String, String> values, String entityName,
-                         Map<String, String> tags, Long timeMills, Integer timeSeconds,
+                         Map<String, String> tags, Long timeMills, Long timeSeconds,
                          String timeISO, Boolean append) {
         super(SERIES_COMMAND);
         this.texts = texts;
@@ -57,11 +57,11 @@ public class SeriesCommand extends AbstractCommand {
         this.timeMills = timeMills;
     }
 
-    public Integer getTimeSeconds() {
+    public Long getTimeSeconds() {
         return timeSeconds;
     }
 
-    public void setTimeSeconds(Integer timeSeconds) {
+    public void setTimeSeconds(Long timeSeconds) {
         this.timeSeconds = timeSeconds;
     }
 
