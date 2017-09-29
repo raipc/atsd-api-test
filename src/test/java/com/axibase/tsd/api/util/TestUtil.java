@@ -135,6 +135,14 @@ public class TestUtil {
                 .toEpochMilli();
     }
 
+    public static long plusTime(long time, long amount,
+                                    TimeZone plusTimeZone, TemporalUnit plusUnit) {
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(time),  plusTimeZone.toZoneId())
+                .plus(amount, plusUnit)
+                .toInstant()
+                .toEpochMilli();
+    }
+
     public static <T> List<List<T>> twoDArrayToList(T[][] twoDArray) {
         List<List<T>> list = new ArrayList<List<T>>();
         for (T[] array : twoDArray) {
