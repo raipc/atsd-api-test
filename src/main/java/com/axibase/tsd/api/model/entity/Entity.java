@@ -13,15 +13,13 @@ import java.util.Objects;
 import static com.axibase.tsd.api.util.Util.prettyPrint;
 
 
-/**
- * @author Dmitry Korchagin.
- */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Entity {
     private String name;
     private InterpolationMode interpolationMode;
     private String label;
     private Date lastInsertDate;
+    private Date createdDate;
     private Map<String, String> tags;
     private Boolean enabled;
     private String timeZoneID;
@@ -68,8 +66,11 @@ public class Entity {
         return new Date(lastInsertDate.getTime());
     }
 
-    public void setLastInsertDate(Date lastInsertDate) {
-        this.lastInsertDate = new Date(lastInsertDate.getTime());
+    public Date getCreatedDate() {
+        if (null == createdDate) {
+            return null;
+        }
+        return new Date(createdDate.getTime());
     }
 
     public Map<String, String> getTags() {
