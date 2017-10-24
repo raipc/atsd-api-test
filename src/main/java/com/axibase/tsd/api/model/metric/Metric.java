@@ -42,11 +42,11 @@ public class Metric {
     private String label;
     private String description;
     private InterpolationMode interpolate;
-    private String units;
     private BigDecimal minValue;
     private BigDecimal maxValue;
     private String timeZoneID;
     private String filter;
+    private String units;
     private Map<String, String> tags;
     private Map<String, Object> additionalProperties = new HashMap<>();
 
