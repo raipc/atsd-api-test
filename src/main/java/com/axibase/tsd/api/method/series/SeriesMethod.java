@@ -127,6 +127,17 @@ public class SeriesMethod extends BaseMethod {
         return response.readEntity(SeriesSearchResult.class);
     }
 
+    public static Response searchRawSeries(SeriesSearchQuery query) {
+        Response response = executeApiRequest(webTarget -> {
+            WebTarget target = webTarget.path(METHOD_SERIES_SEARCH);
+            target = addParameters(target, query);
+            Invocation.Builder builder = target.request();
+            return builder.get();
+        });
+        response.bufferEntity();
+        return response;
+    }
+
     public static void updateSearchIndex() throws Exception {
         Response response = executeRootRequest(webTarget -> webTarget
                 .path(METHOD_REINDEX)
