@@ -18,6 +18,6 @@ public class Checker {
                     throw new IllegalStateException(e.getMessage());
                 }
             }
-        };
+        }
     }
 }
