@@ -5,10 +5,14 @@ import com.axibase.tsd.api.util.Registry;
 import com.axibase.tsd.api.util.Util;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.util.*;
 
+@Data
+@Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Series {
@@ -16,10 +20,14 @@ public class Series {
     private String metric;
     private List<Sample> data;
     private Map<String, String> tags;
+    private SeriesType type;
+    private String forecastName;
+    private SeriesMeta meta;
 
     public Series() {
         data = new ArrayList<>();
         tags = new HashMap<>();
+        type = SeriesType.HISTORY;
     }
 
     public Series(String entity, String metric) {
@@ -33,6 +41,7 @@ public class Series {
         this.metric = metric;
         this.data = new ArrayList<>();
         this.tags = new HashMap<>();
+        type = SeriesType.HISTORY;
     }
 
     public Series(String entity, String metric, Map<String, String> tags) {
@@ -46,6 +55,7 @@ public class Series {
         this.metric = metric;
         this.data = new ArrayList<>();
         this.tags = tags;
+        type = SeriesType.HISTORY;
     }
 
     public Series(String entity, String metric, String... tags) {
@@ -78,6 +88,8 @@ public class Series {
         }
         copy.setSamples(dataCopy);
         copy.setTags(new HashMap<>(tags));
+        copy.setType(type);
+        copy.setForecastName(forecastName);
         return copy;
     }
 
@@ -107,36 +119,8 @@ public class Series {
         return transformedSeries;
     }
 
-    public String getEntity() {
-        return entity;
-    }
-
-    public void setEntity(String entity) {
-        this.entity = entity;
-    }
-
-    public String getMetric() {
-        return metric;
-    }
-
-    public void setMetric(String metric) {
-        this.metric = metric;
-    }
-
-    public Map<String, String> getTags() {
-        return tags;
-    }
-
-    public void setTags(Map<String, String> tags) {
-        this.tags = tags;
-    }
-
-    public List<Sample> getData() {
-        return data;
-    }
-
     public void setSamples(Collection<Sample> samples) {
-        this.data = new ArrayList<>(samples);
+        setData(new ArrayList<>(samples));
     }
 
     public Series addTag(String key, String value) {
@@ -155,31 +139,10 @@ public class Series {
         Collections.addAll(data, samples);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Series series = (Series) o;
-
-        return entity.equals(series.entity) && metric.equals(series.metric) &&
-                data.equals(series.data) && tags.equals(series.tags);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = entity.hashCode();
-        result = 31 * result + metric.hashCode();
-        result = 31 * result + data.hashCode();
-        result = 31 * result + tags.hashCode();
-        return result;
-    }
-
     public List<SeriesCommand> toCommands() {
+        if (type == SeriesType.FORECAST) {
+            throw new IllegalArgumentException("Cannot convert FORECAST series to commands");
+        }
         List<SeriesCommand> result = new ArrayList<>();
         for (Sample s : data) {
             SeriesCommand seriesCommand = new SeriesCommand();

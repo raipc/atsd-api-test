@@ -4,6 +4,7 @@ import com.axibase.tsd.api.model.Period;
 import com.axibase.tsd.api.util.Util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import static com.axibase.tsd.api.util.Util.MAX_QUERYABLE_DATE;
 import static com.axibase.tsd.api.util.Util.MIN_QUERYABLE_DATE;
 
 @Data
+@Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SeriesQuery {
     private String entity;
@@ -34,6 +36,8 @@ public class SeriesQuery {
     private String direction;
     private Integer seriesLimit;
     private Boolean versioned;
+    private Boolean addMeta;
+    private SeriesType type;
 
     public SeriesQuery() {
     }
@@ -52,6 +56,7 @@ public class SeriesQuery {
         } else {
             setIntervalBasedOnSeriesDate(series);
         }
+        type = series.getType();
     }
 
     public SeriesQuery(String entity, String metric) {
@@ -90,7 +95,7 @@ public class SeriesQuery {
         tags.put(tag, value);
     }
 
-    private void setIntervalBasedOnSeriesDate(final Series series) throws IllegalArgumentException {
+    private void setIntervalBasedOnSeriesDate(final Series series) {
         Long minDate = Util.getUnixTime(MAX_QUERYABLE_DATE);
         Long maxDate = Util.getUnixTime(MIN_QUERYABLE_DATE);
 
