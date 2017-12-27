@@ -600,6 +600,7 @@ public class SqlPeriodAlignTest extends SqlTest {
     }
 
     @Issue("4175")
+    @Issue("4700")
     @Test
     public void testPeriodsTimeGroupingDSTChangedEndTime() throws Exception {
         insertSamples(
@@ -621,11 +622,10 @@ public class SqlPeriodAlignTest extends SqlTest {
         );
 
         String[][] expectedRows = {
-                {"2004-03-26T00:00:00.000Z", "26"},
-                {"2004-03-27T00:00:00.000Z", "27"},
-                {"2004-03-27T23:00:00.000Z", "28"},
-                {"2004-03-28T23:00:00.000Z", "29"},
-                {"2004-03-29T23:00:00.000Z", "30"},
+                {"2004-03-26T01:00:00.000Z", "27"},
+                {"2004-03-28T00:00:00.000Z", "28"},
+                {"2004-03-29T00:00:00.000Z", "29"},
+                {"2004-03-30T00:00:00.000Z", "30"},
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
