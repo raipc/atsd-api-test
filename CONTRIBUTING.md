@@ -36,12 +36,15 @@ If you use IntelliJ IDEA for development you should install Lombok plugin for pr
 ### Version control (git)
 1. Name your remote branch with specified pattern `last_name-issue_id` for example 'pushkin-1234'.
 2. Pull request flow
+
     a. Before submit a `pull request`:
+    
         1. `squash` all commits into a single commit
         2. `rebase` your branch on latest master
         3. run all tests on clear latest ATSD installation
-    b. After your have received a `change request` submit a new single commit corresponding to requested changes 
+    b. If your have received a `change request` submit a new single commit corresponding to requested changes 
     with a commit message `code review #number` where `number` is corresponding to a code review commit order.
+    
     c. If tests fail because of some unfixed ATSD bugs mark pull request with label `pending`, add message with issue numbers related to bugs and wait until all unfixed bugs will be fixed.
 
 ### Code style
