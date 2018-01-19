@@ -20,8 +20,9 @@ public class WithInterpolateNoBoundariesTest extends SqlTest {
     }
 
     @Issue("4120")
+    @Issue("4814")
     @Test
-    public void testWitnInterpolateNoBoundaries() {
+    public void testWithInterpolateNoBoundaries() {
         /*
             If there are no date limits by WHERE statement,
             then interpolation should be limited by min/max time in scan
@@ -35,7 +36,7 @@ public class WithInterpolateNoBoundariesTest extends SqlTest {
         );
 
         String[][] expectedRows = {
-                {"1"}
+                {"2"}
         };
 
         assertSqlQueryRows("Incorrect result for WITH INTERPOLATE without data boundaries",
