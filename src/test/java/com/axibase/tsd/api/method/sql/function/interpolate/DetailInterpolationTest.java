@@ -120,6 +120,7 @@ public class DetailInterpolationTest extends SqlTest {
     }
 
     @Issue("3435")
+    @Issue("4814")
     @Test
     public void testDetailOuterJoinPrevious() {
         String sqlQuery = String.format(
@@ -135,7 +136,7 @@ public class DetailInterpolationTest extends SqlTest {
                 {"2017-01-02T00:00:00.000Z", "null", "2"},
                 {"2017-01-03T00:00:00.000Z", "3",    "2"},
                 {"2017-01-04T00:00:00.000Z", "3",    "4"},
-                {"2017-01-05T00:00:00.000Z", "5",    "null"}
+                {"2017-01-05T00:00:00.000Z", "5",    "4"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
@@ -164,6 +165,7 @@ public class DetailInterpolationTest extends SqlTest {
     }
 
     @Issue("3435")
+    @Issue("4814")
     @Test
     public void testDetailOuterJoinPreviousInner() {
         String sqlQuery = String.format(
@@ -179,7 +181,7 @@ public class DetailInterpolationTest extends SqlTest {
                 {"2017-01-02T00:00:00.000Z", "null", "2"},
                 {"2017-01-03T00:00:00.000Z", "3",    "2"},
                 {"2017-01-04T00:00:00.000Z", "3",    "4"},
-                {"2017-01-05T00:00:00.000Z", "5",    "null"}
+                {"2017-01-05T00:00:00.000Z", "5",    "4"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
@@ -276,6 +278,7 @@ public class DetailInterpolationTest extends SqlTest {
     }
 
     @Issue("3435")
+    @Issue("4814")
     @Test
     public void testDetailOuterJoinPreviousInnerNan() {
         String sqlQuery = String.format(
@@ -291,7 +294,7 @@ public class DetailInterpolationTest extends SqlTest {
                 {"2017-01-02T00:00:00.000Z", "NaN",  "2"},
                 {"2017-01-03T00:00:00.000Z", "3",    "2"},
                 {"2017-01-04T00:00:00.000Z", "3",    "4"},
-                {"2017-01-05T00:00:00.000Z", "5",    "NaN"}
+                {"2017-01-05T00:00:00.000Z", "5",    "4"}
         };
 
         assertSqlQueryRows(expectedRows, sqlQuery);
