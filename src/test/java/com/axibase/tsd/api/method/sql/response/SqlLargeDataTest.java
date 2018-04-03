@@ -23,7 +23,7 @@ public class SqlLargeDataTest extends SqlTest {
     private final static String METRIC_NAME = "test-sql-large-data-test-metric";
 
     @Issue("3890")
-    @Test
+    @Test(enabled = false)
     public void testQueryLargeData() throws Exception {
         ArrayList<SeriesCommand> seriesRequests = new ArrayList<>(ENTITIES_COUNT);
         Registry.Entity.checkExists(ENTITY_NAME);
