@@ -40,8 +40,8 @@ public class SeriesMethod extends BaseMethod {
         Response response = executeApiRequest(webTarget -> {
             Invocation.Builder builder = webTarget.path(METHOD_SERIES_INSERT).request();
 
-//            builder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, user);
-//            builder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password);
+            builder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME, user);
+            builder.property(HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD, password);
 
             return builder.post(Entity.json(seriesList));
         });

@@ -10,6 +10,7 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
@@ -42,9 +43,8 @@ public abstract class BaseMethod {
     private static final int DEFAULT_BORROW_MAX_TIME_MS = 3000;
     private static final int DEFAULT_MAX_TOTAL = 1;
     private static final int DEFAULT_MAX_IDLE = 1;
-
-    private static final GenericObjectPool<HttpClient> apiTargetPool;
-    private static final GenericObjectPool<HttpClient> rootTargetPool;
+    private static final WebTarget rootTarget;
+    private static final WebTarget apiTarget;
     private static final Integer DEFAULT_CONNECT_TIMEOUT = 180000;
     private static final Logger logger = LoggerFactory.getLogger(BaseMethod.class);
 
@@ -57,6 +57,9 @@ public abstract class BaseMethod {
         java.util.logging.Logger julLogger = java.util.logging.Logger.getLogger("");
         julLogger.setLevel(Level.FINEST);
         try {
+            PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+
+            connectionManager.setValidateAfterInactivity(20000);
             Config config = Config.getInstance();
             ClientConfig clientConfig = new ClientConfig();
             clientConfig.connectorProvider(new ApacheConnectorProvider());
@@ -64,12 +67,16 @@ public abstract class BaseMethod {
             clientConfig.register(HttpAuthenticationFeature.basic(config.getLogin(), config.getPassword()));
             clientConfig.property(ClientProperties.READ_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
             clientConfig.property(ClientProperties.CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
-            clientConfig.property(ApacheClientProperties.RETRY_HANDLER, new DefaultHttpRequestRetryHandler(5, false));
+            clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
+            clientConfig.property(ApacheClientProperties.DISABLE_COOKIES, true);
 
-            rootTargetPool = new GenericObjectPool<>(
-                    new HttpClientFactory(clientConfig, config, "") ,pool());
-            apiTargetPool = new GenericObjectPool<>(
-                    new HttpClientFactory(clientConfig, config, config.getApiPath()), pool());
+            rootTarget = ClientBuilder.newClient().target(UriBuilder.fromPath("")
+                    .scheme(config.getProtocol())
+                    .host(config.getServerName())
+                    .port(config.getHttpPort())
+                    .build());
+
+            apiTarget = rootTarget.path(config.getApiPath());
 
             jacksonMapper = new ObjectMapper();
             jacksonMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssXXX"));
@@ -135,11 +142,11 @@ public abstract class BaseMethod {
     }
 
     public static Response executeRootRequest(Function<WebTarget, Response> requestFunction) {
-        return executeRequest(rootTargetPool, requestFunction);
+        return requestFunction.apply(rootTarget);
     }
 
     public static Response executeApiRequest(Function<WebTarget, Response> requestFunction) {
-        return executeRequest(apiTargetPool, requestFunction);
+        return requestFunction.apply(apiTarget);
     }
 
     private static Response executeRequest(
