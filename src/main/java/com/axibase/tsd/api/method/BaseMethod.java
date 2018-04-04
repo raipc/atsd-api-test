@@ -38,8 +38,8 @@ public abstract class BaseMethod {
     public static final Long UPPER_BOUND_FOR_CHECK = 100000L;
 
     private static final int DEFAULT_BORROW_MAX_TIME_MS = 3000;
-    private static final int DEFAULT_MAX_TOTAL = 8;
-    private static final int DEFAULT_MAX_IDLE = 8;
+    private static final int DEFAULT_MAX_TOTAL = 1;
+    private static final int DEFAULT_MAX_IDLE = 1;
 
     private static final GenericObjectPool<HttpClient> apiTargetPool;
     private static final GenericObjectPool<HttpClient> rootTargetPool;
@@ -63,14 +63,11 @@ public abstract class BaseMethod {
             clientConfig.property(ClientProperties.READ_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
             clientConfig.property(ClientProperties.CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
 
-            GenericObjectPoolConfig objectPoolConfig = new GenericObjectPoolConfig();
-            objectPoolConfig.setMaxTotal(DEFAULT_MAX_TOTAL);
-            objectPoolConfig.setMaxIdle(DEFAULT_MAX_IDLE);
 
             rootTargetPool = new GenericObjectPool<>(
-                    new HttpClientFactory(clientConfig, config, "") ,objectPoolConfig);
+                    new HttpClientFactory(clientConfig, config, "") ,pool());
             apiTargetPool = new GenericObjectPool<>(
-                    new HttpClientFactory(clientConfig, config, config.getApiPath()), objectPoolConfig);
+                    new HttpClientFactory(clientConfig, config, config.getApiPath()), pool());
 
             jacksonMapper = new ObjectMapper();
             jacksonMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssXXX"));
@@ -78,6 +75,13 @@ public abstract class BaseMethod {
             logger.error("Failed prepare BaseMethod class. Reason: {}", fne.getMessage());
             throw new RuntimeException(fne);
         }
+    }
+
+    private static GenericObjectPoolConfig pool() {
+        GenericObjectPoolConfig objectPoolConfig = new GenericObjectPoolConfig();
+        objectPoolConfig.setMaxTotal(DEFAULT_MAX_TOTAL);
+        objectPoolConfig.setMaxIdle(DEFAULT_MAX_IDLE);
+        return objectPoolConfig;
     }
 
     protected static WebTarget addParameters(WebTarget target, MethodParameters parameters) {
