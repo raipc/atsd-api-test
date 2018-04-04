@@ -9,6 +9,8 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
@@ -62,7 +64,7 @@ public abstract class BaseMethod {
             clientConfig.register(HttpAuthenticationFeature.basic(config.getLogin(), config.getPassword()));
             clientConfig.property(ClientProperties.READ_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
             clientConfig.property(ClientProperties.CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
-
+            clientConfig.property(ApacheClientProperties.RETRY_HANDLER, new DefaultHttpRequestRetryHandler(5, false));
 
             rootTargetPool = new GenericObjectPool<>(
                     new HttpClientFactory(clientConfig, config, "") ,pool());
