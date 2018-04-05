@@ -166,7 +166,7 @@ public abstract class BaseMethod {
 					throw reqEx;
 				}
 			}
-			ool.returnObject(client);
+			pool.returnObject(client);
 			return result;
         } catch (Exception e) {
             logger.error("Exception while making request", e);
