@@ -201,7 +201,7 @@
                     <runOrder>alphabetical</runOrder>
                     <skipAfterFailureCount>1</skipAfterFailureCount>
                     <includes>
-                    	<include>**/Sql*Order*Test.java</include>
+                    	<exclude>**/Sql*Test.java</exclude>
 		  </includes>		
                 </configuration>                     
             </plugin>
