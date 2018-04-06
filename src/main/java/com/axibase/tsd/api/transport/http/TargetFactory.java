@@ -78,9 +78,9 @@ public class TargetFactory {
                 .build();
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(10);
+        connectionManager.setMaxTotal(50);
+        connectionManager.setValidateAfterInactivity(2000);
         connectionManager.setDefaultMaxPerRoute(connectionManager.getMaxTotal());
-        connectionManager.setDefaultMaxPerRoute(10);
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER_SHARED, true);
         clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, requestConfig);
