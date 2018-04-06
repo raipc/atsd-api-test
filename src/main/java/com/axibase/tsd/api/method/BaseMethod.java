@@ -149,9 +149,13 @@ public abstract class BaseMethod {
         }
 
         try {
-            return requestFunction.apply(client.target);
-        } finally {
+            final Response result = requestFunction.apply(client.target);
             pool.returnObject(client);
+            return result;
+        } catch (Exception e) {
+            logger.error("Exception while making request", e);
+            client.close();
+            throw e;
         }
     }
 
