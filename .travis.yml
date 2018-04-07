@@ -5,7 +5,6 @@ jdk:
 services:
   - docker
 before_install:
-  - gzip -dc docker/atsd.tar.gz | docker load
 install:
   - docker pull axibase/atsd:api_test
   - docker save axibase/atsd:api_test| gzip > docker/atsd.tar.gz
