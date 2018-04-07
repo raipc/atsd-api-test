@@ -6,8 +6,6 @@ services:
   - docker
 before_install:
 install:
-  - docker pull axibase/atsd:api_test
-  - docker save axibase/atsd:api_test| gzip > docker/atsd.tar.gz
   - export ATSD_LOGIN=axibase
   - export ATSD_PASSWORD=axibase
   - docker run -d --name="atsd-api-test" -e axiname="$ATSD_LOGIN" -e axipass="$ATSD_PASSWORD" -e timezone="Asia/Kathmandu" axibase/atsd:api_test
