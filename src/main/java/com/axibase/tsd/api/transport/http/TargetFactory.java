@@ -76,6 +76,7 @@ public class TargetFactory {
                 .setConnectionRequestTimeout(DEFAULT_CONNECT_TIMEOUT)
                 .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
                 .setSocketTimeout(DEFAULT_CONNECT_TIMEOUT)
+                .setExpectContinueEnabled(true)
                 .build();
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
