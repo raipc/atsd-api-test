@@ -198,7 +198,7 @@
 
                 <configuration>
                     <parallel>classes</parallel>
-                    <threadCount>4</threadCount>
+                    <threadCount>8</threadCount>
                     <forkCount>0</forkCount>
                 </configuration>
             </plugin>

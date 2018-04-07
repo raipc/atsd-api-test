@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
 @Slf4j
 public class TargetFactory {
 
-    private static final Integer DEFAULT_CONNECT_TIMEOUT = 30000;
+    private static final Integer DEFAULT_CONNECT_TIMEOUT = 180000;
     private static final URI DEFAULT_URI = baseURI();
     private final Client defaultHttpClient = createClient();
 
@@ -77,10 +77,10 @@ public class TargetFactory {
                 .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
                 .setSocketTimeout(DEFAULT_CONNECT_TIMEOUT)
                 .setAuthenticationEnabled(true)
+                .setStaleConnectionCheckEnabled(true)
                 .build();
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setValidateAfterInactivity(2000);
         connectionManager.setMaxTotal(8);
         connectionManager.setDefaultMaxPerRoute(connectionManager.getMaxTotal());
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
