@@ -4,6 +4,7 @@ import com.axibase.tsd.api.Config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
 import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
@@ -78,11 +79,12 @@ public class TargetFactory {
                 .build();
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(1);
+        connectionManager.setMaxTotal(8);
         connectionManager.setDefaultMaxPerRoute(connectionManager.getMaxTotal());
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER_SHARED, true);
         clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, requestConfig);
+        clientConfig.property(ApacheClientProperties.RETRY_HANDLER, new DefaultHttpRequestRetryHandler());
         return clientConfig;
     }
 
