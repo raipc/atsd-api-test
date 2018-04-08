@@ -77,11 +77,11 @@ public class TargetFactory {
                 .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
                 .setSocketTimeout(DEFAULT_CONNECT_TIMEOUT)
                 .setAuthenticationEnabled(true)
-                .setStaleConnectionCheckEnabled(true)
                 .build();
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(8);
+        connectionManager.setValidateAfterInactivity(20000);
         connectionManager.setDefaultMaxPerRoute(connectionManager.getMaxTotal());
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER_SHARED, true);
