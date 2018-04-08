@@ -73,16 +73,16 @@ public class TargetFactory {
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
 
         final RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectionRequestTimeout(DEFAULT_CONNECT_TIMEOUT)
-                .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
-                .setSocketTimeout(DEFAULT_CONNECT_TIMEOUT)
-                .setAuthenticationEnabled(true)
-                .setStaleConnectionCheckEnabled(true)
-                .build();
+                .setConnectionRequestTimeout(2000)
+                .setConnectTimeout(1000)
+                .setSocketTimeout(25000)
+                .setExpectContinueEnabled(false)
+                    .build();
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(8);
-        connectionManager.setDefaultMaxPerRoute(connectionManager.getMaxTotal());
+        connectionManager.setMaxTotal(10);
+        connectionManager.setDefaultMaxPerRoute(5);
+        connectionManager.setValidateAfterInactivity(500);
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
         clientConfig.property(ApacheClientProperties.CONNECTION_MANAGER_SHARED, true);
         clientConfig.property(ApacheClientProperties.REQUEST_CONFIG, requestConfig);
