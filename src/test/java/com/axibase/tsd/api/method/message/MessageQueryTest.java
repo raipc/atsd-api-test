@@ -81,26 +81,30 @@ public class MessageQueryTest extends MessageMethod {
     @Issue("2850")
     @Test
     public void testLocalTimeUnsupported() throws Exception {
-        MessageQuery messageQuery = buildMessageQuery();
-        messageQuery.setStartDate("2017-07-21 00:00:00");
+        final String startDate = "2018-07-21 00:00:00";
+        MessageQuery messageQuery = buildMessageQuery().setStartDate(startDate);
 
         Response response = queryMessageResponse(messageQuery);
 
         assertEquals("Incorrect response status code", BAD_REQUEST.getStatusCode(), response.getStatus());
-        JSONAssert.assertEquals("{\"error\":\"IllegalArgumentException: Wrong startDate syntax: 2017-07-21 00:00:00\"}", response.readEntity(String.class), true);
+        JSONAssert.assertEquals("{\"error\":\"IllegalArgumentException: Wrong startDate syntax: " + startDate + "\"}", response.readEntity(String.class), true);
 
     }
 
     @Issue("2850")
+    @Issue("5272")
     @Test
-    public void testXXTimezoneUnsupported() throws Exception {
+    public void testRfc822TimezoneOffsetSupported() throws Exception {
         MessageQuery messageQuery = buildMessageQuery();
-        messageQuery.setStartDate("2017-07-20T22:50:00-0110");
+        messageQuery.setStartDate("2018-05-20T22:50:00-0110");
 
-        Response response = queryMessageResponse(messageQuery);
+        Message storedMessage = queryMessageResponse(messageQuery)
+                .readEntity(new GenericType<List<Message>>() {})
+                .get(0);
 
-        assertEquals("Incorrect response status code", BAD_REQUEST.getStatusCode(), response.getStatus());
-        JSONAssert.assertEquals("{\"error\":\"IllegalArgumentException: Wrong startDate syntax: 2017-07-20T22:50:00-0110\"}", response.readEntity(String.class), true);
+        assertEquals("Incorrect message entity", message.getEntity(), storedMessage.getEntity());
+        assertEquals("Incorrect message text", message.getMessage(), storedMessage.getMessage());
+        assertEquals("Incorrect message date", message.getDate(), storedMessage.getDate());
     }
 
     @Issue("2850")
