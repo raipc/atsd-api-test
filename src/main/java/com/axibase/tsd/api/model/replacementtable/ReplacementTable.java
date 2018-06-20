@@ -17,16 +17,12 @@ public class ReplacementTable {
     private String name;
     private String description;
     private String author;
-    private SupportedFormat format;
+    private SupportedFormat valueFormat;
     private Map<String, String> keys = new HashMap<>();
-
-    private ReplacementTable(String name, SupportedFormat format) {
-        this.setName(name).setFormat(format);
-    }
 
     public static ReplacementTable of(String name, SupportedFormat format) {
         Registry.ReplacementTable.checkExists(name);
-        return new ReplacementTable(name, format);
+        return new ReplacementTable().setName(name).setValueFormat(format);
     }
 
     public ReplacementTable addValue(String key, String value) {
