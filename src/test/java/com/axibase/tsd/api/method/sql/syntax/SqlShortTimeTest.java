@@ -5,17 +5,19 @@ import com.axibase.tsd.api.method.sql.SqlTest;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.util.Mocks;
-import com.axibase.tsd.api.util.Util;
+import com.axibase.tsd.api.util.ZonedDateTimeComparator;
 import com.google.common.collect.ImmutableMap;
 import io.qameta.allure.Issue;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Predicate;
+
+import static com.axibase.tsd.api.util.Util.parseAsServerZoned;
 
 public class SqlShortTimeTest extends SqlTest {
     private static final String ENTITY_NAME = Mocks.entity();
@@ -149,14 +151,11 @@ public class SqlShortTimeTest extends SqlTest {
     }
 
     private static final class FilterFactory {
-        private static ZonedDateTime parseAsServerZoned(final String dateString) {
-            final LocalDateTime localDateTime = LocalDateTime.parse(dateString);
-            return ZonedDateTime.of(localDateTime, Util.getServerTimeZone().toZoneId());
-        }
+        private static final Comparator<ZonedDateTime> COMPARATOR = new ZonedDateTimeComparator();
 
         private static Predicate<Sample> filter(final String dateString, final Predicate<Integer> predicate) {
             final ZonedDateTime compareDate = parseAsServerZoned(dateString);
-            return sample -> predicate.test(sample.getZonedDateTime().compareTo(compareDate));
+            return sample -> predicate.test(COMPARATOR.compare(sample.getZonedDateTime(), compareDate));
         }
 
         private static Predicate<Sample> greaterOrEqual(final String dateString) {
