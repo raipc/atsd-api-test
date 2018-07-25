@@ -1,6 +1,5 @@
 package com.axibase.tsd.api.method.series;
 
-import com.axibase.tsd.api.model.Period;
 import com.axibase.tsd.api.model.TimeUnit;
 import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
@@ -17,9 +16,7 @@ import static com.axibase.tsd.api.util.ErrorTemplate.DATE_FILTER_COMBINATION_REQ
 import static com.axibase.tsd.api.util.ErrorTemplate.DATE_FILTER_END_GREATER_START_REQUIRED;
 import static com.axibase.tsd.api.util.Util.*;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.OK;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.*;
 
 // TODO: Disabled while #5314 will not be solved.
 public class SeriesQueryDateFilterTest extends SeriesMethod {
@@ -36,7 +33,7 @@ public class SeriesQueryDateFilterTest extends SeriesMethod {
         query.setInterval(new Interval(40, TimeUnit.YEAR));
 
         Response response = querySeries(query);
-        assertEquals("Response code mismatch", OK.getStatusCode(), response.getStatus());
+        assertSame("Response code mismatch", Response.Status.Family.SUCCESSFUL, Util.responseFamily(response));
         final String expected = jacksonMapper.writeValueAsString(Collections.singletonList(series));
         final String given = response.readEntity(String.class);
         assertTrue("Stored series mismatch", compareJsonString(expected, given));
@@ -54,7 +51,7 @@ public class SeriesQueryDateFilterTest extends SeriesMethod {
         query.setEndDate(MAX_STORABLE_DATE);
 
         Response response = querySeries(query);
-        assertEquals("Response code mismatch", OK.getStatusCode(), response.getStatus());
+        assertSame("Response code mismatch", Response.Status.Family.SUCCESSFUL, Util.responseFamily(response));
         final String expected = jacksonMapper.writeValueAsString(Collections.singletonList(series));
         final String given = response.readEntity(String.class);
         assertTrue("Stored series mismatch", compareJsonString(expected, given));
@@ -72,7 +69,7 @@ public class SeriesQueryDateFilterTest extends SeriesMethod {
         query.setStartDate(MIN_STORABLE_DATE);
 
         Response response = querySeries(query);
-        assertEquals("Response code mismatch", OK.getStatusCode(), response.getStatus());
+        assertSame("Response code mismatch", Response.Status.Family.SUCCESSFUL, Util.responseFamily(response));
         final String expected = jacksonMapper.writeValueAsString(Collections.singletonList(series));
         final String given = response.readEntity(String.class);
         assertTrue("Stored series mismatch", compareJsonString(expected, given));

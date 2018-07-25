@@ -3,6 +3,7 @@ package com.axibase.tsd.api.method.replacementtable;
 import com.axibase.tsd.api.method.BaseMethod;
 import com.axibase.tsd.api.model.replacementtable.ReplacementTable;
 import com.axibase.tsd.api.util.NotCheckedException;
+import com.axibase.tsd.api.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientProperties;
@@ -13,7 +14,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.Status.OK;
 
 @Slf4j
 public class ReplacementTableMethod extends BaseMethod {
@@ -38,7 +38,7 @@ public class ReplacementTableMethod extends BaseMethod {
     public static void createCheck(ReplacementTable table) {
         Response response = createResponse(table);
 
-        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+        if (Response.Status.Family.SUCCESSFUL != Util.responseFamily(response)) {
             String errorMessage = "Wasn't able to create a replacement table, Status Info is " + response.getStatusInfo();
             log.error(errorMessage);
             throw new IllegalStateException(errorMessage);
@@ -56,7 +56,7 @@ public class ReplacementTableMethod extends BaseMethod {
     public static boolean replacementTableExist(String replacementTableName) throws NotCheckedException {
         replacementTableName = replacementTableName.replace(" ", "_").toLowerCase();
         final Response response = getReplacementTablesResponse(replacementTableName);
-        if (response.getStatus() != OK.getStatusCode()) {
+        if (Response.Status.Family.SUCCESSFUL != Util.responseFamily(response)) {
             if (response.getStatus() == NOT_FOUND.getStatusCode()) {
                 return false;
             }
