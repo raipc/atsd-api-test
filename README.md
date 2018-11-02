@@ -2,7 +2,7 @@
 
 # Running Tests
 
->> Note: run tests in a freshly installed image.
+> Note: run tests in a freshly installed image.
 
 ## Prepare ATSD Container for Tests Running
 
