@@ -6,20 +6,21 @@ import com.axibase.tsd.api.model.series.Sample;
 import com.axibase.tsd.api.model.series.Series;
 import com.axibase.tsd.api.model.sql.StringTable;
 import io.qameta.allure.Issue;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 
 public class SqlIntegerPrecisionLossTest extends SqlTest {
 
-
     private static final String TEST_PREFIX = "integer-precision-";
     private static final String TEST_ENTITY_NAME = TEST_PREFIX + "entity";
     private static final String TEST_METRIC_NAME_POS = TEST_PREFIX + "posmetric";
     private static final String TEST_METRIC_NAME_NEG = TEST_PREFIX + "negmetric";
 
-    @BeforeClass
+    //@BeforeClass
     public void prepareData() throws Exception {
         Series negSeries = createTestSeries(false);
         Series PosSeries = createTestSeries(true);
@@ -49,6 +50,11 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
         return series;
     }
 
+    @DataProvider
+    public static Object[][] provideArithmeticOperators() {
+        return new Object[][]{{"+", 1001L}, {"-", 1001L}, {"/", 1001L}, {"*", 1001L}, {"%", 1001L}};
+    }
+
     @Issue("5736")
     @Test
     public void testPositiveValues() {
@@ -62,7 +68,6 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
             value /= 10;
         }
         StringTable resultTable = queryResponse(query).readEntity(StringTable.class);
-
 
         assertRowsMatch("Wrong table content", expectedRows, resultTable, query);
     }
@@ -81,7 +86,18 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
         }
         StringTable resultTable = queryResponse(query).readEntity(StringTable.class);
 
-
         assertRowsMatch("Wrong table content", expectedRows, resultTable, query);
+    }
+
+    @Issue("5736")
+    @Test(dataProvider = "provideArithmeticOperators")
+    public void testArithmeticOperation(String operator, long number) {
+        String query = "SELECT 100000001 " + operator + " 100000001";
+
+        Long expectedResult = 100000001L + 100000001L;
+        StringTable resultTable = queryResponse(query).readEntity(StringTable.class);
+
+        Assert.assertEquals(resultTable.getTableMetaData().getColumnMeta(0).getDataType(), "long", "wrong datatype");
+        Assert.assertEquals(Long.valueOf(resultTable.getRows().get(0).get(0)), expectedResult, "Operation result wrong");
     }
 }
