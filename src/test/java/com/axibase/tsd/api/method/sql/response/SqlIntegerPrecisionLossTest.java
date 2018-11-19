@@ -12,6 +12,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
+import java.util.function.Function;
 
 public class SqlIntegerPrecisionLossTest extends SqlTest {
 
@@ -20,7 +21,27 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
     private static final String TEST_METRIC_NAME_POS = TEST_PREFIX + "posmetric";
     private static final String TEST_METRIC_NAME_NEG = TEST_PREFIX + "negmetric";
 
-    //@BeforeClass
+    private enum OperationAccessor {
+        PLUS("+", x -> 1000L + x),
+        MINUS("-", x -> 1000L - x),
+        MULTIPLY("*", x -> 1000L * x),
+        DEVIDE("/", x -> 1000L / x),
+        MOD("%", x -> 1000L % x);
+
+        String operator;
+        Function<Long, Long> operatorFunction;
+
+        OperationAccessor(String operator, Function<Long, Long> operatorFunction) {
+            this.operator = operator;
+            this.operatorFunction = operatorFunction;
+        }
+
+        long apply(long parameter) {
+            return operatorFunction.apply(parameter);
+        }
+    }
+
+    @BeforeClass
     public void prepareData() throws Exception {
         Series negSeries = createTestSeries(false);
         Series PosSeries = createTestSeries(true);
