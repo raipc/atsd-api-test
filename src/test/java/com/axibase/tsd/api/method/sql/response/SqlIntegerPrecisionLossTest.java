@@ -12,7 +12,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class SqlIntegerPrecisionLossTest extends SqlTest {
 
@@ -22,22 +22,22 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
     private static final String TEST_METRIC_NAME_NEG = TEST_PREFIX + "negmetric";
 
     private enum OperationAccessor {
-        PLUS("+", x -> 1000L + x),
-        MINUS("-", x -> 1000L - x),
-        MULTIPLY("*", x -> 1000L * x),
-        DEVIDE("/", x -> 1000L / x),
-        MOD("%", x -> 1000L % x);
+        PLUS("+", (x, y) -> x + y),
+        MINUS("-", (x, y) -> x - y),
+        MULTIPLY("*", (x, y) -> x * y),
+        DEVIDE("/", (x, y) -> x / y),
+        MOD("%", (x, y) -> x % y);
 
         String operator;
-        Function<Long, Long> operatorFunction;
+        BiFunction<Long, Long, Long> operatorFunction;
 
-        OperationAccessor(String operator, Function<Long, Long> operatorFunction) {
+        OperationAccessor(String operator, BiFunction<Long, Long, Long> operatorFunction) {
             this.operator = operator;
             this.operatorFunction = operatorFunction;
         }
 
-        long apply(long parameter) {
-            return operatorFunction.apply(parameter);
+        long apply(long parameterOne, long parameterTwo) {
+            return operatorFunction.apply(parameterOne, parameterTwo);
         }
     }
 
@@ -55,11 +55,11 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
         Series series;
         if (isPositive) {
             series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME_POS);
-            series.addSamples(Sample.ofTimeDecimal(time++, new BigDecimal(0x7FFFFFFFFFFFFFFFL)));
+            series.addSamples(Sample.ofTimeDecimal(time++, new BigDecimal(Long.MAX_VALUE)));
             value = 1111111111111111111L;
         } else {
             series = new Series(TEST_ENTITY_NAME, TEST_METRIC_NAME_NEG);
-            series.addSamples(Sample.ofTimeDecimal(time++, new BigDecimal(0x8000000000000000L)));
+            series.addSamples(Sample.ofTimeDecimal(time++, new BigDecimal(Long.MIN_VALUE)));
             value = -1111111111111111111L;
         }
 
@@ -71,38 +71,48 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
         return series;
     }
 
+    private static Object[][] getParameters() {
+        return new Object[][]{{10L, 2L}, {-10L, -2L}, {900L, 3L}, {1111111111111111111L, 1111111111111111111L}};
+    }
+
     @DataProvider
     public static Object[][] provideArithmeticOperators() {
-        return new Object[][]{{"+", 1001L}, {"-", 1001L}, {"/", 1001L}, {"*", 1001L}, {"%", 1001L}};
+        OperationAccessor[] accessors = OperationAccessor.values();
+        Object[][] parameters = getParameters();
+        Object[][] result = new Object[parameters.length * accessors.length][];
+
+        try {
+            for (int i = 0; i < accessors.length; i++)
+                for (int j = 0; j < parameters.length; j++) {
+                    result[i * parameters.length + j] =
+                            new Object[]{parameters[j][0],
+                                    parameters[j][1],
+                                    accessors[i]};
+                }
+        } catch (Exception e) {
+            System.out.println("bad");
+        }
+        return result;
     }
 
     @Issue("5736")
     @Test
-    public void testPositiveValues() {
-        String query = String.format("SELECT value from \"%s\" where entity='%s'", TEST_METRIC_NAME_POS, TEST_ENTITY_NAME);
+    public void testDisplayValues() {
+        String query = String.format(
+                "select t1.value, t2.value \n" +
+                        "from \"%s\" as t1\n" +
+                        "join \"%s\" as t2",
+                TEST_METRIC_NAME_POS,
+                TEST_METRIC_NAME_NEG
+        );
 
-        String[][] expectedRows = new String[20][1];
+        String[][] expectedRows = new String[20][2];
         expectedRows[0][0] = Long.toString(Long.MAX_VALUE);
+        expectedRows[0][1] = Long.toString(Long.MIN_VALUE);
         long value = 1111111111111111111L;
         for (int i = 1; i < 20; i++) {
             expectedRows[i][0] = Long.toString(value);
-            value /= 10;
-        }
-        StringTable resultTable = queryResponse(query).readEntity(StringTable.class);
-
-        assertRowsMatch("Wrong table content", expectedRows, resultTable, query);
-    }
-
-    @Issue("5736")
-    @Test
-    public void testNegativeValues() {
-        String query = String.format("SELECT value from \"%s\" where entity='%s'", TEST_METRIC_NAME_NEG, TEST_ENTITY_NAME);
-
-        String[][] expectedRows = new String[20][1];
-        expectedRows[0][0] = Long.toString(Long.MIN_VALUE);
-        long value = -1111111111111111111L;
-        for (int i = 1; i < 20; i++) {
-            expectedRows[i][0] = Long.toString(value);
+            expectedRows[i][1] = Long.toString(-value);
             value /= 10;
         }
         StringTable resultTable = queryResponse(query).readEntity(StringTable.class);
@@ -112,13 +122,14 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
 
     @Issue("5736")
     @Test(dataProvider = "provideArithmeticOperators")
-    public void testArithmeticOperation(String operator, long number) {
-        String query = "SELECT 100000001 " + operator + " 100000001";
+    public void testArithmeticOperation(Long numberOne, Long numberTwo, OperationAccessor accessor) {
+        String query = String.format("SELECT %s %s %s", numberOne, accessor.operator, numberTwo);
 
-        Long expectedResult = 100000001L + 100000001L;
+        Long expectedResult = accessor.apply(numberOne, numberTwo);
         StringTable resultTable = queryResponse(query).readEntity(StringTable.class);
 
-        Assert.assertEquals(resultTable.getTableMetaData().getColumnMeta(0).getDataType(), "long", "wrong datatype");
-        Assert.assertEquals(Long.valueOf(resultTable.getRows().get(0).get(0)), expectedResult, "Operation result wrong");
+        String message = String.format("Operator %s wrong ", accessor.operator);
+        Assert.assertEquals(resultTable.getTableMetaData().getColumnMeta(0).getDataType(), "bigint", message + "datatype");
+        Assert.assertEquals(Long.valueOf(resultTable.getRows().get(0).get(0)), expectedResult, message + "result");
     }
 }
