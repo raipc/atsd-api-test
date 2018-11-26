@@ -25,7 +25,7 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
         PLUS("+", (x, y) -> x + y),
         MINUS("-", (x, y) -> x - y),
         MULTIPLY("*", (x, y) -> x * y),
-        DEVIDE("/", (x, y) -> x / y),
+        DIVIDE("/", (x, y) -> x / y),
         MOD("%", (x, y) -> x % y);
 
         String operator;
@@ -76,22 +76,15 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
     }
 
     @DataProvider
-    public static Object[][] provideArithmeticOperators() {
+    public static Object[][] provideArithmeticOperatorsWithOperator() {
         OperationAccessor[] accessors = OperationAccessor.values();
         Object[][] parameters = getParameters();
         Object[][] result = new Object[parameters.length * accessors.length][];
 
-        try {
-            for (int i = 0; i < accessors.length; i++)
-                for (int j = 0; j < parameters.length; j++) {
-                    result[i * parameters.length + j] =
-                            new Object[]{parameters[j][0],
-                                    parameters[j][1],
-                                    accessors[i]};
-                }
-        } catch (Exception e) {
-            System.out.println("bad");
-        }
+        for (int i = 0; i < accessors.length; i++)
+            for (int j = 0; j < parameters.length; j++) {
+                result[i * parameters.length + j] = new Object[]{parameters[j][0], parameters[j][1], accessors[i]};
+            }
         return result;
     }
 
@@ -121,7 +114,7 @@ public class SqlIntegerPrecisionLossTest extends SqlTest {
     }
 
     @Issue("5736")
-    @Test(dataProvider = "provideArithmeticOperators")
+    @Test(dataProvider = "provideArithmeticOperatorsWithOperator")
     public void testArithmeticOperation(Long numberOne, Long numberTwo, OperationAccessor accessor) {
         String query = String.format("SELECT %s %s %s", numberOne, accessor.operator, numberTwo);
 
