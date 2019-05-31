@@ -36,7 +36,7 @@ public class EmptyTagTest extends PropertyMethod {
 
     @Issue("6234")
     @Test
-    public void emptyAndNonEmptyTagTest() throws Exception{
+    public void emptyAndNonEmptyTagTest() throws Exception {
         Property property = new Property("property-tcp-emptytag-test-t2", "property-tcp-emptytag-test-e2");
         Map<String, String> tagMap = new HashMap<>();
         tagMap.put("t1", "v1");
