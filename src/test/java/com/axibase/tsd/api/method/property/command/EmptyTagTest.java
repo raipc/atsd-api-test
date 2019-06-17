@@ -46,8 +46,7 @@ public class EmptyTagTest extends PropertyMethod {
         String propertyType = Mocks.propertyType();
         String entityName = Mocks.entity();
         Property property = new Property(propertyType, entityName);
-        Map<String, String> tagMap = ImmutableMap.of("t1", emptyValue);
-        property.setTags(tagMap);
+        property.setTags(ImmutableMap.of("t1", emptyValue));
         PlainCommand command = new PropertyCommand(property);
         CommandSendingResult result = CommandMethod.send(command);
         assertEquals("The only command had to fail. Actual response: " + result.toString(), result.getFail(), Integer.valueOf(1));
@@ -62,18 +61,18 @@ public class EmptyTagTest extends PropertyMethod {
     public void emptyAndNonEmptyTagTest(String emptyValue) {
         String propertyType = Mocks.propertyType();
         String entityName = Mocks.entity();
-        Property property = new Property(propertyType, entityName);
-        Map<String, String> tagMap = ImmutableMap.of("t1", "v1", "t2", "v2");
-        property.setTags(tagMap);
+        Property property = new Property(propertyType, entityName);;
+        property.setTags(ImmutableMap.of("t1", "v1", "t2", "v2"));
         PlainCommand nonEmptyCommand = new PropertyCommand(property);
-        CommandMethod.send(nonEmptyCommand);
-
-        Map<String, String> emptyTagMap = ImmutableMap.of("t1", "v1-new", "t2", emptyValue);
-        property.setTags(emptyTagMap);
-        PlainCommand emptyTagCommand = new PropertyCommand(property);
-        CommandSendingResult result = CommandMethod.send(emptyTagCommand);
+        CommandSendingResult result = CommandMethod.send(nonEmptyCommand);
         assertEquals("The only command had to succeed. Actual response: " + result.toString(), result.getSuccess(), Integer.valueOf( 1));
         assertEquals("Total commands count is not 1: " + result.toString(), result.getTotal(), Integer.valueOf( 1));
+
+        property.setTags(ImmutableMap.of("t1", "v1-new", "t2", emptyValue));
+        PlainCommand emptyTagCommand = new PropertyCommand(property);
+        CommandSendingResult newResult = CommandMethod.send(emptyTagCommand);
+        assertEquals("The only command had to succeed. Actual response: " + newResult.toString(), newResult.getSuccess(), Integer.valueOf( 1));
+        assertEquals("Total commands count is not 1: " + newResult.toString(), newResult.getTotal(), Integer.valueOf( 1));
 
         property.setTags(ImmutableMap.of("t1", "v1-new"));
         assertPropertyExisting(property);
@@ -88,12 +87,8 @@ public class EmptyTagTest extends PropertyMethod {
         String propertyType = Mocks.propertyType();
         String entityName = Mocks.entity();
         Property property = new Property(propertyType, entityName);
-        Map<String, String> keyMap = new HashMap<>();
-        keyMap.put("k1", "vk1");
-        property.setKey(keyMap);
-        Map<String, String> tagMap = ImmutableMap.of("t1", emptyValue);
-        property.setTags(tagMap);
-        property.setDate(getCurrentDate());
+        property.setKey(ImmutableMap.of("k1", "vk1"));
+        property.setTags(ImmutableMap.of("t1", emptyValue));
         PlainCommand command = new PropertyCommand(property);
         CommandSendingResult result = CommandMethod.send(command);
         assertEquals("The only command had to fail. Actual response: " + result.toString(), result.getFail(), Integer.valueOf(1));

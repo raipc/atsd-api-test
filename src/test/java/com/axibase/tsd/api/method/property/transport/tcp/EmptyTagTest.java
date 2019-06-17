@@ -45,8 +45,7 @@ public class EmptyTagTest extends PropertyMethod {
         String propertyType = Mocks.propertyType();
         String entityName = Mocks.entity();
         Property property = new Property(propertyType, entityName);
-        Map<String, String> tagMap = ImmutableMap.of("t1", emptyValue);
-        property.setTags(tagMap);
+        property.setTags(ImmutableMap.of("t1", emptyValue));
         PlainCommand command = new PropertyCommand(property);
         String result = TCPSender.send(command, true);
         assertTrue(command.compose() + " had to fail, but did not.", result.startsWith("Empty tag values in command"));
@@ -61,18 +60,15 @@ public class EmptyTagTest extends PropertyMethod {
         String propertyType = Mocks.propertyType();
         String entityName = Mocks.entity();
         Property property = new Property(propertyType, entityName);
-        Map<String, String> tagMap = ImmutableMap.of("t1", "v1", "t2", "v2");
-        property.setTags(tagMap);
-        property.setDate(getCurrentDate());
+        property.setTags(ImmutableMap.of("t1", "v1", "t2", "v2"));
         PlainCommand nonEmptyCommand = new PropertyCommand(property);
         TCPSender.send( nonEmptyCommand, true);
 
-        Map<String, String> emptyTagMap = ImmutableMap.of("t1", "v1-new", "t2", emptyValue);
-        property.setTags(emptyTagMap);
+        property.setTags(ImmutableMap.of("t1", "v1-new", "t2", emptyValue));
         PlainCommand emptyTagCommand = new PropertyCommand(property);
         TCPSender.send(emptyTagCommand, true);
 
-        property.setTags(ImmutableMap.<String, String>builder().put("t1", "v1-new").build());
+        property.setTags(ImmutableMap.of("t1", "v1-new"));
         assertPropertyExisting(property);
     }
 
@@ -85,11 +81,8 @@ public class EmptyTagTest extends PropertyMethod {
         String propertyType = Mocks.propertyType();
         String entityName = Mocks.entity();
         Property property = new Property(propertyType, entityName);
-        Map<String, String> keyMap = new HashMap<>();
-        keyMap.put("k1", "vk1");
-        property.setKey(keyMap);
-        Map<String, String> tagMap = ImmutableMap.of("t1", emptyValue);
-        property.setTags(tagMap);
+        property.setKey(ImmutableMap.of("k1", "vk1"));
+        property.setTags(ImmutableMap.of("t1", emptyValue));
         PlainCommand command = new PropertyCommand(property);
         String result = TCPSender.send(command, true);
         assertTrue(command.compose() + " had to fail, but did not.", result.startsWith("Empty tag values in command"));
