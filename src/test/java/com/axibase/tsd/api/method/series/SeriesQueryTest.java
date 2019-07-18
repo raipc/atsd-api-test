@@ -265,10 +265,9 @@ public class SeriesQueryTest extends SeriesMethod {
             assertEquals("Attempt to insert date before min storable date doesn't return error",
                     BAD_REQUEST.getStatusCode(), response.getStatusInfo().getStatusCode());
 
-            final String message = BaseMethod.extractErrorMessage(response);
             assertEquals("Attempt to insert date before min storable date doesn't return error",
-                    "IllegalArgumentException: Too large timestamp " + Util.getUnixTime(series.getData().get(0).getRawDate()) + ". Max allowed value is " + MAX_STORABLE_TIMESTAMP,
-                    message);
+                    "{\"error\":\"IllegalArgumentException: Too large timestamp " + Util.getUnixTime(series.getData().get(0).getRawDate()) + ". Max allowed value is " + MAX_STORABLE_TIMESTAMP + "\"}",
+                    response.readEntity(String.class));
             setRandomTimeDuringNextDay(calendar);
         }
     }
@@ -293,7 +292,7 @@ public class SeriesQueryTest extends SeriesMethod {
 
     @Issue("2979")
     @Test
-    public void testEntitesExpressionQuestionChar() throws Exception {
+    public void testEntitшesExpressionQuestionChar() throws Exception {
         Series series = new Series("e-query-wildcard-23-1", "m-query-wildcard-23");
         series.addSamples(Sample.ofDateInteger("2010-01-01T00:00:00.000Z", 0));
         insertSeriesCheck(Collections.singletonList(series));
@@ -657,7 +656,7 @@ public class SeriesQueryTest extends SeriesMethod {
 
         CommonAssertions.jsonAssert(
                 Arrays.asList(TEST_SERIES3, TEST_SERIES3),
-                SeriesMethod.querySeries(query, query)
+                SeriesMethod.querySeries(Arrays.asList(query, query))
         );
     }
 
