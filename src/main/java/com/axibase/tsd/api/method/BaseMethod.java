@@ -43,6 +43,8 @@ public abstract class BaseMethod {
 
     private static final GenericObjectPool<HttpClient> apiTargetPool;
     private static final GenericObjectPool<HttpClient> rootTargetPool;
+    private static final GenericObjectPool<HttpClient> tokenRootTargetPool;
+    
     private static final int DEFAULT_CONNECT_TIMEOUT = 180000;
     private static final Logger logger = LoggerFactory.getLogger(BaseMethod.class);
 
@@ -63,15 +65,22 @@ public abstract class BaseMethod {
                 .property(ClientProperties.READ_TIMEOUT, DEFAULT_CONNECT_TIMEOUT)
                 .property(ClientProperties.CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT)
                 .property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
+        ClientConfig tokenConfig = new ClientConfig();
+        tokenConfig.connectorProvider(new ApacheConnectorProvider())
+                .property(ClientProperties.READ_TIMEOUT, DEFAULT_CONNECT_TIMEOUT)
+                .property(ClientProperties.CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT)
+                .property(ClientProperties.REQUEST_ENTITY_PROCESSING, RequestEntityProcessing.BUFFERED);
 
         GenericObjectPoolConfig objectPoolConfig = new GenericObjectPoolConfig();
         objectPoolConfig.setMaxTotal(DEFAULT_MAX_TOTAL);
         objectPoolConfig.setMaxIdle(DEFAULT_MAX_IDLE);
 
         rootTargetPool = new GenericObjectPool<>(
-                new HttpClientFactory(clientConfig, config, "") ,objectPoolConfig);
+                new HttpClientFactory(clientConfig, config, ""), objectPoolConfig);
         apiTargetPool = new GenericObjectPool<>(
                 new HttpClientFactory(clientConfig, config, config.getApiPath()), objectPoolConfig);
+        tokenRootTargetPool = new GenericObjectPool<>(
+                new HttpClientFactory(tokenConfig, config, ""), objectPoolConfig);
 
         jacksonMapper = new ObjectMapper();
         jacksonMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
@@ -142,6 +151,10 @@ public abstract class BaseMethod {
         return executeRequest(apiTargetPool, requestFunction);
     }
 
+    public static Response executeTokenRootRequest(Function<WebTarget, Response> requestFunction) {
+        return executeRequest(tokenRootTargetPool, requestFunction);
+    }
+
     private static Response executeRequest(
             GenericObjectPool<HttpClient> pool,
             Function<WebTarget, Response> requestFunction) {
@@ -157,6 +170,7 @@ public abstract class BaseMethod {
         } finally {
             pool.returnObject(client);
         }
+
     }
 
     private static class HttpClient {
@@ -174,9 +188,13 @@ public abstract class BaseMethod {
                     .build());
         }
 
-        public WebTarget getTarget() { return target; }
+        public WebTarget getTarget() {
+            return target;
+        }
 
-        public void close() { client.close(); }
+        public void close() {
+            client.close();
+        }
     }
 
     private static class HttpClientFactory extends BasePooledObjectFactory<HttpClient> {

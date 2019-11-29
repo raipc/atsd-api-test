@@ -19,6 +19,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
 import static com.axibase.tsd.api.util.TestUtil.TimeTranslation.UNIVERSAL_TO_LOCAL;
@@ -282,16 +283,28 @@ public class TestUtil {
      * @return Unmodifiable LinkedHashMap<String, Object>
      */
     public static Map<String, Object> toUnmodifiableMap(Object... objects) {
-        if(objects.length %2 != 0) {
+        if (objects.length % 2 != 0) {
             throw new IllegalArgumentException("Objects count must be even!");
         }
         Map<String, Object> map = new LinkedHashMap<>();
-        for(int i = 0; i < objects.length; i+=2) {
-            if(!(objects[i] instanceof String)) {
+        for (int i = 0; i < objects.length; i += 2) {
+            if (!(objects[i] instanceof String)) {
                 throw new IllegalArgumentException("Keys must be Strings!");
             }
-            map.put(objects[i].toString(), objects[i+1]);
+            map.put(objects[i].toString(), objects[i + 1]);
         }
         return Collections.unmodifiableMap(map);
+    }
+
+    /**
+     * Transforms {@code Map<String, String>} to a the same map, where new values are singleton lists containing previous values.
+     * Use this when you need to construct a json with format "key": ["value"], e.g. https://axibase.com/docs/atsd/api/meta/metric/series-tags.html
+     *
+     * @param map Original map
+     * @return Transformed map
+     */
+    public static Map<String, List<String>> toStringListMap(Map<String, String> map) {
+        return map.entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey(), entry -> Collections.singletonList(entry.getValue())));
     }
 }

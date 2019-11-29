@@ -1,5 +1,6 @@
 package com.axibase.tsd.api.util;
 
+import com.axibase.tsd.api.Config;
 import com.axibase.tsd.api.method.version.VersionMethod;
 import com.axibase.tsd.api.model.version.Version;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
@@ -33,6 +35,7 @@ public class Util {
     public static final long MIN_STORABLE_TIMESTAMP = 0L;
     public static final long MAX_STORABLE_TIMESTAMP = 4294969199999L;
     public static final String DEFAULT_TIMEZONE_NAME = "UTC";
+    public static final String API_PATH = Config.getInstance().getApiPath();
     private static final ObjectWriter objectWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 
     public static TimeZone getServerTimeZone() {
@@ -102,6 +105,10 @@ public class Util {
         } catch (JsonProcessingException e) {
             return o.toString();
         }
+    }
+
+    public static Map<String, Object> toStringObjectMap(Map<String, String> map) {
+        return map.entrySet().stream().collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
     }
 
     private static final class AtsdVersionInfo {

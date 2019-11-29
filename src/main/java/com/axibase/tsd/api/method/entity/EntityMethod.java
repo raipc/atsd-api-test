@@ -7,10 +7,16 @@ import com.axibase.tsd.api.method.checks.EntityCheck;
 import com.axibase.tsd.api.model.entity.Entity;
 import com.axibase.tsd.api.util.NotCheckedException;
 import com.axibase.tsd.api.util.Util;
+import com.axibase.tsd.api.util.authorization.RequestSenderWithAuthorization;
+import com.axibase.tsd.api.util.authorization.RequestSenderWithBasicAuthorization;
+import com.axibase.tsd.api.util.authorization.RequestSenderWithBearerAuthorization;
 
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static javax.ws.rs.client.Entity.json;
@@ -22,14 +28,24 @@ public class EntityMethod extends BaseMethod {
     private static final String METHOD_ENTITY_GROUPS = "/entities/{entity}/groups";
     private static final String METHOD_ENTITY_PROPERTY_TYPES = "/entities/{entity}/property-types";
 
-    public static <T> Response createOrReplaceEntity(String entityName, T query) {
-        Response response = executeApiRequest(webTarget -> webTarget
-                .path(METHOD_ENTITY)
-                .resolveTemplate("entity", entityName)
-                .request()
-                .put(json(query)));
+    private static Map<String, Object> nameTemplate(String entityName) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("entity", entityName);
+        return Collections.unmodifiableMap(map);
+    }
+
+    public static <T> Response createOrReplaceEntity(String entityName, T query, RequestSenderWithAuthorization sender) {
+        Response response = sender.executeApiRequest(METHOD_ENTITY, nameTemplate(entityName), HttpMethod.PUT, json(query));
         response.bufferEntity();
         return response;
+    }
+
+    public static Response createOrReplaceEntity(Entity entity, String token) {
+        return createOrReplaceEntity(entity.getName(), entity, new RequestSenderWithBearerAuthorization(token));
+    }
+
+    public static <T> Response createOrReplaceEntity(String entityName, T query) {
+        return createOrReplaceEntity(entityName, query, RequestSenderWithBasicAuthorization.DEFAULT_BASIC_SENDER);
     }
 
     public static Response createOrReplaceEntity(Entity entity) {
@@ -69,21 +85,25 @@ public class EntityMethod extends BaseMethod {
         } else if (response.getStatus() == NOT_FOUND.getStatusCode()) {
             return false;
         }
-        if (entity.contains(" ")){
+        if (entity.contains(" ")) {
             return entityExist(entity.replace(" ", "_"));
         }
 
         throw new NotCheckedException("Fail to execute entity query: " + responseAsString(response));
     }
 
-    public static Response getEntityResponse(String entityName) {
-        Response response = executeApiRequest(webTarget -> webTarget
-                .path(METHOD_ENTITY)
-                .resolveTemplate("entity", entityName)
-                .request()
-                .get());
+    public static Response getEntityResponse(String entityName, RequestSenderWithAuthorization sender) {
+        Response response = sender.executeApiRequest(METHOD_ENTITY, nameTemplate(entityName), HttpMethod.GET);
         response.bufferEntity();
         return response;
+    }
+
+    public static Response getEntityResponse(String entityName, String token) {
+        return getEntityResponse(entityName, new RequestSenderWithBearerAuthorization(token));
+    }
+
+    public static Response getEntityResponse(String entityName) {
+        return getEntityResponse(entityName, RequestSenderWithBasicAuthorization.DEFAULT_BASIC_SENDER);
     }
 
     public static Entity getEntity(String entityName) {
@@ -100,65 +120,85 @@ public class EntityMethod extends BaseMethod {
         return response.readEntity(Entity.class);
     }
 
-
-    public static <T> Response updateEntity(String entityName, T query) {
-        Response response = executeApiRequest(webTarget -> webTarget
-                .path(METHOD_ENTITY)
-                .resolveTemplate("entity", entityName)
-                .request()
-                .method("PATCH", json(query)));
+    public static <T> Response updateEntity(String entityName, T query, RequestSenderWithAuthorization sender) {
+        Map<String, Object> contentTypeMap = new HashMap<>();
+        contentTypeMap.put(HttpHeaders.CONTENT_TYPE, "application/json");
+        Response response = sender.executeApiRequest(METHOD_ENTITY, nameTemplate(entityName), Collections.EMPTY_MAP, contentTypeMap, "PATCH", json(query));
         response.bufferEntity();
         return response;
+    }
+
+    public static Response updateEntity(Entity entity, String token) {
+        return updateEntity(entity.getName(), entity, new RequestSenderWithBearerAuthorization(token));
+    }
+
+    public static <T> Response updateEntity(String entityName, T query) {
+        return updateEntity(entityName, query, RequestSenderWithBasicAuthorization.DEFAULT_BASIC_SENDER);
     }
 
     public static Response updateEntity(Entity entity) {
         return updateEntity(entity.getName(), entity);
     }
 
-    public static Response deleteEntity(String entityName) {
-        Response response = executeApiRequest(webTarget -> webTarget
-                .path(METHOD_ENTITY)
-                .resolveTemplate("entity", entityName)
-                .request()
-                .delete());
+    public static Response deleteEntity(String entityName, RequestSenderWithAuthorization sender) {
+        Response response = sender.executeApiRequest(METHOD_ENTITY, nameTemplate(entityName), HttpMethod.DELETE);
         response.bufferEntity();
         return response;
     }
 
-    public static Response queryEntityMetrics(String entityName) {
-        return queryEntityMetrics(entityName, new HashMap<>());
+    public static Response deleteEntity(String entityName, String token) {
+        return deleteEntity(entityName, new RequestSenderWithBearerAuthorization(token));
+    }
+
+    public static Response deleteEntity(String entityName) {
+        return deleteEntity(entityName, RequestSenderWithBasicAuthorization.DEFAULT_BASIC_SENDER);
+    }
+
+    public static Response queryEntityMetrics(String entityName, Map<String, String> parameters, RequestSenderWithAuthorization sender) {
+        Response response = sender.executeApiRequest(METHOD_ENTITY_METRICS, nameTemplate(entityName), Util.toStringObjectMap(parameters),
+                Collections.EMPTY_MAP, HttpMethod.GET);
+        response.bufferEntity();
+        return response;
+    }
+
+    public static Response queryEntityMetrics(String entityName, String token) {
+        return queryEntityMetrics(entityName, new HashMap<>(), new RequestSenderWithBearerAuthorization(token));
     }
 
     private static Response queryEntityMetrics(String entityName, Map<String, String> parameters) {
-        Response response = executeApiRequest(webTarget -> {
-            WebTarget target = webTarget.path(METHOD_ENTITY_METRICS).resolveTemplate("entity", entityName);
-            for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                target = target.queryParam(entry.getKey(), entry.getValue());
-            }
-            return target.request().get();
-        });
+        return queryEntityMetrics(entityName, parameters, RequestSenderWithBasicAuthorization.DEFAULT_BASIC_SENDER);
+    }
 
+    public static Response queryEntityMetrics(String entityName) {
+        return queryEntityMetrics(entityName, Collections.EMPTY_MAP);
+    }
+
+    public static Response queryEntityGroups(String entityName, RequestSenderWithAuthorization sender) {
+        Response response = sender.executeApiRequest(METHOD_ENTITY_GROUPS, nameTemplate(entityName), HttpMethod.GET);
         response.bufferEntity();
         return response;
+    }
+
+    public static Response queryEntityGroups(String entityName, String token) {
+        return queryEntityGroups(entityName, new RequestSenderWithBearerAuthorization(token));
     }
 
     public static Response queryEntityGroups(String entityName) {
-        Response response = executeApiRequest(webTarget -> webTarget
-                .path(METHOD_ENTITY_GROUPS)
-                .resolveTemplate("entity", entityName)
-                .request()
-                .get());
+        return queryEntityGroups(entityName, RequestSenderWithBasicAuthorization.DEFAULT_BASIC_SENDER);
+    }
+
+    public static Response queryEntityPropertyTypes(String entityName, RequestSenderWithAuthorization sender) {
+        Response response = sender.executeApiRequest(METHOD_ENTITY_PROPERTY_TYPES, nameTemplate(entityName), HttpMethod.GET);
+        System.err.println(Util.API_PATH + METHOD_ENTITY_PROPERTY_TYPES);
         response.bufferEntity();
         return response;
     }
 
+    public static Response queryEntityPropertyTypes(String entityName, String token) {
+        return queryEntityPropertyTypes(entityName, new RequestSenderWithBearerAuthorization(token));
+    }
+
     public static Response queryEntityPropertyTypes(String entityName) {
-        Response response = executeApiRequest(webTarget -> webTarget
-                .path(METHOD_ENTITY_PROPERTY_TYPES)
-                .resolveTemplate("entity", entityName)
-                .request()
-                .get());
-        response.bufferEntity();
-        return response;
+        return queryEntityPropertyTypes(entityName, RequestSenderWithBasicAuthorization.DEFAULT_BASIC_SENDER);
     }
 }

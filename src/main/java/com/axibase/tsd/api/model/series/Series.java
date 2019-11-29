@@ -77,7 +77,6 @@ public class Series implements Comparable<Series> {
             if (key == null || value == null || key.isEmpty() || value.isEmpty()) {
                 throw new IllegalArgumentException("Series tag name or value is null or empty");
             }
-
             addTag(key, value);
         }
     }

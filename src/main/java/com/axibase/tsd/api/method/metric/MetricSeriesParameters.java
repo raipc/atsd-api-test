@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,5 +29,15 @@ public class MetricSeriesParameters extends MethodParameters {
 
     public Map<String, String> getTags() {
         return new HashMap<>(tags);
+    }
+
+    @Override
+    public Map<String, Object> toParameterMap() {
+        Map<String, Object> parameters = this.toMap();
+        for(Map.Entry<String, String> tag : tags.entrySet()) {
+            parameters.put("tags." + tag.getKey(), tag.getValue());
+        }
+        parameters.remove("tags");
+        return Collections.unmodifiableMap(parameters);
     }
 }

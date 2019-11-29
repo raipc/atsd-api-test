@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.axibase.tsd.api.util.Util.prettyPrint;
+
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
@@ -42,18 +44,20 @@ public class Property {
         setDate(oldProperty.getDate());
     }
 
-    public void addTag(String tagName, String tagValue) {
+    public Property addTag(String tagName, String tagValue) {
         if (tags == null) {
             tags = new HashMap<>();
         }
         tags.put(tagName, tagValue);
+        return this;
     }
 
-    public void addKey(String keyName, String keyValue) {
+    public Property addKey(String keyName, String keyValue) {
         if (key == null) {
             key = new HashMap<>();
         }
         key.put(keyName, keyValue);
+        return this;
     }
 
     public Map<String, String> getKey() {
@@ -84,5 +88,10 @@ public class Property {
     public Property setDate(Date date) {
         this.setDate(Util.ISOFormat(date));
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return prettyPrint(this);
     }
 }
