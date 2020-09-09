@@ -14,15 +14,15 @@ import static com.axibase.tsd.api.util.Util.getUnixTime;
 
 public class TradeAggregationTest extends SqlTradeTest {
     private static final String QUERY = "select {fields} from atsd_trade where {instrument} " +
-            "group by exchange, class, symbol {period} {having}";
+            "group by exchange, class, symbol {period} {having}  WITH TIMEZONE = 'UTC'";
 
     @BeforeClass
     public void prepareData() throws Exception {
         List<Trade> trades = new ArrayList<>();
-        trades.add(trade(getUnixTime("2020-03-22T10:00:01Z"), new BigDecimal("126.99"), 22330));
-        trades.add(trade(getUnixTime("2020-03-22T10:00:09Z"), new BigDecimal("127.36"), 22330));
-        trades.add(trade(getUnixTime("2020-03-22T10:00:49Z"), new BigDecimal("127.02"), 22339));
-        trades.add(trade(getUnixTime("2020-03-22T10:00:55Z"), new BigDecimal("127.28"), 22330));
+        trades.add(trade(getUnixTime("2020-03-22T10:01:00Z"), new BigDecimal("126.99"), 22330));
+        trades.add(trade(getUnixTime("2020-03-22T10:09:00Z"), new BigDecimal("127.36"), 22330));
+        trades.add(trade(getUnixTime("2020-03-22T10:49:00Z"), new BigDecimal("127.02"), 22339));
+        trades.add(trade(getUnixTime("2020-03-22T10:55:00Z"), new BigDecimal("127.28"), 22330));
         trades.add(trade(getUnixTime("2020-03-22T11:01:05Z"), new BigDecimal("127.20"), 3000));
         trades.add(trade(getUnixTime("2020-03-22T11:01:14Z"), new BigDecimal("127.20"), 3000));
         trades.add(trade(getUnixTime("2020-03-22T11:01:29Z"), new BigDecimal("127.31"), 3000));
@@ -65,6 +65,16 @@ public class TradeAggregationTest extends SqlTradeTest {
                         .fields("open(), volume(), sum((quantity*price)), vwap(), sum(quantity)")
                         .addExpected("126.99", "105466", "1.341158175E7", "127.16497970910056", "105466")
                 ,
+                test("Period greater than 1 hour")
+                        .fields("datetime, count(*)")
+                        .period(2, "hour")
+                        .addExpected("2020-03-22T10:00:00.000000Z", "9")
+                ,
+                test("Period 40 minutes")
+                        .fields("datetime, count(*)")
+                        .period(40, "minute")
+                        .addExpected("2020-03-22T10:00:00.000000Z", "2")
+                        .addExpected("2020-03-22T10:40:00.000000Z", "7")
         };
         return TestUtil.convertTo2DimArray(data);
     }
