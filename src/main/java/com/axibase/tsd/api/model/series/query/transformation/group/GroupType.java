@@ -26,5 +26,7 @@ public enum GroupType {
     LAST,
     MIN_VALUE_TIME,
     MAX_VALUE_TIME,
-    DETAIL
+    DETAIL,
+    OHLCV,
+    VWAP
 }
