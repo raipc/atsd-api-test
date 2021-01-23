@@ -2,6 +2,7 @@ package com.axibase.tsd.api.method.trade
 
 import com.axibase.tsd.api.method.BaseMethod
 import org.apache.http.HttpStatus
+import java.lang.IllegalStateException
 import javax.ws.rs.core.Response
 
 private const val RAW_PATH = "/trades"
@@ -21,9 +22,7 @@ class TradeExportMethod : BaseMethod() {
                         .queryParam("workdayCalendar", rawTradeRequest.workdayCalendar)
                         .queryParam("timezone", rawTradeRequest.timeZone)
                 else tradesTarget
-                val resp = target.request().get()
-                resp.bufferEntity()
-                resp;
+                target.request().get();
             }
         }
 

@@ -5,6 +5,8 @@ import com.axibase.tsd.api.method.trade.TradeExportMethod
 import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.rawCsv
 import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.rawResponse
 import com.axibase.tsd.api.model.financial.Trade
+import com.axibase.tsd.api.transport.tcp.TCPSender
+import com.axibase.tsd.api.transport.tcp.TCPTradesSender
 import com.axibase.tsd.api.util.Mocks
 import com.axibase.tsd.api.util.TradeSender
 import org.apache.http.HttpStatus
@@ -16,22 +18,27 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-private val symbol = Mocks.tradeSymbol()
-private val clazz = Mocks.tradeClass()
+private const val DEFAULT_EXCHANGE = "moex";
+
+
+private val symbol = Mocks.tradeSymbol();
+private val clazz = Mocks.tradeClass();
 private val exchange = Mocks.tradeExchange()
 
 class TradeExportRawTest {
+
+
     private val trades = listOf(
-        TestTrade("2020-12-18T07:41:00Z", 3323404531, 2, 2, exchange),
+        TestTrade("2020-12-18T07:41:00Z", 3323404531, 2, 2, exchange = exchange),
         TestTrade("2020-12-18T10:41:00Z", 3423404531, 5, exchange = exchange),
         TestTrade("2020-12-18T10:41:02.500Z", 3423404532, 6, exchange = exchange),
         TestTrade("2020-12-18T10:41:02.500500Z", 3423404533, 6, 5, exchange),
-        TestTrade("2020-12-18T10:41:02.500500Z", 4423404533, 7, 2, Mocks.tradeExchange())
+        TestTrade("2020-12-18T10:41:02.500500Z", 4423404533, 7, 1, exchange = "quik")
     ).map { it.toTrade() }
 
     @BeforeClass
     fun setup() {
-        TradeSender.send(trades).waitUntilTradesInsertedAtMost(1, TimeUnit.MINUTES)
+        TradeSender.send(trades).waitUntilTradesInsertedAtMost(1, TimeUnit.MINUTES);
     }
 
     @Test
@@ -57,7 +64,7 @@ class TradeExportRawTest {
         val req = RawTradeRequest(
             "non", "existing",
             "2020-12-18T10:41:00Z", "2020-12-18T10:42:00Z"
-        )
+        );
         assertEquals(HttpStatus.SC_NOT_FOUND, rawResponse(req).status)
     }
 
@@ -74,7 +81,7 @@ class TradeExportRawTest {
     @Test
     fun `should return success code with specified exchange`() {
         val req = RawTradeRequest(
-            symbol, clazz, "2020-12-18T10:41:00Z", "2020-12-18T10:42:00Z",
+            symbol, clazz,"2020-12-18T10:41:00Z", "2020-12-18T10:42:00Z",
             exchange = exchange
         )
         val resp = rawResponse(req)
