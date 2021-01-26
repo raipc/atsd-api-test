@@ -1,13 +1,17 @@
 package com.axibase.tsd.api.method.trade.export
 
-import com.axibase.tsd.api.method.trade.OhclvTradeRequest
+import com.axibase.tsd.api.method.trade.OhclvStatistic
+import com.axibase.tsd.api.method.trade.OhclvStatistic.AMOUNT
+import com.axibase.tsd.api.method.trade.OhlcvTradeRequest
 import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.ohlcvCsv
+import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.ohlcvResponse
 import com.axibase.tsd.api.model.Period
 import com.axibase.tsd.api.model.financial.Trade
 import com.axibase.tsd.api.util.Mocks
 import com.axibase.tsd.api.util.TestUtil
 import com.axibase.tsd.api.util.TradeSender
 import com.axibase.tsd.api.util.Util
+import org.apache.http.HttpStatus
 import org.testng.Assert
 import org.testng.annotations.BeforeClass
 import org.testng.annotations.DataProvider
@@ -65,31 +69,31 @@ class TradeExportOhlcvTest {
         val line = ResponseLine(Util.getUnixTime(date1), open1, high2, low1, close2, volume)
         val testCases = arrayOf(
             SuccessCase(
-                OhclvTradeRequest(symbol, clazz, date1, date3, tz, exchange = exchange, period = period),
+                OhlcvTradeRequest(symbol, clazz, date1, date3, tz, exchange = exchange, period = period),
                 listOf(line1, line2)
             ),
             SuccessCase(
-                OhclvTradeRequest(symbol, clazz, date1, endDate, tz, exchange = exchange, period = period),
+                OhlcvTradeRequest(symbol, clazz, date1, endDate, tz, exchange = exchange, period = period),
                 listOf(line1, line2)
             ),
             SuccessCase(
-                OhclvTradeRequest(symbol, clazz, date1, endDate, exchange = "", timeZone = "", period = period),
+                OhlcvTradeRequest(symbol, clazz, date1, endDate, exchange = "", timeZone = "", period = period),
                 listOf(line1, line2)
             ),
             SuccessCase(
-                OhclvTradeRequest(symbol, clazz, date1, date2, exchange = exchange, period = period, timeZone = tz),
+                OhlcvTradeRequest(symbol, clazz, date1, date2, exchange = exchange, period = period, timeZone = tz),
                 listOf(line1)
             ),
             SuccessCase(
-                OhclvTradeRequest(symbol, clazz, date2, date3, period = period, timeZone = tz, exchange = exchange),
+                OhlcvTradeRequest(symbol, clazz, date2, date3, period = period, timeZone = tz, exchange = exchange),
                 listOf(line2)
             ),
             SuccessCase(
-                OhclvTradeRequest(symbol, clazz, date1, date3, tz, exchange = exchange),
+                OhlcvTradeRequest(symbol, clazz, date1, date3, tz, exchange = exchange),
                 listOf(line)
             ),
             SuccessCase(
-                OhclvTradeRequest(symbol, clazz, date1, endDate), listOf(line)
+                OhlcvTradeRequest(symbol, clazz, date1, endDate), listOf(line)
             )
         )
         return TestUtil.convertTo2DimArray(testCases)
@@ -103,10 +107,10 @@ class TradeExportOhlcvTest {
         val date3 = "2020-11-25T14:02:00Z"
         val cases = arrayOf(
             ErrorCase(
-                OhclvTradeRequest(null, clazz, date1, date3, exchange = exchange, period = period, timeZone = tz)
+                OhlcvTradeRequest(null, clazz, date1, date3, exchange = exchange, period = period, timeZone = tz)
             ),
             ErrorCase(
-                OhclvTradeRequest(
+                OhlcvTradeRequest(
                     symbol,
                     null,
                     date1,
@@ -117,7 +121,7 @@ class TradeExportOhlcvTest {
                 ), " 'class' "
             ),
             ErrorCase(
-                OhclvTradeRequest(symbol, clazz, null, date3, exchange = exchange, period = period, timeZone = tz),
+                OhlcvTradeRequest(symbol, clazz, null, date3, exchange = exchange, period = period, timeZone = tz),
                 " 'startDate' "
             )
         )
@@ -154,6 +158,20 @@ class TradeExportOhlcvTest {
         }
     }
 
+    @Test
+    fun `should return 400 for instrument where lot size is not defined`() {
+        val trade = Trade(
+            exchange, clazz, Mocks.tradeSymbol(), 0L,
+            "2020-11-25T14:00:00Z", "1".toBigDecimal(), 1
+        )
+        TradeSender.send(trade).waitUntilTradesInsertedAtMost(1, TimeUnit.MINUTES)
+        val req = OhlcvTradeRequest(
+            trade.symbol, trade.clazz, "2020-11-25T14:00:00Z",
+            "2020-11-25T15:0:00Z", statistics = listOf(AMOUNT)
+        )
+        val resp = ohlcvResponse(req)
+        Assert.assertEquals(resp.status, HttpStatus.SC_BAD_REQUEST)
+    }
 
     private fun checkLine(actualLine: String, expectedLine: ResponseLine) {
         val actualFields = actualLine.split(",").toTypedArray()
@@ -183,12 +201,16 @@ class TradeExportOhlcvTest {
 
     data class SuccessCase(
         /* Request parameters. */
-        val request: OhclvTradeRequest,
+        val request: OhlcvTradeRequest,
 
         /* Response paramters */
         val responseLines: List<ResponseLine> // response lines in case there is no error:
     )
 
-    data class ErrorCase(val req: OhclvTradeRequest, val errorSubstring: String = "")
+    data class StatisticCase(
+        val statistics: List<OhclvStatistic>
+    )
+
+    data class ErrorCase(val req: OhlcvTradeRequest, val errorSubstring: String = "")
 }
 

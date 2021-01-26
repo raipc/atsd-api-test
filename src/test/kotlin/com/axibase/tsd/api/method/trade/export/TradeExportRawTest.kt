@@ -10,7 +10,6 @@ import com.axibase.tsd.api.util.TradeSender
 import org.apache.http.HttpStatus
 import org.testng.annotations.BeforeClass
 import java.math.BigDecimal
-import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -119,12 +118,7 @@ class TradeExportRawTest {
         val exchange: String? = null
     ) {
         fun toTrade(): Trade {
-            val instant = ZonedDateTime.parse(isoTime).toInstant()
-            val millis = instant.toEpochMilli()
-            val micros = TimeUnit.NANOSECONDS.toMicros(instant.nano.toLong()) % TimeUnit.MILLISECONDS.toMicros(1)
-            val trade = Trade(exchange, clazz, symbol, tradeNum, millis, BigDecimal(price.toString()), quantity)
-            trade.microSeconds = micros
-            return trade
+            return Trade(exchange, clazz, symbol, tradeNum, isoTime, BigDecimal(price.toString()), quantity)
         }
     }
 
