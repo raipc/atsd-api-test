@@ -4,6 +4,8 @@ import com.axibase.tsd.api.method.BaseMethod
 import com.axibase.tsd.api.model.Period
 import org.apache.http.HttpStatus
 import javax.ws.rs.client.WebTarget
+import java.lang.IllegalStateException
+import javax.ws.rs.client.WebTarget
 import javax.ws.rs.core.Response
 
 private const val RAW_PATH = "trades"
@@ -62,17 +64,6 @@ class TradeExportMethod : BaseMethod() {
     }
 
     data class ErrorMessage(val error: String? = null)
-}
-
-
-interface TradeRequest {
-    val symbol: String?
-    val clazz: String?
-    val startDate: String?
-    val endDate: String?
-    val timeZone: String?
-    val workdayCalendar: String?
-    val exchange: String?
 }
 
 data class RawTradeRequest(
