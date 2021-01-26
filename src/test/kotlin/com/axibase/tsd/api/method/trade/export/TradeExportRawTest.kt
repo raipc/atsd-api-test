@@ -109,7 +109,6 @@ class TradeExportRawTest {
             """
             datetime,trade_num,side,quantity,price,order_num,session
             2020-12-18T07:41:00.000000Z,3323404531,,2,2,,
-
         """.csv(), csv
         )
     }
