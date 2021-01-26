@@ -1,24 +1,30 @@
 package com.axibase.tsd.api.method.trade.export
 
-import com.axibase.tsd.api.method.trade.OhclvStatistic
+import com.axibase.tsd.api.method.checks.EntityCheck
+import com.axibase.tsd.api.method.entity.EntityMethod
 import com.axibase.tsd.api.method.trade.OhclvStatistic.AMOUNT
 import com.axibase.tsd.api.method.trade.OhlcvTradeRequest
 import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.ohlcvCsv
 import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.ohlcvResponse
 import com.axibase.tsd.api.model.Period
+import com.axibase.tsd.api.model.entity.Entity
 import com.axibase.tsd.api.model.financial.Trade
 import com.axibase.tsd.api.util.Mocks
 import com.axibase.tsd.api.util.TestUtil
 import com.axibase.tsd.api.util.TradeSender
 import com.axibase.tsd.api.util.Util
-import org.apache.http.HttpStatus
+import org.apache.commons.lang3.StringUtils
+import org.hamcrest.CoreMatchers.equalTo
+import org.junit.Assert.assertThat
+import org.junit.internal.matchers.StringContains.containsString
 import org.testng.Assert
+import org.testng.Assert.assertEquals
 import org.testng.annotations.BeforeClass
 import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 import java.math.BigDecimal
-import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.streams.toList
 import kotlin.test.fail
 
 class TradeExportOhlcvTest {
@@ -28,15 +34,15 @@ class TradeExportOhlcvTest {
 
     @BeforeClass
     fun insertTrades() {
-        val trades: MutableList<Trade> = ArrayList()
-        Scanner(TradeExportOhlcvTest::class.java.classLoader.getResourceAsStream("csv/trades.csv")).use { scanner ->
-            var lineNumber = 1
-            while (scanner.hasNextLine()) {
-                val values = scanner.nextLine().split(",").toTypedArray()
-                trades.add(trade(lineNumber++, values[0], Trade.Side.valueOf(values[1]), values[2]))
-            }
-        }
+        val trades = TradeExportOhlcvTest::class.java.classLoader
+            .getResourceAsStream("csv/trades.csv")
+            .bufferedReader().lines()
+            .map {
+                val values = it.split(",").toTypedArray()
+                trade(Mocks.tradeNum(), values[0], Trade.Side.valueOf(values[1]), values[2])
+            }.toList()
         TradeSender.send(trades).waitUntilTradesInsertedAtMost(1, TimeUnit.MINUTES)
+        EntityMethod.updateEntity("${symbol}_[$clazz]", mapOf("tags" to mapOf("lot" to "10")))
     }
 
     @DataProvider
@@ -134,9 +140,9 @@ class TradeExportOhlcvTest {
         val csv = ohlcvCsv(testCase.request)
         val actualLines = csv.trim().split("(\\r)?\\n".toRegex());
         val expectedLines = testCase.responseLines;
-        Assert.assertEquals(actualLines.size, expectedLines.size + 1, "Unexpected lines count in response.")
+        assertEquals(actualLines.size, expectedLines.size + 1, "Unexpected lines count in response.")
         val header = "datetime,open,high,low,close,volume"
-        Assert.assertEquals(actualLines[0], header, "Unexpected header line in response.")
+        assertEquals(actualLines[0], header, "Unexpected header line in response.")
         for (i in expectedLines.indices) {
             checkLine(actualLines[i + 1], expectedLines[i])
         }
@@ -161,30 +167,50 @@ class TradeExportOhlcvTest {
     @Test
     fun `should return 400 for instrument where lot size is not defined`() {
         val trade = Trade(
-            exchange, clazz, Mocks.tradeSymbol(), 0L,
+            Mocks.tradeExchange(), Mocks.tradeClass(), Mocks.tradeSymbol(), Mocks.tradeNum(),
             "2020-11-25T14:00:00Z", "1".toBigDecimal(), 1
         )
         TradeSender.send(trade).waitUntilTradesInsertedAtMost(1, TimeUnit.MINUTES)
         val req = OhlcvTradeRequest(
             trade.symbol, trade.clazz, "2020-11-25T14:00:00Z",
-            "2020-11-25T15:0:00Z", statistics = listOf(AMOUNT)
+            "2020-11-25T15:00:00Z", statistics = listOf(AMOUNT)
         )
-        val resp = ohlcvResponse(req)
-        Assert.assertEquals(resp.status, HttpStatus.SC_BAD_REQUEST)
+        try {
+            ohlcvCsv(req)
+            fail("Should return bad request status")
+        } catch (e: IllegalStateException) {
+            assertThat(e.message, containsString("Lot tag is not defined for entity"))
+        }
     }
+
+    @Test
+    fun `should return right values for custom statistics`() {
+        val csv = ohlcvCsv(
+            OhlcvTradeRequest(
+                symbol, clazz, "2020-11-25T14:00:00Z", "2020-11-25T15:00:00Z",
+                statistics = listOf(AMOUNT)
+            )
+        ).csv()
+        val expectedCsv = """
+            datetime,amount
+            2020-11-25T14:00:00.000Z,168300.110
+        """.csv()
+        assertThat(csv, equalTo(expectedCsv))
+    }
+
 
     private fun checkLine(actualLine: String, expectedLine: ResponseLine) {
         val actualFields = actualLine.split(",").toTypedArray()
-        Assert.assertEquals(actualFields.size, 6, "Unexpected count of fields in line: $actualLine")
-        Assert.assertEquals(Util.getUnixTime(actualFields[0]), expectedLine.dateMillis, "Unexpected timestamp.")
-        Assert.assertEquals(BigDecimal(actualFields[1]), expectedLine.open, "Unexpected OPEN value.")
-        Assert.assertEquals(BigDecimal(actualFields[2]), expectedLine.high, "Unexpected HIGH value.")
-        Assert.assertEquals(BigDecimal(actualFields[3]), expectedLine.low, "Unexpected LOW value.")
-        Assert.assertEquals(BigDecimal(actualFields[4]), expectedLine.close, "Unexpected CLOSE value.")
-        Assert.assertEquals(actualFields[5].toInt(), expectedLine.volume, "Unexpected VOLUME value.")
+        assertEquals(actualFields.size, 6, "Unexpected count of fields in line: $actualLine")
+        assertEquals(Util.getUnixTime(actualFields[0]), expectedLine.dateMillis, "Unexpected timestamp.")
+        assertEquals(BigDecimal(actualFields[1]), expectedLine.open, "Unexpected OPEN value.")
+        assertEquals(BigDecimal(actualFields[2]), expectedLine.high, "Unexpected HIGH value.")
+        assertEquals(BigDecimal(actualFields[3]), expectedLine.low, "Unexpected LOW value.")
+        assertEquals(BigDecimal(actualFields[4]), expectedLine.close, "Unexpected CLOSE value.")
+        assertEquals(actualFields[5].toInt(), expectedLine.volume, "Unexpected VOLUME value.")
     }
 
-    private fun trade(tradeNumber: Int, date: String, side: Trade.Side, price: String): Trade {
+    private fun trade(tradeNumber: Long, date: String, side: Trade.Side, price: String): Trade {
         val trade = Trade(exchange, clazz, symbol, tradeNumber.toLong(), Util.getUnixTime(date), BigDecimal(price), 1)
         trade.side = side
         return trade
@@ -205,10 +231,6 @@ class TradeExportOhlcvTest {
 
         /* Response paramters */
         val responseLines: List<ResponseLine> // response lines in case there is no error:
-    )
-
-    data class StatisticCase(
-        val statistics: List<OhclvStatistic>
     )
 
     data class ErrorCase(val req: OhlcvTradeRequest, val errorSubstring: String = "")
