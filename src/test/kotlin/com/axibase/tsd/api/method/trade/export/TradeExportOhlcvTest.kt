@@ -1,20 +1,16 @@
 package com.axibase.tsd.api.method.trade.export
 
-import com.axibase.tsd.api.method.checks.EntityCheck
 import com.axibase.tsd.api.method.entity.EntityMethod
 import com.axibase.tsd.api.method.trade.OhclvStatistic.AMOUNT
 import com.axibase.tsd.api.method.trade.OhlcvTradeRequest
 import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.ohlcvCsv
-import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.ohlcvResponse
 import com.axibase.tsd.api.model.Period
-import com.axibase.tsd.api.model.entity.Entity
 import com.axibase.tsd.api.model.financial.Trade
 import com.axibase.tsd.api.util.Mocks
 import com.axibase.tsd.api.util.TestUtil
 import com.axibase.tsd.api.util.TradeSender
 import com.axibase.tsd.api.util.Util
-import org.apache.commons.lang3.StringUtils
-import org.hamcrest.CoreMatchers.equalTo
+import com.axibase.tsd.util.CSVMatcher.eqCsv
 import org.junit.Assert.assertThat
 import org.junit.internal.matchers.StringContains.containsString
 import org.testng.Assert
@@ -195,7 +191,7 @@ class TradeExportOhlcvTest {
             datetime,amount
             2020-11-25T14:00:00.000Z,168300.110
         """.csv()
-        assertThat(csv, equalTo(expectedCsv))
+        assertThat(csv, eqCsv(expectedCsv))
     }
 
 

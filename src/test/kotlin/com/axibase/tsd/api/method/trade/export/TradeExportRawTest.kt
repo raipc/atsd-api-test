@@ -7,8 +7,10 @@ import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.rawResponse
 import com.axibase.tsd.api.model.financial.Trade
 import com.axibase.tsd.api.util.Mocks
 import com.axibase.tsd.api.util.TradeSender
+import com.axibase.tsd.util.CSVMatcher.eqCsv
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
+import org.junit.Assert.assertThat
 import org.testng.annotations.BeforeClass
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
@@ -105,12 +107,11 @@ class TradeExportRawTest {
             exchange = exchange
         )
         val csv = rawCsv(req).csv()
-        assertEquals(
-            """
+        val expectedCsv = """
             datetime,trade_num,side,quantity,price,order_num,session
             2020-12-18T07:41:00.000000Z,3323404531,,2,2,,
-        """.csv(), csv
-        )
+        """.csv()
+        assertThat(csv, eqCsv(expectedCsv))
     }
 
     private data class TestTrade(
@@ -125,5 +126,5 @@ class TradeExportRawTest {
 }
 
 fun String.csv(): String {
-    return this.trimIndent().replace(StringUtils.CR, StringUtils.EMPTY)
+    return this.trimIndent()
 }
