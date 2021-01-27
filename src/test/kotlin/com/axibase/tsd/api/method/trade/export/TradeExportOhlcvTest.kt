@@ -1,7 +1,8 @@
 package com.axibase.tsd.api.method.trade.export
 
 import com.axibase.tsd.api.method.entity.EntityMethod
-import com.axibase.tsd.api.method.trade.OhclvStatistic.AMOUNT
+import com.axibase.tsd.api.method.trade.OhclvStatistic
+import com.axibase.tsd.api.method.trade.OhclvStatistic.*
 import com.axibase.tsd.api.method.trade.OhlcvTradeRequest
 import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.ohlcvCsv
 import com.axibase.tsd.api.model.Period
@@ -23,10 +24,13 @@ import java.util.concurrent.TimeUnit
 import kotlin.streams.toList
 import kotlin.test.fail
 
+
+private val exchange = Mocks.tradeExchange()
+private val clazz = Mocks.tradeClass()
+private val symbol = Mocks.tradeSymbol()
+
 class TradeExportOhlcvTest {
-    private val exchange = Mocks.tradeExchange()
-    private val clazz = Mocks.tradeClass()
-    private val symbol = Mocks.tradeSymbol()
+
 
     @BeforeClass
     fun insertTrades() {
@@ -179,19 +183,29 @@ class TradeExportOhlcvTest {
         }
     }
 
-    @Test
-    fun `should return right values for custom statistics`() {
-        val csv = ohlcvCsv(
-            OhlcvTradeRequest(
-                symbol, clazz, "2020-11-25T14:00:00Z", "2020-11-25T15:00:00Z",
-                statistics = listOf(AMOUNT)
-            )
-        ).csv()
-        val expectedCsv = """
+    @DataProvider
+    fun statisticCases(): Array<Array<Any>> = TestUtil.convertTo2DimArray(
+        listOf(
+            StatisticCase(
+                listOf(AMOUNT), """
             datetime,amount
             2020-11-25T14:00:00.000Z,168300.110
         """.csv()
-        assertThat(csv, eqCsv(expectedCsv))
+            ),
+            StatisticCase(
+                listOf(COUNT, HIGH, LOW), """
+            datetime,count, high, low
+            2020-11-25T14:00:00.000Z,168300.110
+        """.csv()
+            )
+        )
+    )
+
+
+    @Test(dataProvider = "statisticCases")
+    fun `should return right values for custom statistics`(case: StatisticCase) {
+        val csv = ohlcvCsv(case.req()).csv()
+        assertThat(csv, eqCsv(case.csv))
     }
 
 
@@ -207,7 +221,7 @@ class TradeExportOhlcvTest {
     }
 
     private fun trade(tradeNumber: Long, date: String, side: Trade.Side, price: String): Trade {
-        val trade = Trade(exchange, clazz, symbol, tradeNumber.toLong(), Util.getUnixTime(date), BigDecimal(price), 1)
+        val trade = Trade(exchange, clazz, symbol, tradeNumber, Util.getUnixTime(date), BigDecimal(price), 1)
         trade.side = side
         return trade
     }
@@ -228,6 +242,20 @@ class TradeExportOhlcvTest {
         /* Response paramters */
         val responseLines: List<ResponseLine> // response lines in case there is no error:
     )
+
+    data class StatisticCase(
+        val statistics: List<OhclvStatistic>,
+        val csv: String,
+        val period: Period? = null,
+        val description: String? = ""
+
+
+    ) {
+        fun req(): OhlcvTradeRequest = OhlcvTradeRequest(
+            symbol, clazz, "2020-11-25T14:00:00Z", "2020-11-25T15:00:00Z",
+            period = period, statistics = statistics
+        )
+    }
 
     data class ErrorCase(val req: OhlcvTradeRequest, val errorSubstring: String = "")
 }
