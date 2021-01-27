@@ -85,7 +85,7 @@ data class RawTradeRequest(
     override val exchange: String? = null
 ) : TradeRequest
 
-enum class OhclvStatistic {
+enum class OhlcvStatistic {
     OPEN,
     HIGH,
     LOW,
@@ -104,10 +104,10 @@ data class OhlcvTradeRequest(
     override val workdayCalendar: String? = null,
     override val exchange: String? = null,
     val period: Period? = null,
-    val statistics: List<OhclvStatistic>? = null
+    val statistics: List<OhlcvStatistic>? = null
 ) : TradeRequest
 
-private fun List<OhclvStatistic>.toCommaSeparatedList(): String = this.joinToString(",") { it.toString() }
+private fun List<OhlcvStatistic>.toCommaSeparatedList(): String = this.joinToString(",") { it.toString() }
 
 private fun Response.toCsv(): String {
     if (this.status == HttpStatus.SC_OK) {

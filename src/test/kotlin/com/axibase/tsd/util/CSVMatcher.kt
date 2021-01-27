@@ -35,7 +35,8 @@ object CSVMatcher {
                 val actualRecords = readRecords(actualCsv, format)
                 val expectedRecords = readRecords(expectedCsv, format)
                 if (actualRecords.size != expectedRecords.size) {
-                    errors.add("row count (${expectedRecords.size})")
+                    errors.add("row count (${expectedRecords.size}) but actual is ${actualRecords.size}")
+                    return errors.toList()
                 }
                 for (i in actualRecords.indices) {
                     val actualRecord = actualRecords[i]
@@ -43,13 +44,14 @@ object CSVMatcher {
                     val expectedRecord = expectedRecords[i]
                     if (actualRecord.size() != expectedRecord.size()) {
                         errors.add("column count (${expectedRecords.size}) on row $i")
-                        for (j in 0 until actualRecord.size()) {
-                            val actualCell = actualRecord[j]
-                            if (j >= expectedRecord.size()) break
-                            val expectedCell = expectedRecord[j]
-                            if (actualCell != expectedCell) {
-                                errors.add("value '$expectedCell' is expected but '${actualCell}' found: row $i, column $j")
-                            }
+                        return errors
+                    }
+                    for (j in 0 until actualRecord.size()) {
+                        val actualCell = actualRecord[j]
+                        if (j >= expectedRecord.size()) break
+                        val expectedCell = expectedRecord[j]
+                        if (actualCell != expectedCell) {
+                            errors.add("value '$expectedCell' is expected but '${actualCell}' found: row $i, column $j")
                         }
                     }
                 }

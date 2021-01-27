@@ -1,8 +1,8 @@
 package com.axibase.tsd.api.method.trade.export
 
 import com.axibase.tsd.api.method.entity.EntityMethod
-import com.axibase.tsd.api.method.trade.OhclvStatistic
-import com.axibase.tsd.api.method.trade.OhclvStatistic.*
+import com.axibase.tsd.api.method.trade.OhlcvStatistic
+import com.axibase.tsd.api.method.trade.OhlcvStatistic.*
 import com.axibase.tsd.api.method.trade.OhlcvTradeRequest
 import com.axibase.tsd.api.method.trade.TradeExportMethod.Companion.ohlcvCsv
 import com.axibase.tsd.api.model.Period
@@ -194,18 +194,48 @@ class TradeExportOhlcvTest {
             ),
             StatisticCase(
                 listOf(COUNT, HIGH, LOW), """
-            datetime,count, high, low
-            2020-11-25T14:00:00.000Z,168300.110
+            datetime,count,high,low
+            2020-11-25T14:00:00.000Z,111,9999,0.001
         """.csv()
-            )
+            ),
+            StatisticCase(
+                emptyList(),
+                """
+            datetime,open,high,low,close,volume
+            2020-11-25T14:00:00.000Z,23,9999,0.001,1,111
+        """.csv(),
+            ),
+            StatisticCase(
+                OhlcvStatistic.values().toList(),
+                """
+            datetime,open,high,low,close,volume,count,vwap,amount
+            2020-11-25T14:00:00.000Z,23,9999,0.001,1,111,111,151.6217207207207207,168300.110
+        """.csv(),
+            ),
+            StatisticCase(
+                listOf(COUNT, COUNT, HIGH, LOW), """
+            datetime,count,high,low
+            2020-11-25T14:00:00.000Z,111,9999,0.001
+        """.csv()
+            ),
+            StatisticCase(
+                listOf(COUNT, COUNT, HIGH, LOW), """
+            datetime,count,high,low
+            2020-11-25T14:00:00.000Z,17,999,23
+            2020-11-25T14:00:40.000Z,69,9999,0.001
+            2020-11-25T14:01:20.000Z,25,25,1
+        """.csv(),
+                period = Period(40, com.axibase.tsd.api.model.TimeUnit.SECOND)
+            ),
         )
     )
 
 
     @Test(dataProvider = "statisticCases")
     fun `should return right values for custom statistics`(case: StatisticCase) {
-        val csv = ohlcvCsv(case.req()).csv()
-        assertThat(csv, eqCsv(case.csv))
+        val req = case.req()
+        val csv = ohlcvCsv(req).csv()
+        assertThat("Should return same csv for request: $req", csv, eqCsv(case.csv))
     }
 
 
@@ -244,12 +274,9 @@ class TradeExportOhlcvTest {
     )
 
     data class StatisticCase(
-        val statistics: List<OhclvStatistic>,
+        val statistics: List<OhlcvStatistic>,
         val csv: String,
-        val period: Period? = null,
-        val description: String? = ""
-
-
+        val period: Period? = null
     ) {
         fun req(): OhlcvTradeRequest = OhlcvTradeRequest(
             symbol, clazz, "2020-11-25T14:00:00Z", "2020-11-25T15:00:00Z",
