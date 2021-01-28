@@ -142,6 +142,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.8</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
@@ -271,7 +277,7 @@
                     <parallel>classes</parallel>
                     <threadCount>4</threadCount>
                     <forkCount>0</forkCount>
-
+                    <useSystemClassLoader>false</useSystemClassLoader>
                     <excludes>
                         <exclude>**/MessageQueryStatsTest.java</exclude>
                     </excludes>
