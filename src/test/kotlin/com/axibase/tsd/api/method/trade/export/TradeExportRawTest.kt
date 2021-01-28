@@ -113,6 +113,22 @@ class TradeExportRawTest {
         assertThat(csv, eqCsv(expectedCsv))
     }
 
+    @Test
+    fun `should select trades with microsecond gap`() {
+        val req = RawTradeRequest(
+            symbol, clazz, "2020-12-18T07:41:00.000000Z", "2020-12-18T07:41:00.000001Z",
+            timeZone = "Europe/Moscow",
+            exchange = exchange
+        )
+        val csv = rawCsv(req).csv()
+        val expectedCsv = """
+            datetime,trade_num,side,quantity,price,order_num,session
+            2020-12-18T07:41:00.000000Z,3323404531,,2,2,,
+        """.csv()
+        assertThat(csv, eqCsv(expectedCsv))
+    }
+
+
     private data class TestTrade(
         val isoTime: String, val tradeNum: Long, val price: Number, val quantity: Long = 1,
         val exchange: String? = null
