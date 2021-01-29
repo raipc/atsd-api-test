@@ -236,8 +236,12 @@ class TradeExportOhlcvTest {
         assertThat("Should return same csv for request: $req", csv, eqCsv(case.csv))
     }
 
+
     @Test
     fun `should perform aggregation on trades selected with microseconds precision`() {
+        /*2020-11-25T14:00:43.914314Z,SELL,91,1
+          2020-11-25T14:00:43.914900Z,SELL,90,1
+         */
         val req = OhlcvTradeRequest(
             symbol, clazz, "2020-11-25T14:00:43.914314Z", "2020-11-25T14:00:43.914315Z",
             statistics = listOf(COUNT), exchange = exchange
