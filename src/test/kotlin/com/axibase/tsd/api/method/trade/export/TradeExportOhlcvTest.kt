@@ -30,8 +30,6 @@ private val clazz = Mocks.tradeClass()
 private val symbol = Mocks.tradeSymbol()
 
 class TradeExportOhlcvTest {
-
-
     @BeforeClass
     fun insertTrades() {
         val trades = TradeExportOhlcvTest::class.java.classLoader
@@ -226,7 +224,7 @@ class TradeExportOhlcvTest {
             2020-11-25T14:01:20.000Z,25,25,1
         """.csv(),
                 period = Period(40, com.axibase.tsd.api.model.TimeUnit.SECOND)
-            ),
+            )
         )
     )
 
@@ -236,6 +234,20 @@ class TradeExportOhlcvTest {
         val req = case.req()
         val csv = ohlcvCsv(req).csv()
         assertThat("Should return same csv for request: $req", csv, eqCsv(case.csv))
+    }
+
+    @Test
+    fun `should perform aggregation on trades selected with microseconds precision`() {
+        val req = OhlcvTradeRequest(
+            symbol, clazz, "2020-11-25T14:00:43.914314Z", "2020-11-25T14:00:43.914315Z",
+            statistics = listOf(COUNT), exchange = exchange
+        )
+        val csv = ohlcvCsv(req)
+        val expectedCsv = """
+            datetime,count
+            2020-11-25T14:00:43.914Z,1
+        """.csv()
+        assertThat("Only one record should be find for this millisecond", csv, eqCsv(expectedCsv))
     }
 
 
@@ -251,7 +263,7 @@ class TradeExportOhlcvTest {
     }
 
     private fun trade(tradeNumber: Long, date: String, side: Trade.Side, price: String): Trade {
-        val trade = Trade(exchange, clazz, symbol, tradeNumber, Util.getUnixTime(date), BigDecimal(price), 1)
+        val trade = Trade(exchange, clazz, symbol, tradeNumber, date, BigDecimal(price), 1)
         trade.side = side
         return trade
     }
