@@ -101,5 +101,21 @@ public class TradeSubQueryTest extends SqlTradeTest {
         assertSqlQueryRows("Wrong result in aggregation subquery", expectedRows, sql);
     }
 
+    @Test
+    public void testSubQueryWithRowNumberFunction() {
+        String sql = "SELECT * FROM (\n" +
+                "SELECT datetime, " +
+                " ROW_NUMBER() AS rn\n" +
+                " FROM atsd_trade\n" +
+                "WHERE " + instrumentCondition() +
+                " WITH ROW_NUMBER(symbol ORDER BY trade_num) >= 0\n" +
+                ") WHERE rn > 1 and rn < 3";
+
+        String[][] expectedRows = {
+                {"2020-03-22T10:09:00.654321Z", "2"},
+        };
+        assertSqlQueryRows("Wrong result in row number subquery", expectedRows, sql);
+    }
+
 
 }
