@@ -74,6 +74,9 @@ public class TradeInstrumentOrConditionTest extends SqlTradeTest {
                         .addExpected(exchange(), clazz(), symbol())
                         .addExpected(exchange(), clazz(), symbolTwo())
                         .addExpected(exchangeTwo(), classTwo(), symbolTwo()),
+                test("(class = '{classOne}' and (symbol like '{symbolOne}%' OR symbol like '{symbolTwo}%'))")
+                        .addExpected(exchange(), clazz(), symbol())
+                        .addExpected(exchange(), clazz(), symbolTwo()),
         };
         return TestUtil.convertTo2DimArray(data);
     }
