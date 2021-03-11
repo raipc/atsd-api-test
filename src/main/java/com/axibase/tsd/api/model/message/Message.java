@@ -29,7 +29,11 @@ public class Message {
     private Map<String, String> tags = new HashMap<>();
 
     public Message(String entity) {
-        if (entity != null) {
+        this(entity, true);
+    }
+
+    public Message(String entity, boolean checkThatEntityDoesNotExistsInAtsd) {
+        if (checkThatEntityDoesNotExistsInAtsd && entity != null) {
             Registry.Entity.checkExists(entity);
         }
         this.entity = entity;
@@ -63,6 +67,23 @@ public class Message {
 
     public void setTags(Map<String, String> tags) {
         this.tags = new HashMap<>(tags);
+    }
+
+    public String getStringField(String fieldName) {
+        switch(fieldName) {
+            case "entity":
+                return entity;
+            case "type":
+                return type;
+            case "source":
+                return source;
+            case "severity":
+                return severity;
+            case "message":
+                return message;
+            default:
+                throw new IllegalArgumentException("There are no String field with name: " + fieldName);
+        }
     }
 
     @Override
