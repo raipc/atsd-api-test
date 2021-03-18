@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.axibase.tsd.api.util.Util.MAX_QUERYABLE_DATE;
 import static com.axibase.tsd.api.util.Util.MIN_QUERYABLE_DATE;
@@ -47,7 +48,7 @@ public class SeriesQuery {
     private String startDate;
     private String endDate;
     private Interval interval;
-    private Map<String, String> tags;
+    private Map<String, List<String>> tags;
     private Aggregate aggregate;
     private Interpolate interpolate;
     private Group group;
@@ -57,7 +58,7 @@ public class SeriesQuery {
     private Forecast forecast;
     private Evaluate evaluate;
     private String timeFormat;
-    @Wither private Boolean exactMatch;
+    private Boolean exactMatch;
     private Integer limit;
     private Boolean cache;
     private String direction;
@@ -75,10 +76,8 @@ public class SeriesQuery {
     public SeriesQuery(Series series) {
         entity = escapeExpression(series.getEntity());
         metric = series.getMetric();
-        tags = new HashMap<>();
-        for (Map.Entry<String, String> keyValue : series.getTags().entrySet()) {
-            tags.put(keyValue.getKey(), escapeExpression(keyValue.getValue()));
-        }
+        tags = series.getTags().entrySet().stream().collect(
+                Collectors.toMap(Map.Entry::getKey, entry -> Util.wrapInMutableList(escapeExpression(entry.getValue()))));
         exactMatch = true;
         if (series.getData().isEmpty()) {
             startDate = MIN_QUERYABLE_DATE;
@@ -107,7 +106,8 @@ public class SeriesQuery {
         this.metric = metric;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.tags = tags;
+        this.tags = tags.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> Util.wrapInMutableList(entry.getValue())));
     }
 
     private String escapeExpression(String expression) {
@@ -121,8 +121,9 @@ public class SeriesQuery {
         return escapedName.toString();
     }
 
-    public void addTag(String tag, String value) {
-        tags.put(tag, value);
+    public SeriesQuery addTag(String tag, String value) {
+        tags.computeIfAbsent(tag, t -> new ArrayList<>(1)).add(value);
+        return this;
     }
 
     public SeriesQuery addSeries(SeriesSettings series) {
@@ -134,8 +135,8 @@ public class SeriesQuery {
     }
 
     private void setIntervalBasedOnSeriesDate(final Series series) {
-        Long minDate = Util.getUnixTime(MAX_QUERYABLE_DATE);
-        Long maxDate = Util.getUnixTime(MIN_QUERYABLE_DATE);
+        long minDate = Util.getUnixTime(MAX_QUERYABLE_DATE);
+        long maxDate = Util.getUnixTime(MIN_QUERYABLE_DATE);
 
         Long curDate;
         for (Sample sample : series.getData()) {
