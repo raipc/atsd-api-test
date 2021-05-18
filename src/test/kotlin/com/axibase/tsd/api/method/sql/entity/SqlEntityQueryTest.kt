@@ -26,7 +26,7 @@ class SqlEntityQueryTest : SqlTest() {
             entity.label = "entity_query_test_1"
             entity.interpolationMode = InterpolationMode.PREVIOUS
             entity.timeZoneID = "UTC"
-            entity.addTag("class_code", classCodeOne)
+            entity.addTag("class_code", classCodeTwo)
             entity.addTag("symbol", "symbol_$entityOne")
             entity.addTag("lot_size", "5")
             entity.addTag("primary", classCodeOne)
@@ -40,10 +40,21 @@ class SqlEntityQueryTest : SqlTest() {
             entity.addTag("lot_size", "5")
             entity.label = "entity_query_test_2"
             EntityMethod.createOrReplaceEntityCheck(entity)
-            Thread.sleep(2000)
+        }
+
+        Thread.sleep(2000)
+        run {
+            val entity = Entity(entityTwo)
             entity.addTag("lot_size", "10")
             EntityMethod.updateEntity(entity)
         }
+
+        run {
+            val entity = Entity(entityOne)
+            entity.addTag("class_code", classCodeOne)
+            EntityMethod.updateEntity(entity)
+        }
+
 
         run {
             val entity = Entity(entityThree)
@@ -185,6 +196,15 @@ class SqlEntityQueryTest : SqlTest() {
         val seconds = (System.currentTimeMillis() - versions[0]) / 1000
         val query = "select tags.lot_size, entity_tag(entity, 'lot_size'), entity_tag(entity, 'lot_size', ${versions[1]})   from atsd_entity where name = '$entityTwo' WITH VERSION = now - $seconds * SECOND"
         val expectedResult = arrayOf(arrayOf("5", "5", "10"))
+        assertSqlQueryRows("Unexpected result", expectedResult, query)
+    }
+
+    @Test
+    fun `test WITH VERSION option where clause`() {
+        val versions = EntityMethod.getEntityVersions(entityTwo, null, null)
+        val version = DateProcessorManager.ISO.print(versions[0], ZoneId.of("UTC"))
+        val query = "select name, tags.lot_size from atsd_entity where tags.class_code in ('$classCodeOne', '$classCodeTwo') and entity_tag(entity, 'lot_size') = '5' WITH VERSION = '$version' order by name"
+        val expectedResult = arrayOf(arrayOf(entityOne, "5"), arrayOf(entityTwo, "5"))
         assertSqlQueryRows("Unexpected result", expectedResult, query)
     }
 
