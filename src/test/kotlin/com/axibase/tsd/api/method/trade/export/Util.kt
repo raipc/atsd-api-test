@@ -19,7 +19,7 @@ fun insertTrades(csvFilePath: String,
                  tradeCreator: (List<String>) -> Trade,
                  linesToSkip: Long = 0) {
     val trades = ClassLoader
-        .getSystemResourceAsStream(csvFilePath)
+        .getSystemResourceAsStream(csvFilePath)!!
         .bufferedReader().lines()
         .skip(linesToSkip)
         .filter(String::isNotBlank)
