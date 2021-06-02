@@ -5,6 +5,7 @@ import com.axibase.tsd.api.model.trade.ohlcv.ResponseLine
 import com.axibase.tsd.api.util.TradeSender
 import com.axibase.tsd.api.util.Util
 import org.testng.Assert
+import java.lang.IllegalArgumentException
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
@@ -18,8 +19,9 @@ import kotlin.streams.toList
 fun insertTrades(csvFilePath: String,
                  tradeCreator: (List<String>) -> Trade,
                  linesToSkip: Long = 0) {
-    val trades = ClassLoader
-        .getSystemResourceAsStream(csvFilePath)!!
+    val inSteam = ClassLoader.getSystemResourceAsStream(csvFilePath)
+        ?: throw IllegalArgumentException("Failed to read file: $csvFilePath")
+    val trades = inSteam
         .bufferedReader().lines()
         .skip(linesToSkip)
         .filter(String::isNotBlank)
