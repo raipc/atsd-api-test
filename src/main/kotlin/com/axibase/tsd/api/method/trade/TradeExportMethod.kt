@@ -68,7 +68,7 @@ class TradeExportMethod : BaseMethod() {
                 .queryParam("endDate", tradeRequest.endDate)
                 .queryParam("exchange", tradeRequest.exchange)
                 .queryParam("workdayCalendar", tradeRequest.workdayCalendar)
-                .queryParam("timeZone", tradeRequest.timeZone)
+                .queryParam("timezone", tradeRequest.timeZone)
         }
     }
 
