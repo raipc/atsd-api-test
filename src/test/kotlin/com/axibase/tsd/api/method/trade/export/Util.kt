@@ -19,7 +19,9 @@ import kotlin.streams.toList
 fun insertTrades(csvFilePath: String,
                  tradeCreator: (List<String>) -> Trade,
                  linesToSkip: Long = 0) {
-    val inSteam = ClassLoader.getSystemResourceAsStream(csvFilePath)
+    val inSteam = Thread.currentThread()
+        .contextClassLoader
+        .getResourceAsStream(csvFilePath)
         ?: throw IllegalArgumentException("Failed to read file: $csvFilePath")
     val trades = inSteam
         .bufferedReader().lines()
