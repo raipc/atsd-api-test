@@ -19,11 +19,11 @@ jobs:
       uses: axibase/setup-java@v1
       with:
         java-version: 1.8
-    - name: Login to DockerHub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_LOGIN }}
-        password: ${{ secrets.DOCKER_TOKEN }}
+#     - name: Login to DockerHub
+#       uses: docker/login-action@v1
+#       with:
+#         username: ${{ secrets.DOCKER_LOGIN }}
+#         password: ${{ secrets.DOCKER_TOKEN }}
     - name: Install ATSD in docker container
       run: |
         export ATSD_LOGIN=axibase
